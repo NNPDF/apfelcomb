@@ -303,7 +303,10 @@ namespace QCD
     if (par.HQMASS.compare("POLE") == 0 )
       APFEL::SetPoleMasses(par.mc, par.mb, par.mt);
     else if (par.HQMASS.compare("MSBAR") == 0 )
+    {
+      APFEL::SetMassScaleReference(par.Qmc, par.Qmb, par.Qmt);
       APFEL::SetMSbarMasses(par.mc, par.mb, par.mt);
+    }
     else
     {
       cerr << "Error: Unrecognised HQMASS"<<endl;

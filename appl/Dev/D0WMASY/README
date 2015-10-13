@@ -1,0 +1,35 @@
+_____Requirements_____________________________________
+
+SHERPA 2.1.1 (not later)
+Rivet 2.3.0
+MCgrid 1.2
+
+_____Event Generation_________________________________
+To generate the HepMC events run
+	./Sherpa
+in this directory. Events will be generated according 
+to the runcard Run.dat. This will generate files in the 
+pattern WRun.X.hepmc
+
+_____Rivet Analysis___________________________________
+
+The Rivet analysis is in the file
+To compile and install it, type:
+	make
+	make install
+In this directory
+
+_____Performing Analysis______________________________
+
+Once installed, run the analysis over the generated HepMC
+events as so:
+
+	rivet -aD0_2013_I1253555 --ignore-beams ./*.hepmc 
+
+Once the analysis is complete, you may generate comparison
+plots with:
+
+	rivet-mkhtml ./Rivet.yoda
+
+_______________________________________________________
+Data files are from http://hepdata.cedar.ac.uk/view/ins1253555

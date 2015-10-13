@@ -1,0 +1,7 @@
+***********************************************************************
+ExpName: CMSJETS11
+Author: Alberto Guffanti (alberto.guffanti@unito.it)
+Date: Sept 2015
+CodesUsed: NLOjet++ v4.1.3 (external/nlojet++-4.1.3) + CMSJETS11 module
+AdditionalInfo: pt_jet as central scale, replaces old FastNLO grids
+***********************************************************************

@@ -1,0 +1,7 @@
+***************************************************************************
+SetName: ATLAS1JET11 
+Author:  Alberto Guffanti (alberto.guffanti@unito.it)
+Date:    18.09.2015
+CodesUsed: NLOjet++ v4.1.3 (external/nlojet++-4.1.3) + ATLAS1JET11 module
+AdditionalInfo: Combination of 10 runs on ATLAS1JET11 module (5bn events)
+***************************************************************************

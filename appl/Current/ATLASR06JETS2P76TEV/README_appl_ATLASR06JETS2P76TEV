@@ -1,0 +1,7 @@
+***********************************************************************
+ExpName: ATLASR06JETS2P76TEV
+Author: APPLgrid/ATLAS authors (grids taken from APPLgrid website)
+Date: 2013
+CodesUsed: NLOjet++ 
+AdditionalInfo: central scale pt_leading, need to be redone with pt_jet
+***********************************************************************

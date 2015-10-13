@@ -1,0 +1,2740 @@
+setup_mcfmbridge()
+ ************** MCFM - version 6.8 ****************
+ *                                                *
+ * MCFM, v6.8                   April 26th, 2014  *
+ *                                                *
+ * Authors: John Campbell, Keith Ellis,           *
+ *          Ciaran Williams                       *
+ *         (johnmc@fnal.gov, ellis@fnal.gov,      *
+ *          ciaran@fnal.gov)                      *
+ *                                                *
+ * For details see:                               *
+ *                                                *
+ *  arXiv:1403.2641 (Triphoton production)        *
+ *  arXiv:1312.1628 (gg->WW, Higgs interference)  *
+ *  arXiv:1311.3589 (gg->ZZ, Higgs interference)  *
+ *  Phys.Rev.D87:114006, arXiv:1302.3856          *
+ *  (tZ, tH -- with R. Rontsch)                   *
+ *  arXiv:1211.6390 (DM, P. Fox and C. Williams)  *
+ *  JHEP 1211:162 (2012), arXiv:1208.0566         *
+ *  (Z+gam+jet,Z+gam+gam -- with H. Hartanto)     *
+ *  arXiv:1204.1513 (top production+decay)        *
+ *  JHEP 1207:052 (2012), arXiv:1204.5678 (ttW)   *
+ *  JHEP 1110:005 (2011), arXiv:1107.5569         *
+ *         (gg->WW,Higgs intference)              *
+ *  JHEP 1107:018 (2011), arXiv:1105.0020         *
+ *         (diboson update)                       *
+ *  JHEP 1103:027 (2011), arXiv:1011.6647         *
+ *         (Wbb for mb>0, with S. Badger)         *
+ *  Phys.Rev.D81:074023, arXiv:1001.4495 (H+2jet) *
+ *                                                *
+ *  P.R.L. 102:142001, arXiv:0903.0005 [hep-ph]   *
+ *    (t-channel single top + explicit b,         *
+ *      JC, R.Frederix, F.Maltoni, F.Tramontano)  *
+ *  N.P.B 726:109(2005), hep-ph/0506289 (W+t)     *
+ *  Phys.Rev.D70:094012, hep-ph/0408158 (Sngl Top)*
+ *       (with Francesco Tramontano)              *
+ *                                                *
+ *  Phys.Rev.D65:113007, hep-ph/0202176 (W,Z+2j)  *
+ *  Phys.Rev.D62:114012, hep-ph/0006304 (W,Z+bb)  *
+ *  Phys.Rev.D60:113006, hep-ph/9905386 (diboson) *
+ *                                                *
+ * On the web:  http://mcfm.fnal.gov/             *
+ **************************************************
+
+ * Using input file named CMSDY2D11-BIN1.DAT                                                      
+
+ * [Flags to specify the mode in which MCFM is run]                                          
+ *                   -1            [nevtrequested] 
+ *                    F            [creatent] 
+ *                    F            [skipnt] 
+ *                    F            [dswhisto] 
+ *                    T            [creategrid] 
+ *                    F            [writetop] 
+ *                    F            [writedat] 
+ *                    F            [writegnu] 
+ *                    F            [writeroot] 
+ *                    F            [writepwg] 
+
+ * [General options to specify the process and execution]                                    
+ *                   31            [nproc] 
+ *                 tota            [part] 
+ * CMSDY2D11-BIN1                  [runstring] 
+ *            7000.0000            [sqrts] 
+ *                    1            [ih1] 
+ *                    1            [ih2] 
+ *             126.0000            [hmass] 
+ *              25.0000            [scale] 
+ *              25.0000            [facscale] 
+ * no                              [dynamicscale] 
+ *                    F            [zerowidth] 
+ *                    F            [removebr] 
+ *                   20            [itmx1] 
+ *               200000            [ncall1] 
+ *                   20            [itmx2] 
+ *              2500000            [ncall2] 
+ *               765931            [ij] 
+ *                    F            [dryrun] 
+ *                    T            [Qflag] 
+ *                    T            [Gflag] 
+
+ * [Heavy quark masses]                                                                      
+ *             172.5000            [top mass] 
+ *               4.7500            [bottom mass] 
+ *               1.4200            [charm mass] 
+
+ * [Pdf selection]                                                                           
+ *              cteq6_m            [pdlabel] 
+ *                    4            [NGROUP] 
+ *                   46            [NSET] 
+ * CT10nlo.LHgrid                  [LHAPDF group] 
+ *                    0            [LHAPDF set] 
+
+ * [Jet definition and event cuts]                                                           
+ *              20.0000            [m34min] 
+ *              30.0000            [m34max] 
+ *               0.0000            [m56min] 
+ *            7000.0000            [m56max] 
+ *                    T            [inclusive] 
+ *                 ankt            [algorithm] 
+ *              15.0000            [ptjetmin] 
+ *               0.0000            [etajetmin] 
+ *               3.0000            [etajetmax] 
+ *               0.5000            [Rcut] 
+ *                    T            [makecuts] 
+ *              14.0000            [leptpt] 
+ *               2.4000            [leptrap] 
+ *    0.000,   0.000                [leptveto] 
+ *              25.0000            [misspt] 
+ *               9.0000            [leptpt2] 
+ *               2.4000            [leptrap2] 
+ *    0.000,   0.000                [leptveto2] 
+ *               0.0000            [mtrans34cut] 
+ *               0.0000            [Rjlmin] 
+ *               0.0000            [Rllmin] 
+ *               0.0000            [delyjjmin] 
+ *                    F            [jetsopphem] 
+ *                    0            [lbjscheme] 
+ *               0.0000            [ptbjetmin] 
+ *              99.0000            [etabjetmax] 
+
+ * [Settings for photon processes]                                                           
+ *                    F            [frag] 
+ *             GdRG__LO            [fragset] 
+ *              80.0000            [frag_scale] 
+ *              20.0000            [gammpt] 
+ *               2.5000            [gammrap] 
+ *              20.0000            [gammpt2] 
+ *              20.0000            [gammpt3] 
+ *               0.0000            [Rgalmin] 
+ *               0.4000            [Rgagamin] 
+ *               0.4000            [Rgajetmin] 
+ *               0.4000            [cone_ang] 
+ *               0.5000            [epsilon_h] 
+
+ * [Anomalous couplings of the W and Z]                                                      
+ *               0.0000            [delg1_z] 
+ *               0.0000            [delk_z] 
+ *               0.0000            [delk_g] 
+ *               0.0000            [lambda_z] 
+ *               0.0000            [lambda_g] 
+ *               0.0000            [h1Z] 
+ *               0.0000            [h1gam] 
+ *               0.0000            [h2Z] 
+ *               0.0000            [h2gam] 
+ *               0.0000            [h3Z] 
+ *               0.0000            [h3gam] 
+ *               0.0000            [h4Z] 
+ *               0.0000            [h4gam] 
+ *               2.0000            [tevscale] 
+
+ * [Anomalous width of the Higgs]                                                            
+ *               1.0000            [Gamma_H/Gamma_H(SM)] 
+
+ * [How to resume/save a run]                                                                
+ *                    F            [readin] 
+ *                    F            [writeout] 
+ *                                 [ingridfile] 
+ *                                 [outgridfile] 
+
+ * [Technical parameters that should not normally be changed]
+
+ *                    F            [debug] 
+ *                    T            [verbose] 
+ *                    F            [new_pspace] 
+ *                    F            [virtonly] 
+ *                    F            [realonly] 
+ *                    T            [spira] 
+ *                    F            [noglue] 
+ *                    F            [ggonly] 
+ *                    F            [gqonly] 
+ *                    F            [omitgg] 
+ *                    F            [vanillafiles] 
+ *                    1            [nmin] 
+LHAPDF 6.1.4 loading /home/guffanti/software/share/LHAPDF/CT10nlo/CT10nlo_0000.dat
+CT10nlo PDF set, member #0, version 4; LHAPDF ID = 11000
+LHAPDF 6.1.4 loading /home/guffanti/software/share/LHAPDF/CT10nlo/CT10nlo_0000.dat
+CT10nlo PDF set, member #0, version 4; LHAPDF ID = 11000
+ ***********************************************
+ booking the grids Mon Jan 19 16:38:09 2015
+
+Dataset ID: CMSDY2D11-BIN1
+CMS double differential Drell-Yan measurement (2011) - Bin 1
+
+Using existing grid file CMSDY2D11-BIN1_rapidity.root
+appl::grid() reading grid from file CMSDY2D11-BIN1_rapidity.root	version 1.4.70
+appl::grid() read grid, size 0 MB	in 575.914 ms	trim in 0.092 ms
+grid::optimise() bin 0		size(untrimmed)=3	size(trimmed)=3
+grid::optimise() bin 1		size(untrimmed)=3	size(trimmed)=3
+grid::optimise() bin 2		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 3		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 4		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 5		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 6		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 7		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 8		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 9		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 10		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 11		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 12		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 13		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 14		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 15		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 16		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 17		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 18		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 19		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 20		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 21		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 22		size(untrimmed)=2	size(trimmed)=2
+grid::optimise() bin 23		size(untrimmed)=4	size(trimmed)=4
+grid::optimise() bin 0		size(untrimmed)=195	size(trimmed)=195
+grid::optimise() bin 1		size(untrimmed)=195	size(trimmed)=195
+grid::optimise() bin 2		size(untrimmed)=195	size(trimmed)=195
+grid::optimise() bin 3		size(untrimmed)=195	size(trimmed)=195
+grid::optimise() bin 4		size(untrimmed)=195	size(trimmed)=195
+grid::optimise() bin 5		size(untrimmed)=213	size(trimmed)=213
+grid::optimise() bin 6		size(untrimmed)=217	size(trimmed)=217
+grid::optimise() bin 7		size(untrimmed)=219	size(trimmed)=219
+grid::optimise() bin 8		size(untrimmed)=216	size(trimmed)=216
+grid::optimise() bin 9		size(untrimmed)=216	size(trimmed)=216
+grid::optimise() bin 10		size(untrimmed)=216	size(trimmed)=216
+grid::optimise() bin 11		size(untrimmed)=220	size(trimmed)=220
+grid::optimise() bin 12		size(untrimmed)=234	size(trimmed)=234
+grid::optimise() bin 13		size(untrimmed)=238	size(trimmed)=238
+grid::optimise() bin 14		size(untrimmed)=231	size(trimmed)=231
+grid::optimise() bin 15		size(untrimmed)=231	size(trimmed)=231
+grid::optimise() bin 16		size(untrimmed)=231	size(trimmed)=231
+grid::optimise() bin 17		size(untrimmed)=231	size(trimmed)=231
+grid::optimise() bin 18		size(untrimmed)=245	size(trimmed)=245
+grid::optimise() bin 19		size(untrimmed)=251	size(trimmed)=251
+grid::optimise() bin 20		size(untrimmed)=240	size(trimmed)=240
+grid::optimise() bin 21		size(untrimmed)=240	size(trimmed)=240
+grid::optimise() bin 22		size(untrimmed)=240	size(trimmed)=240
+grid::optimise() bin 23		size(untrimmed)=240	size(trimmed)=240
+==================================================
+appl::grid version 1.4.70	( 12-LO, 12-NLO, initial states, 24 observable bins )
+Optimised grid
+Unsymmetrised in x1, x2
+leading order of processes  0
+number of loops for grid    1
+x->y coordinate transform:  f2
+genpdf in use: mcfm-z
+--------------------------------------------------
+Observable binning: [ 24 bins : 0,  2.4 ]
+0	    0	-   0.1	   	 x:  [ 40 :	 0.000276638 - 0.0728405	 : 40 :	 0.000276638 - 0.0728405	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+1	  0.1	-   0.2	   	 x:  [ 40 :	 0.000276638 - 0.0728405	 : 40 :	 0.000276638 - 0.0728405	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+2	  0.2	-   0.3	   	 x:  [ 40 :	 0.000276638 - 0.0728405	 : 40 :	 0.000276638 - 0.0728405	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+3	  0.3	-   0.4	   	 x:  [ 40 :	 0.000276638 - 0.0728405	 : 40 :	 0.000276638 - 0.0728405	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+4	  0.4	-   0.5	   	 x:  [ 40 :	 0.000276638 - 0.0728405	 : 40 :	 0.000276638 - 0.0728405	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+5	  0.5	-   0.6	   	 x:  [ 40 :	 0.000276638 - 0.114425	 : 40 :	 0.000276638 - 0.114425	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+6	  0.6	-   0.7	   	 x:  [ 40 :	 0.000276638 - 0.114425	 : 40 :	 0.000276638 - 0.114425	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+7	  0.7	-   0.8	   	 x:  [ 40 :	 0.000143137 - 0.114425	 : 40 :	 0.000143137 - 0.114425	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+8	  0.8	-   0.9	   	 x:  [ 40 :	 0.000143137 - 0.114425	 : 40 :	 0.000143137 - 0.114425	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+9	  0.9	-     1	   	 x:  [ 40 :	 0.000143137 - 0.114425	 : 40 :	 0.000143137 - 0.114425	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+10	    1	-   1.1	   	 x:  [ 40 :	 0.000143137 - 0.114425	 : 40 :	 0.000143137 - 0.114425	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+11	  1.1	-   1.2	   	 x:  [ 40 :	 0.000143137 -  0.1687	 : 40 :	 0.000143137 -  0.1687	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+12	  1.2	-   1.3	   	 x:  [ 40 :	 0.000143137 -  0.1687	 : 40 :	 0.000143137 -  0.1687	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+13	  1.3	-   1.4	   	 x:  [ 40 :	 7.40381e-05 -  0.1687	 : 40 :	 7.40381e-05 -  0.1687	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+14	  1.4	-   1.5	   	 x:  [ 40 :	 7.40381e-05 -  0.1687	 : 40 :	 7.40381e-05 -  0.1687	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+15	  1.5	-   1.6	   	 x:  [ 40 :	 7.40381e-05 -  0.1687	 : 40 :	 7.40381e-05 -  0.1687	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+16	  1.6	-   1.7	   	 x:  [ 40 :	 7.40381e-05 -  0.1687	 : 40 :	 7.40381e-05 -  0.1687	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+17	  1.7	-   1.8	   	 x:  [ 40 :	 7.40381e-05 - 0.234633	 : 40 :	 7.40381e-05 - 0.234633	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+18	  1.8	-   1.9	   	 x:  [ 40 :	 7.40381e-05 - 0.234633	 : 40 :	 7.40381e-05 - 0.234633	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+19	  1.9	-     2	   	 x:  [ 40 :	 7.40381e-05 - 0.234633	 : 40 :	 7.40381e-05 - 0.234633	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+20	    2	-   2.1	   	 x:  [ 40 :	 3.829e-05 - 0.234633	 : 40 :	 3.829e-05 - 0.234633	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+21	  2.1	-   2.2	   	 x:  [ 40 :	 3.829e-05 - 0.234633	 : 40 :	 3.829e-05 - 0.234633	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+22	  2.2	-   2.3	   	 x:  [ 40 :	 3.829e-05 - 0.234633	 : 40 :	 3.829e-05 - 0.234633	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+23	  2.3	-   2.4	   	 x:  [ 40 :	 3.829e-05 - 0.310509	 : 40 :	 3.829e-05 - 0.310509	 : 	( order=6 ) ]	 Q2: [ 3 :	   624.5 -   625.5	( order=1 ) ]
+
+
+ ***********************************************
+ *                    2            [nmax] 
+ *                    T            [clustering] 
+ *                    F            [realwt] 
+ *                    0            [colourchoice] 
+ *               0.0100            [rtsmin] 
+ *               0.0001            [cutoff] 
+ *               0.2000            [aii] 
+ *               0.2000            [aif] 
+ *               0.2000            [afi] 
+ *               1.0000            [aff] 
+ *               1.0000            [bfi] 
+ *               1.0000            [bff] 
+
+ Chooser:process chosen by nproc=          31
+
+ *************************** f(p1)+f(p2) --> ******************************************
+ * Z^0(-->e^-(p3)+e^+(p4))                                                            *
+ **************************************************************************************
+
+
+ *******************************************
+ *     MCFM is calling LHAPDF              *
+ *                                         *
+ *   PDFname CT10nlo.LHgrid                *
+ *   PDFmember  0                          *
+ *******************************************
+
+ ************** Electroweak parameters **************
+ *                                                  *
+ *  zmass(+)   91.1876000     wmass(+)  80.3980000  *
+ * zwidth(+)    2.4952000    wwidth(+)   2.1410000  *
+ *     Gf(+) 0.116637D-04   1/aemmz    132.3407015  *
+ *     xw       0.2226459      mtop(+) 172.5000000  *
+ *   gwsq       0.4264831       esq      0.0949547  *
+ * top width    1.4530210 (LO)                      *
+ *    mb        4.7500000        mc      1.4200000  *
+ *                                                  *
+ * Parameters marked (+) are input, others derived  *
+ ****************************************************
+
+ *******************************************
+ *     MCFM is calling LHAPDF              *
+ *                                         *
+ *   PDFname CT10nlo.LHgrid                *
+ *   PDFmember  0                          *
+ *******************************************
+
+
+ ***************** CKM mixing matrix ****************
+ *                                                  *
+ *      Vud=.97419    Vus=.22570    Vub=.35900E-02  *
+ *      Vcd=.22560    Vcs=.97334    Vcb=.41500E-01  *
+ ****************************************************
+
+ ************* Strong coupling, alpha_s  ************
+ *                                                  *
+ *       alpha_s (scale)  0.14679077                *
+ *       alpha_s (zmass)  0.11800070                *
+ *         (using 2-loop running of alpha_s)        *
+ ****************************************************
+
+ ****************************************
+ *     Cross section in femtobarns      *
+ ****************************************
+
+
+ input parameters for vegas:  ndim=  5  ncall= 200000.
+                              it=    0  itmx=   20
+                              nprn=  0  alph= 1.50
+                              mds=  1   nd= 100
+                              xl( 1)=   0.000     xu( 1)=   1.000    
+                              xl( 2)=   0.000     xu( 2)=   1.000    
+                              xl( 3)=   0.000     xu( 3)=   1.000    
+                              xl( 4)=   0.000     xu( 4)=   1.000    
+                              xl( 5)=   0.000     xu( 5)=   1.000    
+
+ ****************** Basic mass cuts *****************
+ *                                                  *
+ *             20.00  <   m34  <    30.00           *
+ *              0.00  <   m56  <  7000.00           *
+ ****************************************************
+
+ ****************** Generic cuts ********************
+ *                                                  *
+ *        pt(lepton)      >    14.00 GeV            *
+ *      |eta(lepton)|     <     2.40                *
+ *       pt(missing)      >    25.00 GeV            *
+ *     pt(2nd+ lepton)    >     9.00 GeV            *
+ *   |eta(2nd+ lepton)|   <     2.40                *
+ *  (3,4) transverse mass >     0.00 GeV            *
+ *      R(jet,lepton)     >     0.00                *
+ *     R(lepton,lepton)   >     0.00                *
+ * |eta(jet1)-eta(jet2)|  >     0.00                *
+ ****************************************************
+ Poles cancelled!
+
+************* Integration by Vegas (iteration   1) **************
+*                                                               *
+*  integral  =  3387.7588       accum. integral =  3387.7588    *
+*  std. dev. =  33.310954       accum. std. dev =  33.310954    *
+*   max. wt. =    4.23319                                       *
+*                                                               *
+**************   chi**2/iteration =  0.000       ****************
+
+
+************* Integration by Vegas (iteration   2) **************
+*                                                               *
+*  integral  =  3373.3012       accum. integral =  3373.6525    *
+*  std. dev. =  5.2570886       accum. std. dev =  5.1928183    *
+*   max. wt. =    4.23319                                       *
+*                                                               *
+**************   chi**2/iteration = 0.1820       ****************
+
+
+************* Integration by Vegas (iteration   3) **************
+*                                                               *
+*  integral  =  3388.5602       accum. integral =  3381.0262    *
+*  std. dev. =  5.2489188       accum. std. dev =  3.6915517    *
+*   max. wt. =    4.23319                                       *
+*                                                               *
+**************   chi**2/iteration =  2.120       ****************
+
+
+************* Integration by Vegas (iteration   4) **************
+*                                                               *
+*  integral  =  3373.3274       accum. integral =  3378.3107    *
+*  std. dev. =  5.0007941       accum. std. dev =  2.9699879    *
+*   max. wt. =    4.23319                                       *
+*                                                               *
+**************   chi**2/iteration =  1.925       ****************
+
+
+************* Integration by Vegas (iteration   5) **************
+*                                                               *
+*  integral  =  3373.9561       accum. integral =  3377.5663    *
+*  std. dev. =  6.5408290       accum. std. dev =  2.7042626    *
+*   max. wt. =    4.23319                                       *
+*                                                               *
+**************   chi**2/iteration =  1.537       ****************
+
+
+************* Integration by Vegas (iteration   6) **************
+*                                                               *
+*  integral  =  3372.0376       accum. integral =  3376.6324    *
+*  std. dev. =  5.9980894       accum. std. dev =  2.4652867    *
+*   max. wt. =    4.23319                                       *
+*                                                               *
+**************   chi**2/iteration =  1.371       ****************
+
+
+************* Integration by Vegas (iteration   7) **************
+*                                                               *
+*  integral  =  3374.0262       accum. integral =  3376.4203    *
+*  std. dev. =  8.2840912       accum. std. dev =  2.3628761    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration =  1.158       ****************
+
+
+************* Integration by Vegas (iteration   8) **************
+*                                                               *
+*  integral  =  3385.0219       accum. integral =  3377.4585    *
+*  std. dev. =  6.3776611       accum. std. dev =  2.2156959    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration =  1.221       ****************
+
+
+************* Integration by Vegas (iteration   9) **************
+*                                                               *
+*  integral  =  3378.5230       accum. integral =  3377.5986    *
+*  std. dev. =  5.6926104       accum. std. dev =  2.0648057    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration =  1.072       ****************
+
+
+************* Integration by Vegas (iteration  10) **************
+*                                                               *
+*  integral  =  3378.2505       accum. integral =  3377.6769    *
+*  std. dev. =  5.5858980       accum. std. dev =  1.9367254    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9546       ****************
+
+
+************* Integration by Vegas (iteration  11) **************
+*                                                               *
+*  integral  =  3385.2377       accum. integral =  3378.5067    *
+*  std. dev. =  5.5161233       accum. std. dev =  1.8273653    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration =  1.026       ****************
+
+
+************* Integration by Vegas (iteration  12) **************
+*                                                               *
+*  integral  =  3373.5579       accum. integral =  3378.0038    *
+*  std. dev. =  5.4333903       accum. std. dev =  1.7320321    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration =  1.001       ****************
+
+
+************* Integration by Vegas (iteration  13) **************
+*                                                               *
+*  integral  =  3381.7004       accum. integral =  3378.3193    *
+*  std. dev. =  5.6704277       accum. std. dev =  1.6564805    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9498       ****************
+
+
+************* Integration by Vegas (iteration  14) **************
+*                                                               *
+*  integral  =  3379.5762       accum. integral =  3378.4128    *
+*  std. dev. =  5.8409311       accum. std. dev =  1.5936332    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8801       ****************
+
+
+************* Integration by Vegas (iteration  15) **************
+*                                                               *
+*  integral  =  3381.9803       accum. integral =  3378.6808    *
+*  std. dev. =  5.5927329       accum. std. dev =  1.5326266    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8441       ****************
+
+
+************* Integration by Vegas (iteration  16) **************
+*                                                               *
+*  integral  =  3386.8765       accum. integral =  3379.2441    *
+*  std. dev. =  5.6414576       accum. std. dev =  1.4790182    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9189       ****************
+
+
+************* Integration by Vegas (iteration  17) **************
+*                                                               *
+*  integral  =  3380.5565       accum. integral =  3379.3295    *
+*  std. dev. =  5.6046344       accum. std. dev =  1.4300621    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8647       ****************
+
+
+************* Integration by Vegas (iteration  18) **************
+*                                                               *
+*  integral  =  3383.2965       accum. integral =  3379.5548    *
+*  std. dev. =  5.8287326       accum. std. dev =  1.3888713    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8395       ****************
+
+
+************* Integration by Vegas (iteration  19) **************
+*                                                               *
+*  integral  =  3391.3414       accum. integral =  3380.2133    *
+*  std. dev. =  5.7093206       accum. std. dev =  1.3495148    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration =  1.016       ****************
+
+
+************* Integration by Vegas (iteration  20) **************
+*                                                               *
+*  integral  =  3373.1017       accum. integral =  3379.8164    *
+*  std. dev. =  5.5506548       accum. std. dev =  1.3113148    *
+*   max. wt. =    6.09315                                       *
+*                                                               *
+**************   chi**2/iteration =  1.044       ****************
+
+ ****************************************************
+ * Writing out vegas grid to Z_only_tota_CT10nlo_25__25__CMSDY2D11-BIN1_dvegas_virt.grid                                                          *
+ ****************************************************
+ Adjusting number of points for real to     2000000
+
+ input parameters for vegas:  ndim=  7  ncall=1647086.
+                              it=   21  itmx=   20
+                              nprn=  0  alph= 1.50
+                              mds=  1   nd= 100
+                              xl( 1)=   0.000     xu( 1)=   1.000    
+                              xl( 2)=   0.000     xu( 2)=   1.000    
+                              xl( 3)=   0.000     xu( 3)=   1.000    
+                              xl( 4)=   0.000     xu( 4)=   1.000    
+                              xl( 5)=   0.000     xu( 5)=   1.000    
+                              xl( 6)=   0.000     xu( 6)=   1.000    
+                              xl( 7)=   0.000     xu( 7)=   1.000    
+
+ *********** Basic jet-defining parameters **********
+ *     (Anti-kt algorithm - see arXiv:0802.1189)    *
+ *                                                  *
+ *     pt(jet)         >  15.0000                   *
+ *   |pseudo-rap(jet)| >   0.0000                   *
+ *   |pseudo-rap(jet)| <   3.0000                   *
+ * pseudo-cone size, R :   0.5000                   *
+ *                                                  *
+ *    Cross-section defined by:   0 <= jets <= 1    *
+ ****************************************************
+
+************* Integration by Vegas (iteration   1) **************
+*                                                               *
+*  integral  =  25416.290       accum. integral =  25416.290    *
+*  std. dev. =  938.57961       accum. std. dev =  938.57961    *
+*   max. wt. =    375.949                                       *
+*                                                               *
+**************   chi**2/iteration =  0.000       ****************
+
+
+************* Integration by Vegas (iteration   2) **************
+*                                                               *
+*  integral  =  28095.752       accum. integral =  26625.518    *
+*  std. dev. =  1034.9286       accum. std. dev =  695.24937    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  3.642       ****************
+
+
+************* Integration by Vegas (iteration   3) **************
+*                                                               *
+*  integral  =  27353.954       accum. integral =  27209.515    *
+*  std. dev. =  345.76297       accum. std. dev =  309.59070    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  2.268       ****************
+
+
+************* Integration by Vegas (iteration   4) **************
+*                                                               *
+*  integral  =  27016.439       accum. integral =  27065.096    *
+*  std. dev. =  179.70101       accum. std. dev =  155.41682    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.611       ****************
+
+
+************* Integration by Vegas (iteration   5) **************
+*                                                               *
+*  integral  =  27190.777       accum. integral =  27129.607    *
+*  std. dev. =  151.33757       accum. std. dev =  108.42529    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.293       ****************
+
+
+************* Integration by Vegas (iteration   6) **************
+*                                                               *
+*  integral  =  27527.198       accum. integral =  27214.735    *
+*  std. dev. =  207.72780       accum. std. dev =  96.119568    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.610       ****************
+
+
+************* Integration by Vegas (iteration   7) **************
+*                                                               *
+*  integral  =  27462.495       accum. integral =  27285.851    *
+*  std. dev. =  151.48701       accum. std. dev =  81.160558    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.659       ****************
+
+
+************* Integration by Vegas (iteration   8) **************
+*                                                               *
+*  integral  =  27329.228       accum. integral =  27300.395    *
+*  std. dev. =  114.27682       accum. std. dev =  66.170372    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.436       ****************
+
+
+************* Integration by Vegas (iteration   9) **************
+*                                                               *
+*  integral  =  27533.750       accum. integral =  27362.393    *
+*  std. dev. =  110.00795       accum. std. dev =  56.702933    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.669       ****************
+
+
+************* Integration by Vegas (iteration  10) **************
+*                                                               *
+*  integral  =  27611.798       accum. integral =  27408.074    *
+*  std. dev. =  119.74586       accum. std. dev =  51.247697    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.877       ****************
+
+
+************* Integration by Vegas (iteration  11) **************
+*                                                               *
+*  integral  =  27458.665       accum. integral =  27416.398    *
+*  std. dev. =  115.48349       accum. std. dev =  46.842517    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.706       ****************
+
+
+************* Integration by Vegas (iteration  12) **************
+*                                                               *
+*  integral  =  27363.685       accum. integral =  27407.980    *
+*  std. dev. =  107.45356       accum. std. dev =  42.939792    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.569       ****************
+
+
+************* Integration by Vegas (iteration  13) **************
+*                                                               *
+*  integral  =  27498.251       accum. integral =  27420.000    *
+*  std. dev. =  109.55846       accum. std. dev =  39.978810    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.488       ****************
+
+
+************* Integration by Vegas (iteration  14) **************
+*                                                               *
+*  integral  =  27558.296       accum. integral =  27434.335    *
+*  std. dev. =  117.56465       accum. std. dev =  37.850177    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.469       ****************
+
+
+************* Integration by Vegas (iteration  15) **************
+*                                                               *
+*  integral  =  27440.180       accum. integral =  27434.924    *
+*  std. dev. =  113.03732       accum. std. dev =  35.891502    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.364       ****************
+
+
+************* Integration by Vegas (iteration  16) **************
+*                                                               *
+*  integral  =  27435.107       accum. integral =  27434.933    *
+*  std. dev. =  164.41596       accum. std. dev =  35.065722    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.273       ****************
+
+
+************* Integration by Vegas (iteration  17) **************
+*                                                               *
+*  integral  =  27474.689       accum. integral =  27437.265    *
+*  std. dev. =  140.47091       accum. std. dev =  34.021709    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.198       ****************
+
+
+************* Integration by Vegas (iteration  18) **************
+*                                                               *
+*  integral  =  27274.475       accum. integral =  27423.315    *
+*  std. dev. =  111.13002       accum. std. dev =  32.531367    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.243       ****************
+
+
+************* Integration by Vegas (iteration  19) **************
+*                                                               *
+*  integral  =  27594.241       accum. integral =  27437.119    *
+*  std. dev. =  109.75473       accum. std. dev =  31.190127    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.298       ****************
+
+
+************* Integration by Vegas (iteration  20) **************
+*                                                               *
+*  integral  =  27482.369       accum. integral =  27440.691    *
+*  std. dev. =  106.53151       accum. std. dev =  29.933561    *
+*   max. wt. =    985.099                                       *
+*                                                               *
+**************   chi**2/iteration =  1.238       ****************
+
+ ****************************************************
+ * Writing out vegas grid to Z_only_tota_CT10nlo_25__25__CMSDY2D11-BIN1_dvegas_real.grid                                                          *
+ ****************************************************
+
+ ****************************************************
+ * Reading in vegas grid from Z_only_tota_CT10nlo_25__25__CMSDY2D11-BIN1_dvegas_virt.grid                                                         *
+ ****************************************************
+
+ input parameters for vegas:  ndim=  5  ncall=2097152.
+                              it=   21  itmx=   20
+                              nprn=  0  alph= 1.50
+                              mds=  1   nd= 100
+                              xl( 1)=   0.000     xu( 1)=   1.000    
+                              xl( 2)=   0.000     xu( 2)=   1.000    
+                              xl( 3)=   0.000     xu( 3)=   1.000    
+                              xl( 4)=   0.000     xu( 4)=   1.000    
+                              xl( 5)=   0.000     xu( 5)=   1.000    
+fill_grid() filled 50000 weights Mon Jan 19 17:00:45 2015
+fill_grid() filled 100000 weights Mon Jan 19 17:00:57 2015
+fill_grid() filled 150000 weights Mon Jan 19 17:01:09 2015
+fill_grid() filled 200000 weights Mon Jan 19 17:01:21 2015
+fill_grid() filled 250000 weights Mon Jan 19 17:01:33 2015
+fill_grid() filled 300000 weights Mon Jan 19 17:01:44 2015
+fill_grid() filled 350000 weights Mon Jan 19 17:01:56 2015
+fill_grid() filled 400000 weights Mon Jan 19 17:02:08 2015
+fill_grid() filled 450000 weights Mon Jan 19 17:02:19 2015
+fill_grid() filled 500000 weights Mon Jan 19 17:02:31 2015
+fill_grid() filled 550000 weights Mon Jan 19 17:02:43 2015
+fill_grid() filled 600000 weights Mon Jan 19 17:02:55 2015
+fill_grid() filled 650000 weights Mon Jan 19 17:03:06 2015
+fill_grid() filled 700000 weights Mon Jan 19 17:03:18 2015
+fill_grid() filled 750000 weights Mon Jan 19 17:03:30 2015
+fill_grid() filled 800000 weights Mon Jan 19 17:03:41 2015
+fill_grid() filled 850000 weights Mon Jan 19 17:03:53 2015
+fill_grid() filled 900000 weights Mon Jan 19 17:04:05 2015
+fill_grid() filled 950000 weights Mon Jan 19 17:04:16 2015
+fill_grid() filled 1000000 weights Mon Jan 19 17:04:28 2015
+fill_grid() filled 1050000 weights Mon Jan 19 17:04:40 2015
+fill_grid() filled 1100000 weights Mon Jan 19 17:04:51 2015
+fill_grid() filled 1150000 weights Mon Jan 19 17:05:03 2015
+fill_grid() filled 1200000 weights Mon Jan 19 17:05:15 2015
+fill_grid() filled 1250000 weights Mon Jan 19 17:05:27 2015
+fill_grid() filled 1300000 weights Mon Jan 19 17:05:38 2015
+fill_grid() filled 1350000 weights Mon Jan 19 17:05:50 2015
+fill_grid() filled 1400000 weights Mon Jan 19 17:06:02 2015
+fill_grid() filled 1450000 weights Mon Jan 19 17:06:14 2015
+fill_grid() filled 1500000 weights Mon Jan 19 17:06:26 2015
+fill_grid() filled 1550000 weights Mon Jan 19 17:06:37 2015
+
+************* Integration by Vegas (iteration   1) **************
+*                                                               *
+*  integral  =  3376.8830       accum. integral =  3376.8830    *
+*  std. dev. =  1.5678257       accum. std. dev =  1.5678257    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration =  0.000       ****************
+
+ Writing out intermediate results for iteration           1
+fill_grid() filled 1600000 weights Mon Jan 19 17:06:49 2015
+fill_grid() filled 1650000 weights Mon Jan 19 17:07:01 2015
+fill_grid() filled 1700000 weights Mon Jan 19 17:07:13 2015
+fill_grid() filled 1750000 weights Mon Jan 19 17:07:25 2015
+fill_grid() filled 1800000 weights Mon Jan 19 17:07:36 2015
+fill_grid() filled 1850000 weights Mon Jan 19 17:07:48 2015
+fill_grid() filled 1900000 weights Mon Jan 19 17:08:00 2015
+fill_grid() filled 1950000 weights Mon Jan 19 17:08:11 2015
+fill_grid() filled 2000000 weights Mon Jan 19 17:08:23 2015
+fill_grid() filled 2050000 weights Mon Jan 19 17:08:35 2015
+fill_grid() filled 2100000 weights Mon Jan 19 17:08:46 2015
+fill_grid() filled 2150000 weights Mon Jan 19 17:08:58 2015
+fill_grid() filled 2200000 weights Mon Jan 19 17:09:10 2015
+fill_grid() filled 2250000 weights Mon Jan 19 17:09:22 2015
+fill_grid() filled 2300000 weights Mon Jan 19 17:09:33 2015
+fill_grid() filled 2350000 weights Mon Jan 19 17:09:45 2015
+fill_grid() filled 2400000 weights Mon Jan 19 17:09:57 2015
+fill_grid() filled 2450000 weights Mon Jan 19 17:10:08 2015
+fill_grid() filled 2500000 weights Mon Jan 19 17:10:20 2015
+fill_grid() filled 2550000 weights Mon Jan 19 17:10:32 2015
+fill_grid() filled 2600000 weights Mon Jan 19 17:10:43 2015
+fill_grid() filled 2650000 weights Mon Jan 19 17:10:55 2015
+fill_grid() filled 2700000 weights Mon Jan 19 17:11:07 2015
+fill_grid() filled 2750000 weights Mon Jan 19 17:11:19 2015
+fill_grid() filled 2800000 weights Mon Jan 19 17:11:30 2015
+fill_grid() filled 2850000 weights Mon Jan 19 17:11:42 2015
+fill_grid() filled 2900000 weights Mon Jan 19 17:11:54 2015
+fill_grid() filled 2950000 weights Mon Jan 19 17:12:05 2015
+fill_grid() filled 3000000 weights Mon Jan 19 17:12:17 2015
+fill_grid() filled 3050000 weights Mon Jan 19 17:12:29 2015
+fill_grid() filled 3100000 weights Mon Jan 19 17:12:40 2015
+
+************* Integration by Vegas (iteration   2) **************
+*                                                               *
+*  integral  =  3379.0541       accum. integral =  3377.9777    *
+*  std. dev. =  1.5546906       accum. std. dev =  1.1039469    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9573       ****************
+
+ Writing out intermediate results for iteration           2
+fill_grid() filled 3150000 weights Mon Jan 19 17:12:52 2015
+fill_grid() filled 3200000 weights Mon Jan 19 17:13:04 2015
+fill_grid() filled 3250000 weights Mon Jan 19 17:13:16 2015
+fill_grid() filled 3300000 weights Mon Jan 19 17:13:27 2015
+fill_grid() filled 3350000 weights Mon Jan 19 17:13:39 2015
+fill_grid() filled 3400000 weights Mon Jan 19 17:13:51 2015
+fill_grid() filled 3450000 weights Mon Jan 19 17:14:02 2015
+fill_grid() filled 3500000 weights Mon Jan 19 17:14:14 2015
+fill_grid() filled 3550000 weights Mon Jan 19 17:14:26 2015
+fill_grid() filled 3600000 weights Mon Jan 19 17:14:37 2015
+fill_grid() filled 3650000 weights Mon Jan 19 17:14:49 2015
+fill_grid() filled 3700000 weights Mon Jan 19 17:15:01 2015
+fill_grid() filled 3750000 weights Mon Jan 19 17:15:12 2015
+fill_grid() filled 3800000 weights Mon Jan 19 17:15:24 2015
+fill_grid() filled 3850000 weights Mon Jan 19 17:15:36 2015
+fill_grid() filled 3900000 weights Mon Jan 19 17:15:47 2015
+fill_grid() filled 3950000 weights Mon Jan 19 17:15:59 2015
+fill_grid() filled 4000000 weights Mon Jan 19 17:16:11 2015
+fill_grid() filled 4050000 weights Mon Jan 19 17:16:23 2015
+fill_grid() filled 4100000 weights Mon Jan 19 17:16:35 2015
+fill_grid() filled 4150000 weights Mon Jan 19 17:16:46 2015
+fill_grid() filled 4200000 weights Mon Jan 19 17:16:58 2015
+fill_grid() filled 4250000 weights Mon Jan 19 17:17:10 2015
+fill_grid() filled 4300000 weights Mon Jan 19 17:17:21 2015
+fill_grid() filled 4350000 weights Mon Jan 19 17:17:33 2015
+fill_grid() filled 4400000 weights Mon Jan 19 17:17:44 2015
+fill_grid() filled 4450000 weights Mon Jan 19 17:17:56 2015
+fill_grid() filled 4500000 weights Mon Jan 19 17:18:08 2015
+fill_grid() filled 4550000 weights Mon Jan 19 17:18:19 2015
+fill_grid() filled 4600000 weights Mon Jan 19 17:18:31 2015
+fill_grid() filled 4650000 weights Mon Jan 19 17:18:43 2015
+fill_grid() filled 4700000 weights Mon Jan 19 17:18:54 2015
+
+************* Integration by Vegas (iteration   3) **************
+*                                                               *
+*  integral  =  3378.4237       accum. integral =  3378.1250    *
+*  std. dev. =  1.5723316       accum. std. dev = 0.90349280    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration = 0.5079       ****************
+
+ Writing out intermediate results for iteration           3
+fill_grid() filled 4750000 weights Mon Jan 19 17:19:06 2015
+fill_grid() filled 4800000 weights Mon Jan 19 17:19:18 2015
+fill_grid() filled 4850000 weights Mon Jan 19 17:19:30 2015
+fill_grid() filled 4900000 weights Mon Jan 19 17:19:42 2015
+fill_grid() filled 4950000 weights Mon Jan 19 17:19:53 2015
+fill_grid() filled 5000000 weights Mon Jan 19 17:20:05 2015
+fill_grid() filled 5050000 weights Mon Jan 19 17:20:17 2015
+fill_grid() filled 5100000 weights Mon Jan 19 17:20:28 2015
+fill_grid() filled 5150000 weights Mon Jan 19 17:20:40 2015
+fill_grid() filled 5200000 weights Mon Jan 19 17:20:52 2015
+fill_grid() filled 5250000 weights Mon Jan 19 17:21:03 2015
+fill_grid() filled 5300000 weights Mon Jan 19 17:21:15 2015
+fill_grid() filled 5350000 weights Mon Jan 19 17:21:27 2015
+fill_grid() filled 5400000 weights Mon Jan 19 17:21:39 2015
+fill_grid() filled 5450000 weights Mon Jan 19 17:21:50 2015
+fill_grid() filled 5500000 weights Mon Jan 19 17:22:02 2015
+fill_grid() filled 5550000 weights Mon Jan 19 17:22:14 2015
+fill_grid() filled 5600000 weights Mon Jan 19 17:22:25 2015
+fill_grid() filled 5650000 weights Mon Jan 19 17:22:37 2015
+fill_grid() filled 5700000 weights Mon Jan 19 17:22:49 2015
+fill_grid() filled 5750000 weights Mon Jan 19 17:23:00 2015
+fill_grid() filled 5800000 weights Mon Jan 19 17:23:12 2015
+fill_grid() filled 5850000 weights Mon Jan 19 17:23:24 2015
+fill_grid() filled 5900000 weights Mon Jan 19 17:23:36 2015
+fill_grid() filled 5950000 weights Mon Jan 19 17:23:47 2015
+fill_grid() filled 6000000 weights Mon Jan 19 17:23:59 2015
+fill_grid() filled 6050000 weights Mon Jan 19 17:24:11 2015
+fill_grid() filled 6100000 weights Mon Jan 19 17:24:23 2015
+fill_grid() filled 6150000 weights Mon Jan 19 17:24:34 2015
+fill_grid() filled 6200000 weights Mon Jan 19 17:24:46 2015
+fill_grid() filled 6250000 weights Mon Jan 19 17:24:58 2015
+
+************* Integration by Vegas (iteration   4) **************
+*                                                               *
+*  integral  =  3380.3952       accum. integral =  3378.6842    *
+*  std. dev. =  1.5804611       accum. std. dev = 0.78437186    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8558       ****************
+
+ Writing out intermediate results for iteration           4
+fill_grid() filled 6300000 weights Mon Jan 19 17:25:09 2015
+fill_grid() filled 6350000 weights Mon Jan 19 17:25:21 2015
+fill_grid() filled 6400000 weights Mon Jan 19 17:25:33 2015
+fill_grid() filled 6450000 weights Mon Jan 19 17:25:45 2015
+fill_grid() filled 6500000 weights Mon Jan 19 17:25:57 2015
+fill_grid() filled 6550000 weights Mon Jan 19 17:26:08 2015
+fill_grid() filled 6600000 weights Mon Jan 19 17:26:20 2015
+fill_grid() filled 6650000 weights Mon Jan 19 17:26:32 2015
+fill_grid() filled 6700000 weights Mon Jan 19 17:26:44 2015
+fill_grid() filled 6750000 weights Mon Jan 19 17:26:55 2015
+fill_grid() filled 6800000 weights Mon Jan 19 17:27:07 2015
+fill_grid() filled 6850000 weights Mon Jan 19 17:27:19 2015
+fill_grid() filled 6900000 weights Mon Jan 19 17:27:31 2015
+fill_grid() filled 6950000 weights Mon Jan 19 17:27:42 2015
+fill_grid() filled 7000000 weights Mon Jan 19 17:27:54 2015
+fill_grid() filled 7050000 weights Mon Jan 19 17:28:06 2015
+fill_grid() filled 7100000 weights Mon Jan 19 17:28:17 2015
+fill_grid() filled 7150000 weights Mon Jan 19 17:28:29 2015
+fill_grid() filled 7200000 weights Mon Jan 19 17:28:41 2015
+fill_grid() filled 7250000 weights Mon Jan 19 17:28:52 2015
+fill_grid() filled 7300000 weights Mon Jan 19 17:29:04 2015
+fill_grid() filled 7350000 weights Mon Jan 19 17:29:16 2015
+fill_grid() filled 7400000 weights Mon Jan 19 17:29:27 2015
+fill_grid() filled 7450000 weights Mon Jan 19 17:29:39 2015
+fill_grid() filled 7500000 weights Mon Jan 19 17:29:51 2015
+fill_grid() filled 7550000 weights Mon Jan 19 17:30:03 2015
+fill_grid() filled 7600000 weights Mon Jan 19 17:30:14 2015
+fill_grid() filled 7650000 weights Mon Jan 19 17:30:26 2015
+fill_grid() filled 7700000 weights Mon Jan 19 17:30:38 2015
+fill_grid() filled 7750000 weights Mon Jan 19 17:30:49 2015
+fill_grid() filled 7800000 weights Mon Jan 19 17:31:01 2015
+
+************* Integration by Vegas (iteration   5) **************
+*                                                               *
+*  integral  =  3378.1688       accum. integral =  3378.5744    *
+*  std. dev. =  1.5076644       accum. std. dev = 0.69583488    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration = 0.6653       ****************
+
+ Writing out intermediate results for iteration           5
+fill_grid() filled 7850000 weights Mon Jan 19 17:31:13 2015
+fill_grid() filled 7900000 weights Mon Jan 19 17:31:25 2015
+fill_grid() filled 7950000 weights Mon Jan 19 17:31:37 2015
+fill_grid() filled 8000000 weights Mon Jan 19 17:31:48 2015
+fill_grid() filled 8050000 weights Mon Jan 19 17:32:00 2015
+fill_grid() filled 8100000 weights Mon Jan 19 17:32:12 2015
+fill_grid() filled 8150000 weights Mon Jan 19 17:32:23 2015
+fill_grid() filled 8200000 weights Mon Jan 19 17:32:35 2015
+fill_grid() filled 8250000 weights Mon Jan 19 17:32:47 2015
+fill_grid() filled 8300000 weights Mon Jan 19 17:32:58 2015
+fill_grid() filled 8350000 weights Mon Jan 19 17:33:10 2015
+fill_grid() filled 8400000 weights Mon Jan 19 17:33:22 2015
+fill_grid() filled 8450000 weights Mon Jan 19 17:33:33 2015
+fill_grid() filled 8500000 weights Mon Jan 19 17:33:45 2015
+fill_grid() filled 8550000 weights Mon Jan 19 17:33:57 2015
+fill_grid() filled 8600000 weights Mon Jan 19 17:34:08 2015
+fill_grid() filled 8650000 weights Mon Jan 19 17:34:20 2015
+fill_grid() filled 8700000 weights Mon Jan 19 17:34:32 2015
+fill_grid() filled 8750000 weights Mon Jan 19 17:34:43 2015
+fill_grid() filled 8800000 weights Mon Jan 19 17:34:55 2015
+fill_grid() filled 8850000 weights Mon Jan 19 17:35:07 2015
+fill_grid() filled 8900000 weights Mon Jan 19 17:35:18 2015
+fill_grid() filled 8950000 weights Mon Jan 19 17:35:30 2015
+fill_grid() filled 9000000 weights Mon Jan 19 17:35:42 2015
+fill_grid() filled 9050000 weights Mon Jan 19 17:35:53 2015
+fill_grid() filled 9100000 weights Mon Jan 19 17:36:05 2015
+fill_grid() filled 9150000 weights Mon Jan 19 17:36:17 2015
+fill_grid() filled 9200000 weights Mon Jan 19 17:36:29 2015
+fill_grid() filled 9250000 weights Mon Jan 19 17:36:40 2015
+fill_grid() filled 9300000 weights Mon Jan 19 17:36:52 2015
+fill_grid() filled 9350000 weights Mon Jan 19 17:37:04 2015
+fill_grid() filled 9400000 weights Mon Jan 19 17:37:15 2015
+
+************* Integration by Vegas (iteration   6) **************
+*                                                               *
+*  integral  =  3377.9687       accum. integral =  3378.4790    *
+*  std. dev. =  1.6096297       accum. std. dev = 0.63870892    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration = 0.5563       ****************
+
+ Writing out intermediate results for iteration           6
+fill_grid() filled 9450000 weights Mon Jan 19 17:37:27 2015
+fill_grid() filled 9500000 weights Mon Jan 19 17:37:39 2015
+fill_grid() filled 9550000 weights Mon Jan 19 17:37:51 2015
+fill_grid() filled 9600000 weights Mon Jan 19 17:38:02 2015
+fill_grid() filled 9650000 weights Mon Jan 19 17:38:14 2015
+fill_grid() filled 9700000 weights Mon Jan 19 17:38:26 2015
+fill_grid() filled 9750000 weights Mon Jan 19 17:38:37 2015
+fill_grid() filled 9800000 weights Mon Jan 19 17:38:49 2015
+fill_grid() filled 9850000 weights Mon Jan 19 17:39:01 2015
+fill_grid() filled 9900000 weights Mon Jan 19 17:39:13 2015
+fill_grid() filled 9950000 weights Mon Jan 19 17:39:24 2015
+fill_grid() filled 10000000 weights Mon Jan 19 17:39:36 2015
+fill_grid() filled 10050000 weights Mon Jan 19 17:39:48 2015
+fill_grid() filled 10100000 weights Mon Jan 19 17:39:59 2015
+fill_grid() filled 10150000 weights Mon Jan 19 17:40:11 2015
+fill_grid() filled 10200000 weights Mon Jan 19 17:40:23 2015
+fill_grid() filled 10250000 weights Mon Jan 19 17:40:34 2015
+fill_grid() filled 10300000 weights Mon Jan 19 17:40:46 2015
+fill_grid() filled 10350000 weights Mon Jan 19 17:40:58 2015
+fill_grid() filled 10400000 weights Mon Jan 19 17:41:09 2015
+fill_grid() filled 10450000 weights Mon Jan 19 17:41:21 2015
+fill_grid() filled 10500000 weights Mon Jan 19 17:41:33 2015
+fill_grid() filled 10550000 weights Mon Jan 19 17:41:45 2015
+fill_grid() filled 10600000 weights Mon Jan 19 17:41:56 2015
+fill_grid() filled 10650000 weights Mon Jan 19 17:42:08 2015
+fill_grid() filled 10700000 weights Mon Jan 19 17:42:20 2015
+fill_grid() filled 10750000 weights Mon Jan 19 17:42:31 2015
+fill_grid() filled 10800000 weights Mon Jan 19 17:42:43 2015
+fill_grid() filled 10850000 weights Mon Jan 19 17:42:55 2015
+fill_grid() filled 10900000 weights Mon Jan 19 17:43:06 2015
+fill_grid() filled 10950000 weights Mon Jan 19 17:43:18 2015
+
+************* Integration by Vegas (iteration   7) **************
+*                                                               *
+*  integral  =  3378.7994       accum. integral =  3378.5244    *
+*  std. dev. =  1.5730401       accum. std. dev = 0.59178687    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration = 0.4697       ****************
+
+ Writing out intermediate results for iteration           7
+fill_grid() filled 11000000 weights Mon Jan 19 17:43:30 2015
+fill_grid() filled 11050000 weights Mon Jan 19 17:43:41 2015
+fill_grid() filled 11100000 weights Mon Jan 19 17:43:53 2015
+fill_grid() filled 11150000 weights Mon Jan 19 17:44:05 2015
+fill_grid() filled 11200000 weights Mon Jan 19 17:44:17 2015
+fill_grid() filled 11250000 weights Mon Jan 19 17:44:28 2015
+fill_grid() filled 11300000 weights Mon Jan 19 17:44:40 2015
+fill_grid() filled 11350000 weights Mon Jan 19 17:44:52 2015
+fill_grid() filled 11400000 weights Mon Jan 19 17:45:03 2015
+fill_grid() filled 11450000 weights Mon Jan 19 17:45:15 2015
+fill_grid() filled 11500000 weights Mon Jan 19 17:45:27 2015
+fill_grid() filled 11550000 weights Mon Jan 19 17:45:38 2015
+fill_grid() filled 11600000 weights Mon Jan 19 17:45:50 2015
+fill_grid() filled 11650000 weights Mon Jan 19 17:46:02 2015
+fill_grid() filled 11700000 weights Mon Jan 19 17:46:14 2015
+fill_grid() filled 11750000 weights Mon Jan 19 17:46:25 2015
+fill_grid() filled 11800000 weights Mon Jan 19 17:46:37 2015
+fill_grid() filled 11850000 weights Mon Jan 19 17:46:49 2015
+fill_grid() filled 11900000 weights Mon Jan 19 17:47:00 2015
+fill_grid() filled 11950000 weights Mon Jan 19 17:47:12 2015
+fill_grid() filled 12000000 weights Mon Jan 19 17:47:24 2015
+fill_grid() filled 12050000 weights Mon Jan 19 17:47:35 2015
+fill_grid() filled 12100000 weights Mon Jan 19 17:47:47 2015
+fill_grid() filled 12150000 weights Mon Jan 19 17:47:59 2015
+fill_grid() filled 12200000 weights Mon Jan 19 17:48:11 2015
+fill_grid() filled 12250000 weights Mon Jan 19 17:48:22 2015
+fill_grid() filled 12300000 weights Mon Jan 19 17:48:35 2015
+fill_grid() filled 12350000 weights Mon Jan 19 17:48:47 2015
+fill_grid() filled 12400000 weights Mon Jan 19 17:48:59 2015
+fill_grid() filled 12450000 weights Mon Jan 19 17:49:11 2015
+fill_grid() filled 12500000 weights Mon Jan 19 17:49:23 2015
+fill_grid() filled 12550000 weights Mon Jan 19 17:49:35 2015
+
+************* Integration by Vegas (iteration   8) **************
+*                                                               *
+*  integral  =  3376.7436       accum. integral =  3378.3122    *
+*  std. dev. =  1.6091206       accum. std. dev = 0.55541628    *
+*   max. wt. =   0.166688                                       *
+*                                                               *
+**************   chi**2/iteration = 0.5566       ****************
+
+ Writing out intermediate results for iteration           8
+fill_grid() filled 12600000 weights Mon Jan 19 17:49:47 2015
+fill_grid() filled 12650000 weights Mon Jan 19 17:49:59 2015
+fill_grid() filled 12700000 weights Mon Jan 19 17:50:11 2015
+fill_grid() filled 12750000 weights Mon Jan 19 17:50:23 2015
+fill_grid() filled 12800000 weights Mon Jan 19 17:50:34 2015
+fill_grid() filled 12850000 weights Mon Jan 19 17:50:46 2015
+fill_grid() filled 12900000 weights Mon Jan 19 17:50:58 2015
+fill_grid() filled 12950000 weights Mon Jan 19 17:51:09 2015
+fill_grid() filled 13000000 weights Mon Jan 19 17:51:21 2015
+fill_grid() filled 13050000 weights Mon Jan 19 17:51:33 2015
+fill_grid() filled 13100000 weights Mon Jan 19 17:51:45 2015
+fill_grid() filled 13150000 weights Mon Jan 19 17:51:56 2015
+fill_grid() filled 13200000 weights Mon Jan 19 17:52:08 2015
+fill_grid() filled 13250000 weights Mon Jan 19 17:52:20 2015
+fill_grid() filled 13300000 weights Mon Jan 19 17:52:31 2015
+fill_grid() filled 13350000 weights Mon Jan 19 17:52:43 2015
+fill_grid() filled 13400000 weights Mon Jan 19 17:52:55 2015
+fill_grid() filled 13450000 weights Mon Jan 19 17:53:07 2015
+fill_grid() filled 13500000 weights Mon Jan 19 17:53:19 2015
+fill_grid() filled 13550000 weights Mon Jan 19 17:53:31 2015
+fill_grid() filled 13600000 weights Mon Jan 19 17:53:43 2015
+fill_grid() filled 13650000 weights Mon Jan 19 17:53:54 2015
+fill_grid() filled 13700000 weights Mon Jan 19 17:54:06 2015
+fill_grid() filled 13750000 weights Mon Jan 19 17:54:18 2015
+fill_grid() filled 13800000 weights Mon Jan 19 17:54:30 2015
+fill_grid() filled 13850000 weights Mon Jan 19 17:54:42 2015
+fill_grid() filled 13900000 weights Mon Jan 19 17:54:53 2015
+fill_grid() filled 13950000 weights Mon Jan 19 17:55:05 2015
+fill_grid() filled 14000000 weights Mon Jan 19 17:55:17 2015
+fill_grid() filled 14050000 weights Mon Jan 19 17:55:29 2015
+fill_grid() filled 14100000 weights Mon Jan 19 17:55:41 2015
+
+************* Integration by Vegas (iteration   9) **************
+*                                                               *
+*  integral  =  3374.0114       accum. integral =  3377.8655    *
+*  std. dev. =  1.6314712       accum. std. dev = 0.52578263    *
+*   max. wt. =   0.199301                                       *
+*                                                               *
+**************   chi**2/iteration =  1.265       ****************
+
+ Writing out intermediate results for iteration           9
+fill_grid() filled 14150000 weights Mon Jan 19 17:55:53 2015
+fill_grid() filled 14200000 weights Mon Jan 19 17:56:05 2015
+fill_grid() filled 14250000 weights Mon Jan 19 17:56:17 2015
+fill_grid() filled 14300000 weights Mon Jan 19 17:56:29 2015
+fill_grid() filled 14350000 weights Mon Jan 19 17:56:41 2015
+fill_grid() filled 14400000 weights Mon Jan 19 17:56:53 2015
+fill_grid() filled 14450000 weights Mon Jan 19 17:57:04 2015
+fill_grid() filled 14500000 weights Mon Jan 19 17:57:16 2015
+fill_grid() filled 14550000 weights Mon Jan 19 17:57:28 2015
+fill_grid() filled 14600000 weights Mon Jan 19 17:57:39 2015
+fill_grid() filled 14650000 weights Mon Jan 19 17:57:51 2015
+fill_grid() filled 14700000 weights Mon Jan 19 17:58:03 2015
+fill_grid() filled 14750000 weights Mon Jan 19 17:58:15 2015
+fill_grid() filled 14800000 weights Mon Jan 19 17:58:26 2015
+fill_grid() filled 14850000 weights Mon Jan 19 17:58:38 2015
+fill_grid() filled 14900000 weights Mon Jan 19 17:58:50 2015
+fill_grid() filled 14950000 weights Mon Jan 19 17:59:01 2015
+fill_grid() filled 15000000 weights Mon Jan 19 17:59:13 2015
+fill_grid() filled 15050000 weights Mon Jan 19 17:59:25 2015
+fill_grid() filled 15100000 weights Mon Jan 19 17:59:37 2015
+fill_grid() filled 15150000 weights Mon Jan 19 17:59:48 2015
+fill_grid() filled 15200000 weights Mon Jan 19 18:00:00 2015
+fill_grid() filled 15250000 weights Mon Jan 19 18:00:12 2015
+fill_grid() filled 15300000 weights Mon Jan 19 18:00:23 2015
+fill_grid() filled 15350000 weights Mon Jan 19 18:00:35 2015
+fill_grid() filled 15400000 weights Mon Jan 19 18:00:47 2015
+fill_grid() filled 15450000 weights Mon Jan 19 18:00:58 2015
+fill_grid() filled 15500000 weights Mon Jan 19 18:01:10 2015
+fill_grid() filled 15550000 weights Mon Jan 19 18:01:22 2015
+fill_grid() filled 15600000 weights Mon Jan 19 18:01:34 2015
+fill_grid() filled 15650000 weights Mon Jan 19 18:01:45 2015
+
+************* Integration by Vegas (iteration  10) **************
+*                                                               *
+*  integral  =  3378.1618       accum. integral =  3377.8910    *
+*  std. dev. =  1.7149646       accum. std. dev = 0.50268818    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration =  1.127       ****************
+
+ Writing out intermediate results for iteration          10
+fill_grid() filled 15700000 weights Mon Jan 19 18:01:57 2015
+fill_grid() filled 15750000 weights Mon Jan 19 18:02:09 2015
+fill_grid() filled 15800000 weights Mon Jan 19 18:02:21 2015
+fill_grid() filled 15850000 weights Mon Jan 19 18:02:32 2015
+fill_grid() filled 15900000 weights Mon Jan 19 18:02:44 2015
+fill_grid() filled 15950000 weights Mon Jan 19 18:02:56 2015
+fill_grid() filled 16000000 weights Mon Jan 19 18:03:08 2015
+fill_grid() filled 16050000 weights Mon Jan 19 18:03:19 2015
+fill_grid() filled 16100000 weights Mon Jan 19 18:03:31 2015
+fill_grid() filled 16150000 weights Mon Jan 19 18:03:43 2015
+fill_grid() filled 16200000 weights Mon Jan 19 18:03:54 2015
+fill_grid() filled 16250000 weights Mon Jan 19 18:04:06 2015
+fill_grid() filled 16300000 weights Mon Jan 19 18:04:18 2015
+fill_grid() filled 16350000 weights Mon Jan 19 18:04:29 2015
+fill_grid() filled 16400000 weights Mon Jan 19 18:04:41 2015
+fill_grid() filled 16450000 weights Mon Jan 19 18:04:53 2015
+fill_grid() filled 16500000 weights Mon Jan 19 18:05:04 2015
+fill_grid() filled 16550000 weights Mon Jan 19 18:05:16 2015
+fill_grid() filled 16600000 weights Mon Jan 19 18:05:28 2015
+fill_grid() filled 16650000 weights Mon Jan 19 18:05:40 2015
+fill_grid() filled 16700000 weights Mon Jan 19 18:05:51 2015
+fill_grid() filled 16750000 weights Mon Jan 19 18:06:03 2015
+fill_grid() filled 16800000 weights Mon Jan 19 18:06:15 2015
+fill_grid() filled 16850000 weights Mon Jan 19 18:06:27 2015
+fill_grid() filled 16900000 weights Mon Jan 19 18:06:38 2015
+fill_grid() filled 16950000 weights Mon Jan 19 18:06:50 2015
+fill_grid() filled 17000000 weights Mon Jan 19 18:07:02 2015
+fill_grid() filled 17050000 weights Mon Jan 19 18:07:13 2015
+fill_grid() filled 17100000 weights Mon Jan 19 18:07:25 2015
+fill_grid() filled 17150000 weights Mon Jan 19 18:07:37 2015
+fill_grid() filled 17200000 weights Mon Jan 19 18:07:48 2015
+
+************* Integration by Vegas (iteration  11) **************
+*                                                               *
+*  integral  =  3380.3369       accum. integral =  3378.0993    *
+*  std. dev. =  1.6475686       accum. std. dev = 0.48080658    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration =  1.216       ****************
+
+ Writing out intermediate results for iteration          11
+fill_grid() filled 17250000 weights Mon Jan 19 18:08:00 2015
+fill_grid() filled 17300000 weights Mon Jan 19 18:08:12 2015
+fill_grid() filled 17350000 weights Mon Jan 19 18:08:24 2015
+fill_grid() filled 17400000 weights Mon Jan 19 18:08:35 2015
+fill_grid() filled 17450000 weights Mon Jan 19 18:08:47 2015
+fill_grid() filled 17500000 weights Mon Jan 19 18:08:59 2015
+fill_grid() filled 17550000 weights Mon Jan 19 18:09:10 2015
+fill_grid() filled 17600000 weights Mon Jan 19 18:09:22 2015
+fill_grid() filled 17650000 weights Mon Jan 19 18:09:34 2015
+fill_grid() filled 17700000 weights Mon Jan 19 18:09:45 2015
+fill_grid() filled 17750000 weights Mon Jan 19 18:09:57 2015
+fill_grid() filled 17800000 weights Mon Jan 19 18:10:09 2015
+fill_grid() filled 17850000 weights Mon Jan 19 18:10:21 2015
+fill_grid() filled 17900000 weights Mon Jan 19 18:10:32 2015
+fill_grid() filled 17950000 weights Mon Jan 19 18:10:44 2015
+fill_grid() filled 18000000 weights Mon Jan 19 18:10:56 2015
+fill_grid() filled 18050000 weights Mon Jan 19 18:11:07 2015
+fill_grid() filled 18100000 weights Mon Jan 19 18:11:19 2015
+fill_grid() filled 18150000 weights Mon Jan 19 18:11:31 2015
+fill_grid() filled 18200000 weights Mon Jan 19 18:11:43 2015
+fill_grid() filled 18250000 weights Mon Jan 19 18:11:54 2015
+fill_grid() filled 18300000 weights Mon Jan 19 18:12:06 2015
+fill_grid() filled 18350000 weights Mon Jan 19 18:12:18 2015
+fill_grid() filled 18400000 weights Mon Jan 19 18:12:29 2015
+fill_grid() filled 18450000 weights Mon Jan 19 18:12:41 2015
+fill_grid() filled 18500000 weights Mon Jan 19 18:12:53 2015
+fill_grid() filled 18550000 weights Mon Jan 19 18:13:04 2015
+fill_grid() filled 18600000 weights Mon Jan 19 18:13:16 2015
+fill_grid() filled 18650000 weights Mon Jan 19 18:13:28 2015
+fill_grid() filled 18700000 weights Mon Jan 19 18:13:39 2015
+fill_grid() filled 18750000 weights Mon Jan 19 18:13:51 2015
+fill_grid() filled 18800000 weights Mon Jan 19 18:14:03 2015
+
+************* Integration by Vegas (iteration  12) **************
+*                                                               *
+*  integral  =  3378.2989       accum. integral =  3378.1155    *
+*  std. dev. =  1.6157579       accum. std. dev = 0.46083582    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration =  1.107       ****************
+
+ Writing out intermediate results for iteration          12
+fill_grid() filled 18850000 weights Mon Jan 19 18:14:15 2015
+fill_grid() filled 18900000 weights Mon Jan 19 18:14:26 2015
+fill_grid() filled 18950000 weights Mon Jan 19 18:14:38 2015
+fill_grid() filled 19000000 weights Mon Jan 19 18:14:50 2015
+fill_grid() filled 19050000 weights Mon Jan 19 18:15:01 2015
+fill_grid() filled 19100000 weights Mon Jan 19 18:15:13 2015
+fill_grid() filled 19150000 weights Mon Jan 19 18:15:25 2015
+fill_grid() filled 19200000 weights Mon Jan 19 18:15:37 2015
+fill_grid() filled 19250000 weights Mon Jan 19 18:15:49 2015
+fill_grid() filled 19300000 weights Mon Jan 19 18:16:00 2015
+fill_grid() filled 19350000 weights Mon Jan 19 18:16:13 2015
+fill_grid() filled 19400000 weights Mon Jan 19 18:16:25 2015
+fill_grid() filled 19450000 weights Mon Jan 19 18:16:36 2015
+fill_grid() filled 19500000 weights Mon Jan 19 18:16:48 2015
+fill_grid() filled 19550000 weights Mon Jan 19 18:17:00 2015
+fill_grid() filled 19600000 weights Mon Jan 19 18:17:12 2015
+fill_grid() filled 19650000 weights Mon Jan 19 18:17:23 2015
+fill_grid() filled 19700000 weights Mon Jan 19 18:17:35 2015
+fill_grid() filled 19750000 weights Mon Jan 19 18:17:47 2015
+fill_grid() filled 19800000 weights Mon Jan 19 18:17:59 2015
+fill_grid() filled 19850000 weights Mon Jan 19 18:18:10 2015
+fill_grid() filled 19900000 weights Mon Jan 19 18:18:22 2015
+fill_grid() filled 19950000 weights Mon Jan 19 18:18:34 2015
+fill_grid() filled 20000000 weights Mon Jan 19 18:18:45 2015
+fill_grid() filled 20050000 weights Mon Jan 19 18:18:57 2015
+fill_grid() filled 20100000 weights Mon Jan 19 18:19:09 2015
+fill_grid() filled 20150000 weights Mon Jan 19 18:19:21 2015
+fill_grid() filled 20200000 weights Mon Jan 19 18:19:32 2015
+fill_grid() filled 20250000 weights Mon Jan 19 18:19:44 2015
+fill_grid() filled 20300000 weights Mon Jan 19 18:19:56 2015
+fill_grid() filled 20350000 weights Mon Jan 19 18:20:07 2015
+
+************* Integration by Vegas (iteration  13) **************
+*                                                               *
+*  integral  =  3378.4033       accum. integral =  3378.1330    *
+*  std. dev. =  1.8105276       accum. std. dev = 0.44659621    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration =  1.017       ****************
+
+ Writing out intermediate results for iteration          13
+fill_grid() filled 20400000 weights Mon Jan 19 18:20:19 2015
+fill_grid() filled 20450000 weights Mon Jan 19 18:20:31 2015
+fill_grid() filled 20500000 weights Mon Jan 19 18:20:43 2015
+fill_grid() filled 20550000 weights Mon Jan 19 18:20:55 2015
+fill_grid() filled 20600000 weights Mon Jan 19 18:21:06 2015
+fill_grid() filled 20650000 weights Mon Jan 19 18:21:19 2015
+fill_grid() filled 20700000 weights Mon Jan 19 18:21:30 2015
+fill_grid() filled 20750000 weights Mon Jan 19 18:21:42 2015
+fill_grid() filled 20800000 weights Mon Jan 19 18:21:54 2015
+fill_grid() filled 20850000 weights Mon Jan 19 18:22:05 2015
+fill_grid() filled 20900000 weights Mon Jan 19 18:22:17 2015
+fill_grid() filled 20950000 weights Mon Jan 19 18:22:29 2015
+fill_grid() filled 21000000 weights Mon Jan 19 18:22:41 2015
+fill_grid() filled 21050000 weights Mon Jan 19 18:22:52 2015
+fill_grid() filled 21100000 weights Mon Jan 19 18:23:04 2015
+fill_grid() filled 21150000 weights Mon Jan 19 18:23:16 2015
+fill_grid() filled 21200000 weights Mon Jan 19 18:23:28 2015
+fill_grid() filled 21250000 weights Mon Jan 19 18:23:40 2015
+fill_grid() filled 21300000 weights Mon Jan 19 18:23:52 2015
+fill_grid() filled 21350000 weights Mon Jan 19 18:24:04 2015
+fill_grid() filled 21400000 weights Mon Jan 19 18:24:15 2015
+fill_grid() filled 21450000 weights Mon Jan 19 18:24:27 2015
+fill_grid() filled 21500000 weights Mon Jan 19 18:24:39 2015
+fill_grid() filled 21550000 weights Mon Jan 19 18:24:50 2015
+fill_grid() filled 21600000 weights Mon Jan 19 18:25:02 2015
+fill_grid() filled 21650000 weights Mon Jan 19 18:25:14 2015
+fill_grid() filled 21700000 weights Mon Jan 19 18:25:25 2015
+fill_grid() filled 21750000 weights Mon Jan 19 18:25:37 2015
+fill_grid() filled 21800000 weights Mon Jan 19 18:25:49 2015
+fill_grid() filled 21850000 weights Mon Jan 19 18:26:01 2015
+fill_grid() filled 21900000 weights Mon Jan 19 18:26:13 2015
+
+************* Integration by Vegas (iteration  14) **************
+*                                                               *
+*  integral  =  3378.7270       accum. integral =  3378.1697    *
+*  std. dev. =  1.7416615       accum. std. dev = 0.43260063    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9469       ****************
+
+ Writing out intermediate results for iteration          14
+fill_grid() filled 21950000 weights Mon Jan 19 18:26:25 2015
+fill_grid() filled 22000000 weights Mon Jan 19 18:26:37 2015
+fill_grid() filled 22050000 weights Mon Jan 19 18:26:49 2015
+fill_grid() filled 22100000 weights Mon Jan 19 18:27:01 2015
+fill_grid() filled 22150000 weights Mon Jan 19 18:27:12 2015
+fill_grid() filled 22200000 weights Mon Jan 19 18:27:24 2015
+fill_grid() filled 22250000 weights Mon Jan 19 18:27:36 2015
+fill_grid() filled 22300000 weights Mon Jan 19 18:27:48 2015
+fill_grid() filled 22350000 weights Mon Jan 19 18:27:59 2015
+fill_grid() filled 22400000 weights Mon Jan 19 18:28:11 2015
+fill_grid() filled 22450000 weights Mon Jan 19 18:28:23 2015
+fill_grid() filled 22500000 weights Mon Jan 19 18:28:35 2015
+fill_grid() filled 22550000 weights Mon Jan 19 18:28:46 2015
+fill_grid() filled 22600000 weights Mon Jan 19 18:28:58 2015
+fill_grid() filled 22650000 weights Mon Jan 19 18:29:10 2015
+fill_grid() filled 22700000 weights Mon Jan 19 18:29:22 2015
+fill_grid() filled 22750000 weights Mon Jan 19 18:29:33 2015
+fill_grid() filled 22800000 weights Mon Jan 19 18:29:45 2015
+fill_grid() filled 22850000 weights Mon Jan 19 18:29:57 2015
+fill_grid() filled 22900000 weights Mon Jan 19 18:30:09 2015
+fill_grid() filled 22950000 weights Mon Jan 19 18:30:20 2015
+fill_grid() filled 23000000 weights Mon Jan 19 18:30:32 2015
+fill_grid() filled 23050000 weights Mon Jan 19 18:30:44 2015
+fill_grid() filled 23100000 weights Mon Jan 19 18:30:56 2015
+fill_grid() filled 23150000 weights Mon Jan 19 18:31:07 2015
+fill_grid() filled 23200000 weights Mon Jan 19 18:31:19 2015
+fill_grid() filled 23250000 weights Mon Jan 19 18:31:31 2015
+fill_grid() filled 23300000 weights Mon Jan 19 18:31:43 2015
+fill_grid() filled 23350000 weights Mon Jan 19 18:31:55 2015
+fill_grid() filled 23400000 weights Mon Jan 19 18:32:06 2015
+fill_grid() filled 23450000 weights Mon Jan 19 18:32:18 2015
+
+************* Integration by Vegas (iteration  15) **************
+*                                                               *
+*  integral  =  3378.2241       accum. integral =  3378.1730    *
+*  std. dev. =  1.7031561       accum. std. dev = 0.41928673    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8794       ****************
+
+ Writing out intermediate results for iteration          15
+fill_grid() filled 23500000 weights Mon Jan 19 18:32:30 2015
+fill_grid() filled 23550000 weights Mon Jan 19 18:32:42 2015
+fill_grid() filled 23600000 weights Mon Jan 19 18:32:54 2015
+fill_grid() filled 23650000 weights Mon Jan 19 18:33:06 2015
+fill_grid() filled 23700000 weights Mon Jan 19 18:33:17 2015
+fill_grid() filled 23750000 weights Mon Jan 19 18:33:29 2015
+fill_grid() filled 23800000 weights Mon Jan 19 18:33:41 2015
+fill_grid() filled 23850000 weights Mon Jan 19 18:33:53 2015
+fill_grid() filled 23900000 weights Mon Jan 19 18:34:04 2015
+fill_grid() filled 23950000 weights Mon Jan 19 18:34:16 2015
+fill_grid() filled 24000000 weights Mon Jan 19 18:34:28 2015
+fill_grid() filled 24050000 weights Mon Jan 19 18:34:40 2015
+fill_grid() filled 24100000 weights Mon Jan 19 18:34:51 2015
+fill_grid() filled 24150000 weights Mon Jan 19 18:35:03 2015
+fill_grid() filled 24200000 weights Mon Jan 19 18:35:15 2015
+fill_grid() filled 24250000 weights Mon Jan 19 18:35:27 2015
+fill_grid() filled 24300000 weights Mon Jan 19 18:35:38 2015
+fill_grid() filled 24350000 weights Mon Jan 19 18:35:50 2015
+fill_grid() filled 24400000 weights Mon Jan 19 18:36:02 2015
+fill_grid() filled 24450000 weights Mon Jan 19 18:36:14 2015
+fill_grid() filled 24500000 weights Mon Jan 19 18:36:26 2015
+fill_grid() filled 24550000 weights Mon Jan 19 18:36:38 2015
+fill_grid() filled 24600000 weights Mon Jan 19 18:36:49 2015
+fill_grid() filled 24650000 weights Mon Jan 19 18:37:01 2015
+fill_grid() filled 24700000 weights Mon Jan 19 18:37:13 2015
+fill_grid() filled 24750000 weights Mon Jan 19 18:37:25 2015
+fill_grid() filled 24800000 weights Mon Jan 19 18:37:36 2015
+fill_grid() filled 24850000 weights Mon Jan 19 18:37:48 2015
+fill_grid() filled 24900000 weights Mon Jan 19 18:38:00 2015
+fill_grid() filled 24950000 weights Mon Jan 19 18:38:12 2015
+fill_grid() filled 25000000 weights Mon Jan 19 18:38:23 2015
+
+************* Integration by Vegas (iteration  16) **************
+*                                                               *
+*  integral  =  3376.1222       accum. integral =  3378.0537    *
+*  std. dev. =  1.6877338       accum. std. dev = 0.40691758    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9135       ****************
+
+ Writing out intermediate results for iteration          16
+fill_grid() filled 25050000 weights Mon Jan 19 18:38:35 2015
+fill_grid() filled 25100000 weights Mon Jan 19 18:38:47 2015
+fill_grid() filled 25150000 weights Mon Jan 19 18:38:59 2015
+fill_grid() filled 25200000 weights Mon Jan 19 18:39:11 2015
+fill_grid() filled 25250000 weights Mon Jan 19 18:39:22 2015
+fill_grid() filled 25300000 weights Mon Jan 19 18:39:34 2015
+fill_grid() filled 25350000 weights Mon Jan 19 18:39:46 2015
+fill_grid() filled 25400000 weights Mon Jan 19 18:39:58 2015
+fill_grid() filled 25450000 weights Mon Jan 19 18:40:10 2015
+fill_grid() filled 25500000 weights Mon Jan 19 18:40:21 2015
+fill_grid() filled 25550000 weights Mon Jan 19 18:40:33 2015
+fill_grid() filled 25600000 weights Mon Jan 19 18:40:45 2015
+fill_grid() filled 25650000 weights Mon Jan 19 18:40:57 2015
+fill_grid() filled 25700000 weights Mon Jan 19 18:41:09 2015
+fill_grid() filled 25750000 weights Mon Jan 19 18:41:21 2015
+fill_grid() filled 25800000 weights Mon Jan 19 18:41:33 2015
+fill_grid() filled 25850000 weights Mon Jan 19 18:41:45 2015
+fill_grid() filled 25900000 weights Mon Jan 19 18:41:57 2015
+fill_grid() filled 25950000 weights Mon Jan 19 18:42:08 2015
+fill_grid() filled 26000000 weights Mon Jan 19 18:42:20 2015
+fill_grid() filled 26050000 weights Mon Jan 19 18:42:32 2015
+fill_grid() filled 26100000 weights Mon Jan 19 18:42:43 2015
+fill_grid() filled 26150000 weights Mon Jan 19 18:42:55 2015
+fill_grid() filled 26200000 weights Mon Jan 19 18:43:07 2015
+fill_grid() filled 26250000 weights Mon Jan 19 18:43:19 2015
+fill_grid() filled 26300000 weights Mon Jan 19 18:43:32 2015
+fill_grid() filled 26350000 weights Mon Jan 19 18:43:45 2015
+fill_grid() filled 26400000 weights Mon Jan 19 18:43:57 2015
+fill_grid() filled 26450000 weights Mon Jan 19 18:44:10 2015
+fill_grid() filled 26500000 weights Mon Jan 19 18:44:22 2015
+fill_grid() filled 26550000 weights Mon Jan 19 18:44:35 2015
+
+************* Integration by Vegas (iteration  17) **************
+*                                                               *
+*  integral  =  3378.0734       accum. integral =  3378.0547    *
+*  std. dev. =  1.7890399       accum. std. dev = 0.39678347    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8564       ****************
+
+ Writing out intermediate results for iteration          17
+fill_grid() filled 26600000 weights Mon Jan 19 18:44:47 2015
+fill_grid() filled 26650000 weights Mon Jan 19 18:45:00 2015
+fill_grid() filled 26700000 weights Mon Jan 19 18:45:13 2015
+fill_grid() filled 26750000 weights Mon Jan 19 18:45:25 2015
+fill_grid() filled 26800000 weights Mon Jan 19 18:45:38 2015
+fill_grid() filled 26850000 weights Mon Jan 19 18:45:51 2015
+fill_grid() filled 26900000 weights Mon Jan 19 18:46:02 2015
+fill_grid() filled 26950000 weights Mon Jan 19 18:46:14 2015
+fill_grid() filled 27000000 weights Mon Jan 19 18:46:27 2015
+fill_grid() filled 27050000 weights Mon Jan 19 18:46:39 2015
+fill_grid() filled 27100000 weights Mon Jan 19 18:46:51 2015
+fill_grid() filled 27150000 weights Mon Jan 19 18:47:04 2015
+fill_grid() filled 27200000 weights Mon Jan 19 18:47:16 2015
+fill_grid() filled 27250000 weights Mon Jan 19 18:47:29 2015
+fill_grid() filled 27300000 weights Mon Jan 19 18:47:41 2015
+fill_grid() filled 27350000 weights Mon Jan 19 18:47:54 2015
+fill_grid() filled 27400000 weights Mon Jan 19 18:48:06 2015
+fill_grid() filled 27450000 weights Mon Jan 19 18:48:19 2015
+fill_grid() filled 27500000 weights Mon Jan 19 18:48:31 2015
+fill_grid() filled 27550000 weights Mon Jan 19 18:48:44 2015
+fill_grid() filled 27600000 weights Mon Jan 19 18:48:56 2015
+fill_grid() filled 27650000 weights Mon Jan 19 18:49:09 2015
+fill_grid() filled 27700000 weights Mon Jan 19 18:49:21 2015
+fill_grid() filled 27750000 weights Mon Jan 19 18:49:34 2015
+fill_grid() filled 27800000 weights Mon Jan 19 18:49:46 2015
+fill_grid() filled 27850000 weights Mon Jan 19 18:49:59 2015
+fill_grid() filled 27900000 weights Mon Jan 19 18:50:11 2015
+fill_grid() filled 27950000 weights Mon Jan 19 18:50:24 2015
+fill_grid() filled 28000000 weights Mon Jan 19 18:50:36 2015
+fill_grid() filled 28050000 weights Mon Jan 19 18:50:49 2015
+fill_grid() filled 28100000 weights Mon Jan 19 18:51:01 2015
+
+************* Integration by Vegas (iteration  18) **************
+*                                                               *
+*  integral  =  3377.3692       accum. integral =  3378.0228    *
+*  std. dev. =  1.7948678       accum. std. dev = 0.38742955    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8142       ****************
+
+ Writing out intermediate results for iteration          18
+fill_grid() filled 28150000 weights Mon Jan 19 18:51:14 2015
+fill_grid() filled 28200000 weights Mon Jan 19 18:51:25 2015
+fill_grid() filled 28250000 weights Mon Jan 19 18:51:37 2015
+fill_grid() filled 28300000 weights Mon Jan 19 18:51:49 2015
+fill_grid() filled 28350000 weights Mon Jan 19 18:52:01 2015
+fill_grid() filled 28400000 weights Mon Jan 19 18:52:12 2015
+fill_grid() filled 28450000 weights Mon Jan 19 18:52:24 2015
+fill_grid() filled 28500000 weights Mon Jan 19 18:52:36 2015
+fill_grid() filled 28550000 weights Mon Jan 19 18:52:47 2015
+fill_grid() filled 28600000 weights Mon Jan 19 18:52:59 2015
+fill_grid() filled 28650000 weights Mon Jan 19 18:53:11 2015
+fill_grid() filled 28700000 weights Mon Jan 19 18:53:22 2015
+fill_grid() filled 28750000 weights Mon Jan 19 18:53:34 2015
+fill_grid() filled 28800000 weights Mon Jan 19 18:53:46 2015
+fill_grid() filled 28850000 weights Mon Jan 19 18:53:58 2015
+fill_grid() filled 28900000 weights Mon Jan 19 18:54:10 2015
+fill_grid() filled 28950000 weights Mon Jan 19 18:54:22 2015
+fill_grid() filled 29000000 weights Mon Jan 19 18:54:33 2015
+fill_grid() filled 29050000 weights Mon Jan 19 18:54:45 2015
+fill_grid() filled 29100000 weights Mon Jan 19 18:54:57 2015
+fill_grid() filled 29150000 weights Mon Jan 19 18:55:08 2015
+fill_grid() filled 29200000 weights Mon Jan 19 18:55:20 2015
+fill_grid() filled 29250000 weights Mon Jan 19 18:55:32 2015
+fill_grid() filled 29300000 weights Mon Jan 19 18:55:43 2015
+fill_grid() filled 29350000 weights Mon Jan 19 18:55:55 2015
+fill_grid() filled 29400000 weights Mon Jan 19 18:56:07 2015
+fill_grid() filled 29450000 weights Mon Jan 19 18:56:18 2015
+fill_grid() filled 29500000 weights Mon Jan 19 18:56:30 2015
+fill_grid() filled 29550000 weights Mon Jan 19 18:56:42 2015
+fill_grid() filled 29600000 weights Mon Jan 19 18:56:53 2015
+fill_grid() filled 29650000 weights Mon Jan 19 18:57:05 2015
+
+************* Integration by Vegas (iteration  19) **************
+*                                                               *
+*  integral  =  3376.9589       accum. integral =  3377.9680    *
+*  std. dev. =  1.6627811       accum. std. dev = 0.37732260    *
+*   max. wt. =   0.203994                                       *
+*                                                               *
+**************   chi**2/iteration = 0.7906       ****************
+
+ Writing out intermediate results for iteration          19
+fill_grid() filled 29700000 weights Mon Jan 19 18:57:17 2015
+fill_grid() filled 29750000 weights Mon Jan 19 18:57:29 2015
+fill_grid() filled 29800000 weights Mon Jan 19 18:57:40 2015
+fill_grid() filled 29850000 weights Mon Jan 19 18:57:52 2015
+fill_grid() filled 29900000 weights Mon Jan 19 18:58:04 2015
+fill_grid() filled 29950000 weights Mon Jan 19 18:58:15 2015
+fill_grid() filled 30000000 weights Mon Jan 19 18:58:27 2015
+fill_grid() filled 30050000 weights Mon Jan 19 18:58:39 2015
+fill_grid() filled 30100000 weights Mon Jan 19 18:58:51 2015
+fill_grid() filled 30150000 weights Mon Jan 19 18:59:02 2015
+fill_grid() filled 30200000 weights Mon Jan 19 18:59:14 2015
+fill_grid() filled 30250000 weights Mon Jan 19 18:59:26 2015
+fill_grid() filled 30300000 weights Mon Jan 19 18:59:37 2015
+fill_grid() filled 30350000 weights Mon Jan 19 18:59:49 2015
+fill_grid() filled 30400000 weights Mon Jan 19 19:00:01 2015
+fill_grid() filled 30450000 weights Mon Jan 19 19:00:12 2015
+fill_grid() filled 30500000 weights Mon Jan 19 19:00:24 2015
+fill_grid() filled 30550000 weights Mon Jan 19 19:00:36 2015
+fill_grid() filled 30600000 weights Mon Jan 19 19:00:47 2015
+fill_grid() filled 30650000 weights Mon Jan 19 19:00:59 2015
+fill_grid() filled 30700000 weights Mon Jan 19 19:01:11 2015
+fill_grid() filled 30750000 weights Mon Jan 19 19:01:23 2015
+fill_grid() filled 30800000 weights Mon Jan 19 19:01:34 2015
+fill_grid() filled 30850000 weights Mon Jan 19 19:01:46 2015
+fill_grid() filled 30900000 weights Mon Jan 19 19:01:58 2015
+fill_grid() filled 30950000 weights Mon Jan 19 19:02:09 2015
+fill_grid() filled 31000000 weights Mon Jan 19 19:02:21 2015
+fill_grid() filled 31050000 weights Mon Jan 19 19:02:33 2015
+fill_grid() filled 31100000 weights Mon Jan 19 19:02:44 2015
+fill_grid() filled 31150000 weights Mon Jan 19 19:02:56 2015
+fill_grid() filled 31200000 weights Mon Jan 19 19:03:08 2015
+fill_grid() filled 31250000 weights Mon Jan 19 19:03:19 2015
+
+************* Integration by Vegas (iteration  20) **************
+*                                                               *
+*  integral  =  3378.0806       accum. integral =  3377.9737    *
+*  std. dev. =  1.6281731       accum. std. dev = 0.36758099    *
+*   max. wt. =   0.228728                                       *
+*                                                               *
+**************   chi**2/iteration = 0.7492       ****************
+
+ Adjusting number of points for real to    25000000
+ ****************************************************
+ * Reading in vegas grid from Z_only_tota_CT10nlo_25__25__CMSDY2D11-BIN1_dvegas_real.grid                                                         *
+ ****************************************************
+
+ input parameters for vegas:  ndim=  7  ncall=********
+                              it=   21  itmx=   20
+                              nprn=  0  alph= 1.50
+                              mds=  1   nd= 100
+                              xl( 1)=   0.000     xu( 1)=   1.000    
+                              xl( 2)=   0.000     xu( 2)=   1.000    
+                              xl( 3)=   0.000     xu( 3)=   1.000    
+                              xl( 4)=   0.000     xu( 4)=   1.000    
+                              xl( 5)=   0.000     xu( 5)=   1.000    
+                              xl( 6)=   0.000     xu( 6)=   1.000    
+                              xl( 7)=   0.000     xu( 7)=   1.000    
+fill_grid() filled 31300000 weights Mon Jan 19 19:03:46 2015
+fill_grid() filled 31350000 weights Mon Jan 19 19:03:57 2015
+fill_grid() filled 31400000 weights Mon Jan 19 19:04:06 2015
+fill_grid() filled 31450000 weights Mon Jan 19 19:04:17 2015
+fill_grid() filled 31500000 weights Mon Jan 19 19:05:00 2015
+fill_grid() filled 31550000 weights Mon Jan 19 19:05:17 2015
+fill_grid() filled 31600000 weights Mon Jan 19 19:05:33 2015
+fill_grid() filled 31650000 weights Mon Jan 19 19:06:18 2015
+fill_grid() filled 31700000 weights Mon Jan 19 19:06:35 2015
+fill_grid() filled 31750000 weights Mon Jan 19 19:07:01 2015
+fill_grid() filled 31800000 weights Mon Jan 19 19:07:31 2015
+fill_grid() filled 31850000 weights Mon Jan 19 19:07:49 2015
+fill_grid() filled 31900000 weights Mon Jan 19 19:08:08 2015
+fill_grid() filled 31950000 weights Mon Jan 19 19:08:37 2015
+fill_grid() filled 32000000 weights Mon Jan 19 19:08:51 2015
+fill_grid() filled 32050000 weights Mon Jan 19 19:09:07 2015
+fill_grid() filled 32100000 weights Mon Jan 19 19:09:21 2015
+fill_grid() filled 32150000 weights Mon Jan 19 19:09:45 2015
+fill_grid() filled 32200000 weights Mon Jan 19 19:10:04 2015
+fill_grid() filled 32250000 weights Mon Jan 19 19:10:16 2015
+fill_grid() filled 32300000 weights Mon Jan 19 19:10:28 2015
+fill_grid() filled 32350000 weights Mon Jan 19 19:10:40 2015
+fill_grid() filled 32400000 weights Mon Jan 19 19:11:00 2015
+fill_grid() filled 32450000 weights Mon Jan 19 19:11:22 2015
+fill_grid() filled 32500000 weights Mon Jan 19 19:11:34 2015
+fill_grid() filled 32550000 weights Mon Jan 19 19:11:45 2015
+fill_grid() filled 32600000 weights Mon Jan 19 19:11:56 2015
+fill_grid() filled 32650000 weights Mon Jan 19 19:12:13 2015
+fill_grid() filled 32700000 weights Mon Jan 19 19:12:37 2015
+fill_grid() filled 32750000 weights Mon Jan 19 19:12:52 2015
+fill_grid() filled 32800000 weights Mon Jan 19 19:13:03 2015
+fill_grid() filled 32850000 weights Mon Jan 19 19:13:15 2015
+fill_grid() filled 32900000 weights Mon Jan 19 19:13:31 2015
+fill_grid() filled 32950000 weights Mon Jan 19 19:13:51 2015
+fill_grid() filled 33000000 weights Mon Jan 19 19:14:06 2015
+fill_grid() filled 33050000 weights Mon Jan 19 19:14:19 2015
+fill_grid() filled 33100000 weights Mon Jan 19 19:14:32 2015
+fill_grid() filled 33150000 weights Mon Jan 19 19:14:47 2015
+fill_grid() filled 33200000 weights Mon Jan 19 19:15:02 2015
+fill_grid() filled 33250000 weights Mon Jan 19 19:15:19 2015
+fill_grid() filled 33300000 weights Mon Jan 19 19:15:34 2015
+fill_grid() filled 33350000 weights Mon Jan 19 19:15:49 2015
+fill_grid() filled 33400000 weights Mon Jan 19 19:16:04 2015
+fill_grid() filled 33450000 weights Mon Jan 19 19:16:19 2015
+
+************* Integration by Vegas (iteration   1) **************
+*                                                               *
+*  integral  =  27419.296       accum. integral =  27419.296    *
+*  std. dev. =  34.768762       accum. std. dev =  34.768762    *
+*   max. wt. =    7.82296                                       *
+*                                                               *
+**************   chi**2/iteration =  0.000       ****************
+
+ Writing out intermediate results for iteration           1
+fill_grid() filled 33500000 weights Mon Jan 19 19:16:45 2015
+fill_grid() filled 33550000 weights Mon Jan 19 19:16:57 2015
+fill_grid() filled 33600000 weights Mon Jan 19 19:17:06 2015
+fill_grid() filled 33650000 weights Mon Jan 19 19:17:17 2015
+fill_grid() filled 33700000 weights Mon Jan 19 19:17:52 2015
+fill_grid() filled 33750000 weights Mon Jan 19 19:18:15 2015
+fill_grid() filled 33800000 weights Mon Jan 19 19:18:31 2015
+fill_grid() filled 33850000 weights Mon Jan 19 19:19:14 2015
+fill_grid() filled 33900000 weights Mon Jan 19 19:19:33 2015
+fill_grid() filled 33950000 weights Mon Jan 19 19:19:55 2015
+fill_grid() filled 34000000 weights Mon Jan 19 19:20:26 2015
+fill_grid() filled 34050000 weights Mon Jan 19 19:20:44 2015
+fill_grid() filled 34100000 weights Mon Jan 19 19:21:02 2015
+fill_grid() filled 34150000 weights Mon Jan 19 19:21:29 2015
+fill_grid() filled 34200000 weights Mon Jan 19 19:21:45 2015
+fill_grid() filled 34250000 weights Mon Jan 19 19:22:00 2015
+fill_grid() filled 34300000 weights Mon Jan 19 19:22:14 2015
+fill_grid() filled 34350000 weights Mon Jan 19 19:22:29 2015
+fill_grid() filled 34400000 weights Mon Jan 19 19:22:54 2015
+fill_grid() filled 34450000 weights Mon Jan 19 19:23:07 2015
+fill_grid() filled 34500000 weights Mon Jan 19 19:23:18 2015
+fill_grid() filled 34550000 weights Mon Jan 19 19:23:29 2015
+fill_grid() filled 34600000 weights Mon Jan 19 19:23:42 2015
+fill_grid() filled 34650000 weights Mon Jan 19 19:24:07 2015
+fill_grid() filled 34700000 weights Mon Jan 19 19:24:23 2015
+fill_grid() filled 34750000 weights Mon Jan 19 19:24:34 2015
+fill_grid() filled 34800000 weights Mon Jan 19 19:24:45 2015
+fill_grid() filled 34850000 weights Mon Jan 19 19:24:58 2015
+fill_grid() filled 34900000 weights Mon Jan 19 19:25:19 2015
+fill_grid() filled 34950000 weights Mon Jan 19 19:25:36 2015
+fill_grid() filled 35000000 weights Mon Jan 19 19:25:49 2015
+fill_grid() filled 35050000 weights Mon Jan 19 19:26:01 2015
+fill_grid() filled 35100000 weights Mon Jan 19 19:26:13 2015
+fill_grid() filled 35150000 weights Mon Jan 19 19:26:28 2015
+fill_grid() filled 35200000 weights Mon Jan 19 19:26:45 2015
+fill_grid() filled 35250000 weights Mon Jan 19 19:27:00 2015
+fill_grid() filled 35300000 weights Mon Jan 19 19:27:13 2015
+fill_grid() filled 35350000 weights Mon Jan 19 19:27:26 2015
+fill_grid() filled 35400000 weights Mon Jan 19 19:27:39 2015
+fill_grid() filled 35450000 weights Mon Jan 19 19:27:54 2015
+fill_grid() filled 35500000 weights Mon Jan 19 19:28:09 2015
+fill_grid() filled 35550000 weights Mon Jan 19 19:28:23 2015
+fill_grid() filled 35600000 weights Mon Jan 19 19:28:37 2015
+fill_grid() filled 35650000 weights Mon Jan 19 19:28:50 2015
+fill_grid() filled 35700000 weights Mon Jan 19 19:29:04 2015
+fill_grid() filled 35750000 weights Mon Jan 19 19:29:18 2015
+
+************* Integration by Vegas (iteration   2) **************
+*                                                               *
+*  integral  =  27471.960       accum. integral =  27448.397    *
+*  std. dev. =  31.287030       accum. std. dev =  23.257081    *
+*   max. wt. =    7.82296                                       *
+*                                                               *
+**************   chi**2/iteration =  1.255       ****************
+
+ Writing out intermediate results for iteration           2
+fill_grid() filled 35800000 weights Mon Jan 19 19:29:44 2015
+fill_grid() filled 35850000 weights Mon Jan 19 19:29:54 2015
+fill_grid() filled 35900000 weights Mon Jan 19 19:30:03 2015
+fill_grid() filled 35950000 weights Mon Jan 19 19:30:15 2015
+fill_grid() filled 36000000 weights Mon Jan 19 19:30:56 2015
+fill_grid() filled 36050000 weights Mon Jan 19 19:31:13 2015
+fill_grid() filled 36100000 weights Mon Jan 19 19:31:28 2015
+fill_grid() filled 36150000 weights Mon Jan 19 19:32:12 2015
+fill_grid() filled 36200000 weights Mon Jan 19 19:32:29 2015
+fill_grid() filled 36250000 weights Mon Jan 19 19:32:51 2015
+fill_grid() filled 36300000 weights Mon Jan 19 19:33:24 2015
+fill_grid() filled 36350000 weights Mon Jan 19 19:33:42 2015
+fill_grid() filled 36400000 weights Mon Jan 19 19:34:01 2015
+fill_grid() filled 36450000 weights Mon Jan 19 19:34:29 2015
+fill_grid() filled 36500000 weights Mon Jan 19 19:34:45 2015
+fill_grid() filled 36550000 weights Mon Jan 19 19:35:00 2015
+fill_grid() filled 36600000 weights Mon Jan 19 19:35:15 2015
+fill_grid() filled 36650000 weights Mon Jan 19 19:35:35 2015
+fill_grid() filled 36700000 weights Mon Jan 19 19:35:57 2015
+fill_grid() filled 36750000 weights Mon Jan 19 19:36:09 2015
+fill_grid() filled 36800000 weights Mon Jan 19 19:36:21 2015
+fill_grid() filled 36850000 weights Mon Jan 19 19:36:32 2015
+fill_grid() filled 36900000 weights Mon Jan 19 19:36:47 2015
+fill_grid() filled 36950000 weights Mon Jan 19 19:37:12 2015
+fill_grid() filled 37000000 weights Mon Jan 19 19:37:26 2015
+fill_grid() filled 37050000 weights Mon Jan 19 19:37:37 2015
+fill_grid() filled 37100000 weights Mon Jan 19 19:37:48 2015
+fill_grid() filled 37150000 weights Mon Jan 19 19:38:02 2015
+fill_grid() filled 37200000 weights Mon Jan 19 19:38:24 2015
+fill_grid() filled 37250000 weights Mon Jan 19 19:38:41 2015
+fill_grid() filled 37300000 weights Mon Jan 19 19:38:54 2015
+fill_grid() filled 37350000 weights Mon Jan 19 19:39:05 2015
+fill_grid() filled 37400000 weights Mon Jan 19 19:39:18 2015
+fill_grid() filled 37450000 weights Mon Jan 19 19:39:37 2015
+fill_grid() filled 37500000 weights Mon Jan 19 19:39:54 2015
+fill_grid() filled 37550000 weights Mon Jan 19 19:40:08 2015
+fill_grid() filled 37600000 weights Mon Jan 19 19:40:21 2015
+fill_grid() filled 37650000 weights Mon Jan 19 19:40:34 2015
+fill_grid() filled 37700000 weights Mon Jan 19 19:40:49 2015
+fill_grid() filled 37750000 weights Mon Jan 19 19:41:05 2015
+fill_grid() filled 37800000 weights Mon Jan 19 19:41:20 2015
+fill_grid() filled 37850000 weights Mon Jan 19 19:41:35 2015
+fill_grid() filled 37900000 weights Mon Jan 19 19:41:50 2015
+fill_grid() filled 37950000 weights Mon Jan 19 19:42:04 2015
+fill_grid() filled 38000000 weights Mon Jan 19 19:42:20 2015
+
+************* Integration by Vegas (iteration   3) **************
+*                                                               *
+*  integral  =  27502.494       accum. integral =  27469.202    *
+*  std. dev. =  29.419558       accum. std. dev =  18.244694    *
+*   max. wt. =    7.82296                                       *
+*                                                               *
+**************   chi**2/iteration =  1.666       ****************
+
+ Writing out intermediate results for iteration           3
+fill_grid() filled 38050000 weights Mon Jan 19 19:42:46 2015
+fill_grid() filled 38100000 weights Mon Jan 19 19:42:56 2015
+fill_grid() filled 38150000 weights Mon Jan 19 19:43:06 2015
+fill_grid() filled 38200000 weights Mon Jan 19 19:43:18 2015
+fill_grid() filled 38250000 weights Mon Jan 19 19:44:00 2015
+fill_grid() filled 38300000 weights Mon Jan 19 19:44:15 2015
+fill_grid() filled 38350000 weights Mon Jan 19 19:44:33 2015
+fill_grid() filled 38400000 weights Mon Jan 19 19:45:15 2015
+fill_grid() filled 38450000 weights Mon Jan 19 19:45:33 2015
+fill_grid() filled 38500000 weights Mon Jan 19 19:45:57 2015
+fill_grid() filled 38550000 weights Mon Jan 19 19:46:28 2015
+fill_grid() filled 38600000 weights Mon Jan 19 19:46:46 2015
+fill_grid() filled 38650000 weights Mon Jan 19 19:47:05 2015
+fill_grid() filled 38700000 weights Mon Jan 19 19:47:33 2015
+fill_grid() filled 38750000 weights Mon Jan 19 19:47:48 2015
+fill_grid() filled 38800000 weights Mon Jan 19 19:48:04 2015
+fill_grid() filled 38850000 weights Mon Jan 19 19:48:18 2015
+fill_grid() filled 38900000 weights Mon Jan 19 19:48:43 2015
+fill_grid() filled 38950000 weights Mon Jan 19 19:49:00 2015
+fill_grid() filled 39000000 weights Mon Jan 19 19:49:12 2015
+fill_grid() filled 39050000 weights Mon Jan 19 19:49:23 2015
+fill_grid() filled 39100000 weights Mon Jan 19 19:49:34 2015
+fill_grid() filled 39150000 weights Mon Jan 19 19:49:53 2015
+fill_grid() filled 39200000 weights Mon Jan 19 19:50:15 2015
+fill_grid() filled 39250000 weights Mon Jan 19 19:50:28 2015
+fill_grid() filled 39300000 weights Mon Jan 19 19:50:39 2015
+fill_grid() filled 39350000 weights Mon Jan 19 19:50:50 2015
+fill_grid() filled 39400000 weights Mon Jan 19 19:51:06 2015
+fill_grid() filled 39450000 weights Mon Jan 19 19:51:29 2015
+fill_grid() filled 39500000 weights Mon Jan 19 19:51:44 2015
+fill_grid() filled 39550000 weights Mon Jan 19 19:51:55 2015
+fill_grid() filled 39600000 weights Mon Jan 19 19:52:07 2015
+fill_grid() filled 39650000 weights Mon Jan 19 19:52:22 2015
+fill_grid() filled 39700000 weights Mon Jan 19 19:52:41 2015
+fill_grid() filled 39750000 weights Mon Jan 19 19:52:56 2015
+fill_grid() filled 39800000 weights Mon Jan 19 19:53:10 2015
+fill_grid() filled 39850000 weights Mon Jan 19 19:53:23 2015
+fill_grid() filled 39900000 weights Mon Jan 19 19:53:37 2015
+fill_grid() filled 39950000 weights Mon Jan 19 19:53:52 2015
+fill_grid() filled 40000000 weights Mon Jan 19 19:54:09 2015
+fill_grid() filled 40050000 weights Mon Jan 19 19:54:23 2015
+fill_grid() filled 40100000 weights Mon Jan 19 19:54:38 2015
+fill_grid() filled 40150000 weights Mon Jan 19 19:54:52 2015
+fill_grid() filled 40200000 weights Mon Jan 19 19:55:07 2015
+
+************* Integration by Vegas (iteration   4) **************
+*                                                               *
+*  integral  =  27433.723       accum. integral =  27459.030    *
+*  std. dev. =  28.777935       accum. std. dev =  15.408946    *
+*   max. wt. =    7.82296                                       *
+*                                                               *
+**************   chi**2/iteration =  1.473       ****************
+
+ Writing out intermediate results for iteration           4
+fill_grid() filled 40250000 weights Mon Jan 19 19:55:32 2015
+fill_grid() filled 40300000 weights Mon Jan 19 19:55:48 2015
+fill_grid() filled 40350000 weights Mon Jan 19 19:55:57 2015
+fill_grid() filled 40400000 weights Mon Jan 19 19:56:07 2015
+fill_grid() filled 40450000 weights Mon Jan 19 19:56:21 2015
+fill_grid() filled 40500000 weights Mon Jan 19 19:57:03 2015
+fill_grid() filled 40550000 weights Mon Jan 19 19:57:18 2015
+fill_grid() filled 40600000 weights Mon Jan 19 19:57:43 2015
+fill_grid() filled 40650000 weights Mon Jan 19 19:58:21 2015
+fill_grid() filled 40700000 weights Mon Jan 19 19:58:38 2015
+fill_grid() filled 40750000 weights Mon Jan 19 19:59:14 2015
+fill_grid() filled 40800000 weights Mon Jan 19 19:59:35 2015
+fill_grid() filled 40850000 weights Mon Jan 19 19:59:53 2015
+fill_grid() filled 40900000 weights Mon Jan 19 20:00:14 2015
+fill_grid() filled 40950000 weights Mon Jan 19 20:00:42 2015
+fill_grid() filled 41000000 weights Mon Jan 19 20:00:57 2015
+fill_grid() filled 41050000 weights Mon Jan 19 20:01:13 2015
+fill_grid() filled 41100000 weights Mon Jan 19 20:01:29 2015
+fill_grid() filled 41150000 weights Mon Jan 19 20:01:57 2015
+fill_grid() filled 41200000 weights Mon Jan 19 20:02:10 2015
+fill_grid() filled 41250000 weights Mon Jan 19 20:02:22 2015
+fill_grid() filled 41300000 weights Mon Jan 19 20:02:33 2015
+fill_grid() filled 41350000 weights Mon Jan 19 20:02:47 2015
+fill_grid() filled 41400000 weights Mon Jan 19 20:03:13 2015
+fill_grid() filled 41450000 weights Mon Jan 19 20:03:29 2015
+fill_grid() filled 41500000 weights Mon Jan 19 20:03:40 2015
+fill_grid() filled 41550000 weights Mon Jan 19 20:03:51 2015
+fill_grid() filled 41600000 weights Mon Jan 19 20:04:04 2015
+fill_grid() filled 41650000 weights Mon Jan 19 20:04:26 2015
+fill_grid() filled 41700000 weights Mon Jan 19 20:04:46 2015
+fill_grid() filled 41750000 weights Mon Jan 19 20:04:59 2015
+fill_grid() filled 41800000 weights Mon Jan 19 20:05:11 2015
+fill_grid() filled 41850000 weights Mon Jan 19 20:05:24 2015
+fill_grid() filled 41900000 weights Mon Jan 19 20:05:43 2015
+fill_grid() filled 41950000 weights Mon Jan 19 20:06:00 2015
+fill_grid() filled 42000000 weights Mon Jan 19 20:06:15 2015
+fill_grid() filled 42050000 weights Mon Jan 19 20:06:28 2015
+fill_grid() filled 42100000 weights Mon Jan 19 20:06:42 2015
+fill_grid() filled 42150000 weights Mon Jan 19 20:06:56 2015
+fill_grid() filled 42200000 weights Mon Jan 19 20:07:12 2015
+fill_grid() filled 42250000 weights Mon Jan 19 20:07:28 2015
+fill_grid() filled 42300000 weights Mon Jan 19 20:07:43 2015
+fill_grid() filled 42350000 weights Mon Jan 19 20:07:58 2015
+fill_grid() filled 42400000 weights Mon Jan 19 20:08:13 2015
+fill_grid() filled 42450000 weights Mon Jan 19 20:08:29 2015
+
+************* Integration by Vegas (iteration   5) **************
+*                                                               *
+*  integral  =  27434.663       accum. integral =  27453.657    *
+*  std. dev. =  28.971080       accum. std. dev =  13.604367    *
+*   max. wt. =    7.82296                                       *
+*                                                               *
+**************   chi**2/iteration =  1.243       ****************
+
+ Writing out intermediate results for iteration           5
+fill_grid() filled 42500000 weights Mon Jan 19 20:08:56 2015
+fill_grid() filled 42550000 weights Mon Jan 19 20:09:07 2015
+fill_grid() filled 42600000 weights Mon Jan 19 20:09:16 2015
+fill_grid() filled 42650000 weights Mon Jan 19 20:09:27 2015
+fill_grid() filled 42700000 weights Mon Jan 19 20:10:10 2015
+fill_grid() filled 42750000 weights Mon Jan 19 20:10:27 2015
+fill_grid() filled 42800000 weights Mon Jan 19 20:10:42 2015
+fill_grid() filled 42850000 weights Mon Jan 19 20:11:28 2015
+fill_grid() filled 42900000 weights Mon Jan 19 20:11:46 2015
+fill_grid() filled 42950000 weights Mon Jan 19 20:12:08 2015
+fill_grid() filled 43000000 weights Mon Jan 19 20:12:42 2015
+fill_grid() filled 43050000 weights Mon Jan 19 20:13:00 2015
+fill_grid() filled 43100000 weights Mon Jan 19 20:13:19 2015
+fill_grid() filled 43150000 weights Mon Jan 19 20:13:48 2015
+fill_grid() filled 43200000 weights Mon Jan 19 20:14:04 2015
+fill_grid() filled 43250000 weights Mon Jan 19 20:14:20 2015
+fill_grid() filled 43300000 weights Mon Jan 19 20:14:35 2015
+fill_grid() filled 43350000 weights Mon Jan 19 20:15:02 2015
+fill_grid() filled 43400000 weights Mon Jan 19 20:15:18 2015
+fill_grid() filled 43450000 weights Mon Jan 19 20:15:30 2015
+fill_grid() filled 43500000 weights Mon Jan 19 20:15:42 2015
+fill_grid() filled 43550000 weights Mon Jan 19 20:15:54 2015
+fill_grid() filled 43600000 weights Mon Jan 19 20:16:18 2015
+fill_grid() filled 43650000 weights Mon Jan 19 20:16:37 2015
+fill_grid() filled 43700000 weights Mon Jan 19 20:16:48 2015
+fill_grid() filled 43750000 weights Mon Jan 19 20:16:59 2015
+fill_grid() filled 43800000 weights Mon Jan 19 20:17:11 2015
+fill_grid() filled 43850000 weights Mon Jan 19 20:17:31 2015
+fill_grid() filled 43900000 weights Mon Jan 19 20:17:53 2015
+fill_grid() filled 43950000 weights Mon Jan 19 20:18:06 2015
+fill_grid() filled 44000000 weights Mon Jan 19 20:18:18 2015
+fill_grid() filled 44050000 weights Mon Jan 19 20:18:31 2015
+fill_grid() filled 44100000 weights Mon Jan 19 20:18:49 2015
+fill_grid() filled 44150000 weights Mon Jan 19 20:19:07 2015
+fill_grid() filled 44200000 weights Mon Jan 19 20:19:22 2015
+fill_grid() filled 44250000 weights Mon Jan 19 20:19:35 2015
+fill_grid() filled 44300000 weights Mon Jan 19 20:19:48 2015
+fill_grid() filled 44350000 weights Mon Jan 19 20:20:03 2015
+fill_grid() filled 44400000 weights Mon Jan 19 20:20:19 2015
+fill_grid() filled 44450000 weights Mon Jan 19 20:20:35 2015
+fill_grid() filled 44500000 weights Mon Jan 19 20:20:49 2015
+fill_grid() filled 44550000 weights Mon Jan 19 20:21:04 2015
+fill_grid() filled 44600000 weights Mon Jan 19 20:21:18 2015
+fill_grid() filled 44650000 weights Mon Jan 19 20:21:34 2015
+
+************* Integration by Vegas (iteration   6) **************
+*                                                               *
+*  integral  =  27454.144       accum. integral =  27453.725    *
+*  std. dev. =  33.802940       accum. std. dev =  12.620599    *
+*   max. wt. =    7.92958                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9949       ****************
+
+ Writing out intermediate results for iteration           6
+fill_grid() filled 44700000 weights Mon Jan 19 20:22:00 2015
+fill_grid() filled 44750000 weights Mon Jan 19 20:22:11 2015
+fill_grid() filled 44800000 weights Mon Jan 19 20:22:21 2015
+fill_grid() filled 44850000 weights Mon Jan 19 20:22:33 2015
+fill_grid() filled 44900000 weights Mon Jan 19 20:23:16 2015
+fill_grid() filled 44950000 weights Mon Jan 19 20:23:32 2015
+fill_grid() filled 45000000 weights Mon Jan 19 20:23:54 2015
+fill_grid() filled 45050000 weights Mon Jan 19 20:24:35 2015
+fill_grid() filled 45100000 weights Mon Jan 19 20:24:52 2015
+fill_grid() filled 45150000 weights Mon Jan 19 20:25:23 2015
+fill_grid() filled 45200000 weights Mon Jan 19 20:25:46 2015
+fill_grid() filled 45250000 weights Mon Jan 19 20:26:04 2015
+fill_grid() filled 45300000 weights Mon Jan 19 20:26:23 2015
+fill_grid() filled 45350000 weights Mon Jan 19 20:26:51 2015
+fill_grid() filled 45400000 weights Mon Jan 19 20:27:04 2015
+fill_grid() filled 45450000 weights Mon Jan 19 20:27:19 2015
+fill_grid() filled 45500000 weights Mon Jan 19 20:27:33 2015
+fill_grid() filled 45550000 weights Mon Jan 19 20:27:57 2015
+fill_grid() filled 45600000 weights Mon Jan 19 20:28:15 2015
+fill_grid() filled 45650000 weights Mon Jan 19 20:28:26 2015
+fill_grid() filled 45700000 weights Mon Jan 19 20:28:37 2015
+fill_grid() filled 45750000 weights Mon Jan 19 20:28:49 2015
+fill_grid() filled 45800000 weights Mon Jan 19 20:29:06 2015
+fill_grid() filled 45850000 weights Mon Jan 19 20:29:30 2015
+fill_grid() filled 45900000 weights Mon Jan 19 20:29:43 2015
+fill_grid() filled 45950000 weights Mon Jan 19 20:29:54 2015
+fill_grid() filled 46000000 weights Mon Jan 19 20:30:06 2015
+fill_grid() filled 46050000 weights Mon Jan 19 20:30:21 2015
+fill_grid() filled 46100000 weights Mon Jan 19 20:30:43 2015
+fill_grid() filled 46150000 weights Mon Jan 19 20:30:58 2015
+fill_grid() filled 46200000 weights Mon Jan 19 20:31:10 2015
+fill_grid() filled 46250000 weights Mon Jan 19 20:31:22 2015
+fill_grid() filled 46300000 weights Mon Jan 19 20:31:35 2015
+fill_grid() filled 46350000 weights Mon Jan 19 20:31:53 2015
+fill_grid() filled 46400000 weights Mon Jan 19 20:32:08 2015
+fill_grid() filled 46450000 weights Mon Jan 19 20:32:22 2015
+fill_grid() filled 46500000 weights Mon Jan 19 20:32:35 2015
+fill_grid() filled 46550000 weights Mon Jan 19 20:32:48 2015
+fill_grid() filled 46600000 weights Mon Jan 19 20:33:02 2015
+fill_grid() filled 46650000 weights Mon Jan 19 20:33:16 2015
+fill_grid() filled 46700000 weights Mon Jan 19 20:33:31 2015
+fill_grid() filled 46750000 weights Mon Jan 19 20:33:45 2015
+fill_grid() filled 46800000 weights Mon Jan 19 20:33:59 2015
+fill_grid() filled 46850000 weights Mon Jan 19 20:34:12 2015
+fill_grid() filled 46900000 weights Mon Jan 19 20:34:26 2015
+
+************* Integration by Vegas (iteration   7) **************
+*                                                               *
+*  integral  =  27438.552       accum. integral =  27451.676    *
+*  std. dev. =  31.943784       accum. std. dev =  11.737709    *
+*   max. wt. =    7.92958                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8618       ****************
+
+ Writing out intermediate results for iteration           7
+fill_grid() filled 46950000 weights Mon Jan 19 20:34:49 2015
+fill_grid() filled 47000000 weights Mon Jan 19 20:35:06 2015
+fill_grid() filled 47050000 weights Mon Jan 19 20:35:15 2015
+fill_grid() filled 47100000 weights Mon Jan 19 20:35:25 2015
+fill_grid() filled 47150000 weights Mon Jan 19 20:35:39 2015
+fill_grid() filled 47200000 weights Mon Jan 19 20:36:22 2015
+fill_grid() filled 47250000 weights Mon Jan 19 20:36:37 2015
+fill_grid() filled 47300000 weights Mon Jan 19 20:37:10 2015
+fill_grid() filled 47350000 weights Mon Jan 19 20:37:40 2015
+fill_grid() filled 47400000 weights Mon Jan 19 20:37:56 2015
+fill_grid() filled 47450000 weights Mon Jan 19 20:38:31 2015
+fill_grid() filled 47500000 weights Mon Jan 19 20:38:51 2015
+fill_grid() filled 47550000 weights Mon Jan 19 20:39:09 2015
+fill_grid() filled 47600000 weights Mon Jan 19 20:39:27 2015
+fill_grid() filled 47650000 weights Mon Jan 19 20:39:56 2015
+fill_grid() filled 47700000 weights Mon Jan 19 20:40:10 2015
+fill_grid() filled 47750000 weights Mon Jan 19 20:40:26 2015
+fill_grid() filled 47800000 weights Mon Jan 19 20:40:40 2015
+fill_grid() filled 47850000 weights Mon Jan 19 20:41:06 2015
+fill_grid() filled 47900000 weights Mon Jan 19 20:41:22 2015
+fill_grid() filled 47950000 weights Mon Jan 19 20:41:33 2015
+fill_grid() filled 48000000 weights Mon Jan 19 20:41:45 2015
+fill_grid() filled 48050000 weights Mon Jan 19 20:41:56 2015
+fill_grid() filled 48100000 weights Mon Jan 19 20:42:16 2015
+fill_grid() filled 48150000 weights Mon Jan 19 20:42:38 2015
+fill_grid() filled 48200000 weights Mon Jan 19 20:42:50 2015
+fill_grid() filled 48250000 weights Mon Jan 19 20:43:01 2015
+fill_grid() filled 48300000 weights Mon Jan 19 20:43:13 2015
+fill_grid() filled 48350000 weights Mon Jan 19 20:43:29 2015
+fill_grid() filled 48400000 weights Mon Jan 19 20:43:51 2015
+fill_grid() filled 48450000 weights Mon Jan 19 20:44:06 2015
+fill_grid() filled 48500000 weights Mon Jan 19 20:44:18 2015
+fill_grid() filled 48550000 weights Mon Jan 19 20:44:30 2015
+fill_grid() filled 48600000 weights Mon Jan 19 20:44:44 2015
+fill_grid() filled 48650000 weights Mon Jan 19 20:45:03 2015
+fill_grid() filled 48700000 weights Mon Jan 19 20:45:18 2015
+fill_grid() filled 48750000 weights Mon Jan 19 20:45:32 2015
+fill_grid() filled 48800000 weights Mon Jan 19 20:45:46 2015
+fill_grid() filled 48850000 weights Mon Jan 19 20:45:59 2015
+fill_grid() filled 48900000 weights Mon Jan 19 20:46:13 2015
+fill_grid() filled 48950000 weights Mon Jan 19 20:46:30 2015
+fill_grid() filled 49000000 weights Mon Jan 19 20:46:45 2015
+fill_grid() filled 49050000 weights Mon Jan 19 20:46:59 2015
+fill_grid() filled 49100000 weights Mon Jan 19 20:47:14 2015
+fill_grid() filled 49150000 weights Mon Jan 19 20:47:29 2015
+
+************* Integration by Vegas (iteration   8) **************
+*                                                               *
+*  integral  =  27419.365       accum. integral =  27447.517    *
+*  std. dev. =  30.537592       accum. std. dev =  10.956242    *
+*   max. wt. =    7.92958                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8780       ****************
+
+ Writing out intermediate results for iteration           8
+fill_grid() filled 49200000 weights Mon Jan 19 20:47:54 2015
+fill_grid() filled 49250000 weights Mon Jan 19 20:48:09 2015
+fill_grid() filled 49300000 weights Mon Jan 19 20:48:19 2015
+fill_grid() filled 49350000 weights Mon Jan 19 20:48:29 2015
+fill_grid() filled 49400000 weights Mon Jan 19 20:48:44 2015
+fill_grid() filled 49450000 weights Mon Jan 19 20:49:26 2015
+fill_grid() filled 49500000 weights Mon Jan 19 20:49:40 2015
+fill_grid() filled 49550000 weights Mon Jan 19 20:50:16 2015
+fill_grid() filled 49600000 weights Mon Jan 19 20:50:43 2015
+fill_grid() filled 49650000 weights Mon Jan 19 20:51:00 2015
+fill_grid() filled 49700000 weights Mon Jan 19 20:51:36 2015
+fill_grid() filled 49750000 weights Mon Jan 19 20:51:55 2015
+fill_grid() filled 49800000 weights Mon Jan 19 20:52:13 2015
+fill_grid() filled 49850000 weights Mon Jan 19 20:52:33 2015
+fill_grid() filled 49900000 weights Mon Jan 19 20:53:00 2015
+fill_grid() filled 49950000 weights Mon Jan 19 20:53:14 2015
+fill_grid() filled 50000000 weights Mon Jan 19 20:53:30 2015
+fill_grid() filled 50050000 weights Mon Jan 19 20:53:44 2015
+fill_grid() filled 50100000 weights Mon Jan 19 20:54:12 2015
+fill_grid() filled 50150000 weights Mon Jan 19 20:54:26 2015
+fill_grid() filled 50200000 weights Mon Jan 19 20:54:37 2015
+fill_grid() filled 50250000 weights Mon Jan 19 20:54:49 2015
+fill_grid() filled 50300000 weights Mon Jan 19 20:55:01 2015
+fill_grid() filled 50350000 weights Mon Jan 19 20:55:24 2015
+fill_grid() filled 50400000 weights Mon Jan 19 20:55:43 2015
+fill_grid() filled 50450000 weights Mon Jan 19 20:55:55 2015
+fill_grid() filled 50500000 weights Mon Jan 19 20:56:06 2015
+fill_grid() filled 50550000 weights Mon Jan 19 20:56:18 2015
+fill_grid() filled 50600000 weights Mon Jan 19 20:56:38 2015
+fill_grid() filled 50650000 weights Mon Jan 19 20:56:58 2015
+fill_grid() filled 50700000 weights Mon Jan 19 20:57:12 2015
+fill_grid() filled 50750000 weights Mon Jan 19 20:57:23 2015
+fill_grid() filled 50800000 weights Mon Jan 19 20:57:36 2015
+fill_grid() filled 50850000 weights Mon Jan 19 20:57:51 2015
+fill_grid() filled 50900000 weights Mon Jan 19 20:58:10 2015
+fill_grid() filled 50950000 weights Mon Jan 19 20:58:25 2015
+fill_grid() filled 51000000 weights Mon Jan 19 20:58:38 2015
+fill_grid() filled 51050000 weights Mon Jan 19 20:58:52 2015
+fill_grid() filled 51100000 weights Mon Jan 19 20:59:06 2015
+fill_grid() filled 51150000 weights Mon Jan 19 20:59:21 2015
+fill_grid() filled 51200000 weights Mon Jan 19 20:59:38 2015
+fill_grid() filled 51250000 weights Mon Jan 19 20:59:53 2015
+fill_grid() filled 51300000 weights Mon Jan 19 21:00:08 2015
+fill_grid() filled 51350000 weights Mon Jan 19 21:00:23 2015
+fill_grid() filled 51400000 weights Mon Jan 19 21:00:38 2015
+
+************* Integration by Vegas (iteration   9) **************
+*                                                               *
+*  integral  =  27441.297       accum. integral =  27446.768    *
+*  std. dev. =  29.620759       accum. std. dev =  10.275830    *
+*   max. wt. =    7.92958                                       *
+*                                                               *
+**************   chi**2/iteration = 0.7733       ****************
+
+ Writing out intermediate results for iteration           9
+fill_grid() filled 51450000 weights Mon Jan 19 21:01:06 2015
+fill_grid() filled 51500000 weights Mon Jan 19 21:01:17 2015
+fill_grid() filled 51550000 weights Mon Jan 19 21:01:27 2015
+fill_grid() filled 51600000 weights Mon Jan 19 21:01:37 2015
+fill_grid() filled 51650000 weights Mon Jan 19 21:02:13 2015
+fill_grid() filled 51700000 weights Mon Jan 19 21:02:35 2015
+fill_grid() filled 51750000 weights Mon Jan 19 21:02:50 2015
+fill_grid() filled 51800000 weights Mon Jan 19 21:03:33 2015
+fill_grid() filled 51850000 weights Mon Jan 19 21:03:53 2015
+fill_grid() filled 51900000 weights Mon Jan 19 21:04:13 2015
+fill_grid() filled 51950000 weights Mon Jan 19 21:04:47 2015
+fill_grid() filled 52000000 weights Mon Jan 19 21:05:06 2015
+fill_grid() filled 52050000 weights Mon Jan 19 21:05:25 2015
+fill_grid() filled 52100000 weights Mon Jan 19 21:05:53 2015
+fill_grid() filled 52150000 weights Mon Jan 19 21:06:10 2015
+fill_grid() filled 52200000 weights Mon Jan 19 21:06:26 2015
+fill_grid() filled 52250000 weights Mon Jan 19 21:06:41 2015
+fill_grid() filled 52300000 weights Mon Jan 19 21:07:02 2015
+fill_grid() filled 52350000 weights Mon Jan 19 21:07:24 2015
+fill_grid() filled 52400000 weights Mon Jan 19 21:07:35 2015
+fill_grid() filled 52450000 weights Mon Jan 19 21:07:47 2015
+fill_grid() filled 52500000 weights Mon Jan 19 21:07:59 2015
+fill_grid() filled 52550000 weights Mon Jan 19 21:08:14 2015
+fill_grid() filled 52600000 weights Mon Jan 19 21:08:39 2015
+fill_grid() filled 52650000 weights Mon Jan 19 21:08:53 2015
+fill_grid() filled 52700000 weights Mon Jan 19 21:09:04 2015
+fill_grid() filled 52750000 weights Mon Jan 19 21:09:16 2015
+fill_grid() filled 52800000 weights Mon Jan 19 21:09:29 2015
+fill_grid() filled 52850000 weights Mon Jan 19 21:09:53 2015
+fill_grid() filled 52900000 weights Mon Jan 19 21:10:10 2015
+fill_grid() filled 52950000 weights Mon Jan 19 21:10:22 2015
+fill_grid() filled 53000000 weights Mon Jan 19 21:10:33 2015
+fill_grid() filled 53050000 weights Mon Jan 19 21:10:47 2015
+fill_grid() filled 53100000 weights Mon Jan 19 21:11:07 2015
+fill_grid() filled 53150000 weights Mon Jan 19 21:11:23 2015
+fill_grid() filled 53200000 weights Mon Jan 19 21:11:37 2015
+fill_grid() filled 53250000 weights Mon Jan 19 21:11:50 2015
+fill_grid() filled 53300000 weights Mon Jan 19 21:12:04 2015
+fill_grid() filled 53350000 weights Mon Jan 19 21:12:19 2015
+fill_grid() filled 53400000 weights Mon Jan 19 21:12:35 2015
+fill_grid() filled 53450000 weights Mon Jan 19 21:12:50 2015
+fill_grid() filled 53500000 weights Mon Jan 19 21:13:06 2015
+fill_grid() filled 53550000 weights Mon Jan 19 21:13:21 2015
+fill_grid() filled 53600000 weights Mon Jan 19 21:13:36 2015
+
+************* Integration by Vegas (iteration  10) **************
+*                                                               *
+*  integral  =  27442.425       accum. integral =  27446.307    *
+*  std. dev. =  29.806725       accum. std. dev =  9.7147280    *
+*   max. wt. =    7.92958                                       *
+*                                                               *
+**************   chi**2/iteration = 0.6895       ****************
+
+ Writing out intermediate results for iteration          10
+fill_grid() filled 53650000 weights Mon Jan 19 21:14:03 2015
+fill_grid() filled 53700000 weights Mon Jan 19 21:14:17 2015
+fill_grid() filled 53750000 weights Mon Jan 19 21:14:26 2015
+fill_grid() filled 53800000 weights Mon Jan 19 21:14:36 2015
+fill_grid() filled 53850000 weights Mon Jan 19 21:14:54 2015
+fill_grid() filled 53900000 weights Mon Jan 19 21:15:34 2015
+fill_grid() filled 53950000 weights Mon Jan 19 21:15:48 2015
+fill_grid() filled 54000000 weights Mon Jan 19 21:16:28 2015
+fill_grid() filled 54050000 weights Mon Jan 19 21:16:51 2015
+fill_grid() filled 54100000 weights Mon Jan 19 21:17:09 2015
+fill_grid() filled 54150000 weights Mon Jan 19 21:17:44 2015
+fill_grid() filled 54200000 weights Mon Jan 19 21:18:03 2015
+fill_grid() filled 54250000 weights Mon Jan 19 21:18:21 2015
+fill_grid() filled 54300000 weights Mon Jan 19 21:18:44 2015
+fill_grid() filled 54350000 weights Mon Jan 19 21:19:07 2015
+fill_grid() filled 54400000 weights Mon Jan 19 21:19:22 2015
+fill_grid() filled 54450000 weights Mon Jan 19 21:19:38 2015
+fill_grid() filled 54500000 weights Mon Jan 19 21:19:54 2015
+fill_grid() filled 54550000 weights Mon Jan 19 21:20:20 2015
+fill_grid() filled 54600000 weights Mon Jan 19 21:20:33 2015
+fill_grid() filled 54650000 weights Mon Jan 19 21:20:44 2015
+fill_grid() filled 54700000 weights Mon Jan 19 21:20:55 2015
+fill_grid() filled 54750000 weights Mon Jan 19 21:21:08 2015
+fill_grid() filled 54800000 weights Mon Jan 19 21:21:35 2015
+fill_grid() filled 54850000 weights Mon Jan 19 21:21:50 2015
+fill_grid() filled 54900000 weights Mon Jan 19 21:22:01 2015
+fill_grid() filled 54950000 weights Mon Jan 19 21:22:12 2015
+fill_grid() filled 55000000 weights Mon Jan 19 21:22:25 2015
+fill_grid() filled 55050000 weights Mon Jan 19 21:22:48 2015
+fill_grid() filled 55100000 weights Mon Jan 19 21:23:06 2015
+fill_grid() filled 55150000 weights Mon Jan 19 21:23:18 2015
+fill_grid() filled 55200000 weights Mon Jan 19 21:23:30 2015
+fill_grid() filled 55250000 weights Mon Jan 19 21:23:43 2015
+fill_grid() filled 55300000 weights Mon Jan 19 21:24:02 2015
+fill_grid() filled 55350000 weights Mon Jan 19 21:24:19 2015
+fill_grid() filled 55400000 weights Mon Jan 19 21:24:33 2015
+fill_grid() filled 55450000 weights Mon Jan 19 21:24:46 2015
+fill_grid() filled 55500000 weights Mon Jan 19 21:25:00 2015
+fill_grid() filled 55550000 weights Mon Jan 19 21:25:14 2015
+fill_grid() filled 55600000 weights Mon Jan 19 21:25:30 2015
+fill_grid() filled 55650000 weights Mon Jan 19 21:25:46 2015
+fill_grid() filled 55700000 weights Mon Jan 19 21:26:00 2015
+fill_grid() filled 55750000 weights Mon Jan 19 21:26:15 2015
+fill_grid() filled 55800000 weights Mon Jan 19 21:26:30 2015
+fill_grid() filled 55850000 weights Mon Jan 19 21:26:45 2015
+
+************* Integration by Vegas (iteration  11) **************
+*                                                               *
+*  integral  =  27401.345       accum. integral =  27441.801    *
+*  std. dev. =  29.110759       accum. std. dev =  9.2151415    *
+*   max. wt. =    7.92958                                       *
+*                                                               *
+**************   chi**2/iteration = 0.8351       ****************
+
+ Writing out intermediate results for iteration          11
+fill_grid() filled 55900000 weights Mon Jan 19 21:27:12 2015
+fill_grid() filled 55950000 weights Mon Jan 19 21:27:22 2015
+fill_grid() filled 56000000 weights Mon Jan 19 21:27:32 2015
+fill_grid() filled 56050000 weights Mon Jan 19 21:27:44 2015
+fill_grid() filled 56100000 weights Mon Jan 19 21:28:27 2015
+fill_grid() filled 56150000 weights Mon Jan 19 21:28:42 2015
+fill_grid() filled 56200000 weights Mon Jan 19 21:29:00 2015
+fill_grid() filled 56250000 weights Mon Jan 19 21:29:43 2015
+fill_grid() filled 56300000 weights Mon Jan 19 21:30:00 2015
+fill_grid() filled 56350000 weights Mon Jan 19 21:30:27 2015
+fill_grid() filled 56400000 weights Mon Jan 19 21:30:57 2015
+fill_grid() filled 56450000 weights Mon Jan 19 21:31:15 2015
+fill_grid() filled 56500000 weights Mon Jan 19 21:31:35 2015
+fill_grid() filled 56550000 weights Mon Jan 19 21:32:04 2015
+fill_grid() filled 56600000 weights Mon Jan 19 21:32:19 2015
+fill_grid() filled 56650000 weights Mon Jan 19 21:32:35 2015
+fill_grid() filled 56700000 weights Mon Jan 19 21:32:50 2015
+fill_grid() filled 56750000 weights Mon Jan 19 21:33:18 2015
+fill_grid() filled 56800000 weights Mon Jan 19 21:33:32 2015
+fill_grid() filled 56850000 weights Mon Jan 19 21:33:44 2015
+fill_grid() filled 56900000 weights Mon Jan 19 21:33:56 2015
+fill_grid() filled 56950000 weights Mon Jan 19 21:34:08 2015
+fill_grid() filled 57000000 weights Mon Jan 19 21:34:33 2015
+fill_grid() filled 57050000 weights Mon Jan 19 21:34:50 2015
+fill_grid() filled 57100000 weights Mon Jan 19 21:35:02 2015
+fill_grid() filled 57150000 weights Mon Jan 19 21:35:13 2015
+fill_grid() filled 57200000 weights Mon Jan 19 21:35:25 2015
+fill_grid() filled 57250000 weights Mon Jan 19 21:35:46 2015
+fill_grid() filled 57300000 weights Mon Jan 19 21:36:06 2015
+fill_grid() filled 57350000 weights Mon Jan 19 21:36:20 2015
+fill_grid() filled 57400000 weights Mon Jan 19 21:36:32 2015
+fill_grid() filled 57450000 weights Mon Jan 19 21:36:44 2015
+fill_grid() filled 57500000 weights Mon Jan 19 21:37:02 2015
+fill_grid() filled 57550000 weights Mon Jan 19 21:37:21 2015
+fill_grid() filled 57600000 weights Mon Jan 19 21:37:36 2015
+fill_grid() filled 57650000 weights Mon Jan 19 21:37:49 2015
+fill_grid() filled 57700000 weights Mon Jan 19 21:38:02 2015
+fill_grid() filled 57750000 weights Mon Jan 19 21:38:16 2015
+fill_grid() filled 57800000 weights Mon Jan 19 21:38:32 2015
+fill_grid() filled 57850000 weights Mon Jan 19 21:38:48 2015
+fill_grid() filled 57900000 weights Mon Jan 19 21:39:03 2015
+fill_grid() filled 57950000 weights Mon Jan 19 21:39:18 2015
+fill_grid() filled 58000000 weights Mon Jan 19 21:39:33 2015
+fill_grid() filled 58050000 weights Mon Jan 19 21:39:48 2015
+
+************* Integration by Vegas (iteration  12) **************
+*                                                               *
+*  integral  =  27433.541       accum. integral =  27441.048    *
+*  std. dev. =  29.084660       accum. std. dev =  8.7847489    *
+*   max. wt. =    7.92958                                       *
+*                                                               *
+**************   chi**2/iteration = 0.7659       ****************
+
+ Writing out intermediate results for iteration          12
+fill_grid() filled 58100000 weights Mon Jan 19 21:40:15 2015
+fill_grid() filled 58150000 weights Mon Jan 19 21:40:26 2015
+fill_grid() filled 58200000 weights Mon Jan 19 21:40:36 2015
+fill_grid() filled 58250000 weights Mon Jan 19 21:40:47 2015
+fill_grid() filled 58300000 weights Mon Jan 19 21:41:31 2015
+fill_grid() filled 58350000 weights Mon Jan 19 21:41:46 2015
+fill_grid() filled 58400000 weights Mon Jan 19 21:42:03 2015
+fill_grid() filled 58450000 weights Mon Jan 19 21:42:47 2015
+fill_grid() filled 58500000 weights Mon Jan 19 21:43:04 2015
+fill_grid() filled 58550000 weights Mon Jan 19 21:43:29 2015
+fill_grid() filled 58600000 weights Mon Jan 19 21:44:00 2015
+fill_grid() filled 58650000 weights Mon Jan 19 21:44:18 2015
+fill_grid() filled 58700000 weights Mon Jan 19 21:44:38 2015
+fill_grid() filled 58750000 weights Mon Jan 19 21:45:07 2015
+fill_grid() filled 58800000 weights Mon Jan 19 21:45:22 2015
+fill_grid() filled 58850000 weights Mon Jan 19 21:45:39 2015
+fill_grid() filled 58900000 weights Mon Jan 19 21:45:54 2015
+fill_grid() filled 58950000 weights Mon Jan 19 21:46:22 2015
+fill_grid() filled 59000000 weights Mon Jan 19 21:46:36 2015
+fill_grid() filled 59050000 weights Mon Jan 19 21:46:48 2015
+fill_grid() filled 59100000 weights Mon Jan 19 21:47:00 2015
+fill_grid() filled 59150000 weights Mon Jan 19 21:47:12 2015
+fill_grid() filled 59200000 weights Mon Jan 19 21:47:38 2015
+fill_grid() filled 59250000 weights Mon Jan 19 21:47:54 2015
+fill_grid() filled 59300000 weights Mon Jan 19 21:48:06 2015
+fill_grid() filled 59350000 weights Mon Jan 19 21:48:17 2015
+fill_grid() filled 59400000 weights Mon Jan 19 21:48:29 2015
+fill_grid() filled 59450000 weights Mon Jan 19 21:48:52 2015
+fill_grid() filled 59500000 weights Mon Jan 19 21:49:12 2015
+fill_grid() filled 59550000 weights Mon Jan 19 21:49:24 2015
+fill_grid() filled 59600000 weights Mon Jan 19 21:49:36 2015
+fill_grid() filled 59650000 weights Mon Jan 19 21:49:49 2015
+fill_grid() filled 59700000 weights Mon Jan 19 21:50:09 2015
+fill_grid() filled 59750000 weights Mon Jan 19 21:50:26 2015
+fill_grid() filled 59800000 weights Mon Jan 19 21:50:41 2015
+fill_grid() filled 59850000 weights Mon Jan 19 21:50:54 2015
+fill_grid() filled 59900000 weights Mon Jan 19 21:51:07 2015
+fill_grid() filled 59950000 weights Mon Jan 19 21:51:22 2015
+fill_grid() filled 60000000 weights Mon Jan 19 21:51:39 2015
+fill_grid() filled 60050000 weights Mon Jan 19 21:51:55 2015
+fill_grid() filled 60100000 weights Mon Jan 19 21:52:10 2015
+fill_grid() filled 60150000 weights Mon Jan 19 21:52:24 2015
+fill_grid() filled 60200000 weights Mon Jan 19 21:52:40 2015
+fill_grid() filled 60250000 weights Mon Jan 19 21:52:56 2015
+
+************* Integration by Vegas (iteration  13) **************
+*                                                               *
+*  integral  =  27357.653       accum. integral =  27437.148    *
+*  std. dev. =  39.662489       accum. std. dev =  8.5768904    *
+*   max. wt. =    23.1110                                       *
+*                                                               *
+**************   chi**2/iteration =  1.053       ****************
+
+ Writing out intermediate results for iteration          13
+fill_grid() filled 60300000 weights Mon Jan 19 21:53:23 2015
+fill_grid() filled 60350000 weights Mon Jan 19 21:53:34 2015
+fill_grid() filled 60400000 weights Mon Jan 19 21:53:44 2015
+fill_grid() filled 60450000 weights Mon Jan 19 21:53:58 2015
+fill_grid() filled 60500000 weights Mon Jan 19 21:54:43 2015
+fill_grid() filled 60550000 weights Mon Jan 19 21:54:59 2015
+fill_grid() filled 60600000 weights Mon Jan 19 21:55:39 2015
+fill_grid() filled 60650000 weights Mon Jan 19 21:56:01 2015
+fill_grid() filled 60700000 weights Mon Jan 19 21:56:21 2015
+fill_grid() filled 60750000 weights Mon Jan 19 21:56:54 2015
+fill_grid() filled 60800000 weights Mon Jan 19 21:57:12 2015
+fill_grid() filled 60850000 weights Mon Jan 19 21:57:30 2015
+fill_grid() filled 60900000 weights Mon Jan 19 21:57:55 2015
+fill_grid() filled 60950000 weights Mon Jan 19 21:58:15 2015
+fill_grid() filled 61000000 weights Mon Jan 19 21:58:29 2015
+fill_grid() filled 61050000 weights Mon Jan 19 21:58:43 2015
+fill_grid() filled 61100000 weights Mon Jan 19 21:58:58 2015
+fill_grid() filled 61150000 weights Mon Jan 19 21:59:23 2015
+fill_grid() filled 61200000 weights Mon Jan 19 21:59:38 2015
+fill_grid() filled 61250000 weights Mon Jan 19 21:59:49 2015
+fill_grid() filled 61300000 weights Mon Jan 19 22:00:00 2015
+fill_grid() filled 61350000 weights Mon Jan 19 22:00:11 2015
+fill_grid() filled 61400000 weights Mon Jan 19 22:00:34 2015
+fill_grid() filled 61450000 weights Mon Jan 19 22:00:52 2015
+fill_grid() filled 61500000 weights Mon Jan 19 22:01:05 2015
+fill_grid() filled 61550000 weights Mon Jan 19 22:01:16 2015
+fill_grid() filled 61600000 weights Mon Jan 19 22:01:28 2015
+fill_grid() filled 61650000 weights Mon Jan 19 22:01:48 2015
+fill_grid() filled 61700000 weights Mon Jan 19 22:02:04 2015
+fill_grid() filled 61750000 weights Mon Jan 19 22:02:18 2015
+fill_grid() filled 61800000 weights Mon Jan 19 22:02:30 2015
+fill_grid() filled 61850000 weights Mon Jan 19 22:02:42 2015
+fill_grid() filled 61900000 weights Mon Jan 19 22:02:56 2015
+fill_grid() filled 61950000 weights Mon Jan 19 22:03:12 2015
+fill_grid() filled 62000000 weights Mon Jan 19 22:03:26 2015
+fill_grid() filled 62050000 weights Mon Jan 19 22:03:39 2015
+fill_grid() filled 62100000 weights Mon Jan 19 22:03:52 2015
+fill_grid() filled 62150000 weights Mon Jan 19 22:04:04 2015
+fill_grid() filled 62200000 weights Mon Jan 19 22:04:18 2015
+fill_grid() filled 62250000 weights Mon Jan 19 22:04:32 2015
+fill_grid() filled 62300000 weights Mon Jan 19 22:04:45 2015
+fill_grid() filled 62350000 weights Mon Jan 19 22:04:58 2015
+fill_grid() filled 62400000 weights Mon Jan 19 22:05:10 2015
+fill_grid() filled 62450000 weights Mon Jan 19 22:05:23 2015
+fill_grid() filled 62500000 weights Mon Jan 19 22:05:36 2015
+
+************* Integration by Vegas (iteration  14) **************
+*                                                               *
+*  integral  =  27461.960       accum. integral =  27438.290    *
+*  std. dev. =  39.052775       accum. std. dev =  8.3772346    *
+*   max. wt. =    23.1110                                       *
+*                                                               *
+**************   chi**2/iteration =  1.002       ****************
+
+ Writing out intermediate results for iteration          14
+fill_grid() filled 62550000 weights Mon Jan 19 22:05:58 2015
+fill_grid() filled 62600000 weights Mon Jan 19 22:06:15 2015
+fill_grid() filled 62650000 weights Mon Jan 19 22:06:26 2015
+fill_grid() filled 62700000 weights Mon Jan 19 22:06:35 2015
+fill_grid() filled 62750000 weights Mon Jan 19 22:06:48 2015
+fill_grid() filled 62800000 weights Mon Jan 19 22:07:32 2015
+fill_grid() filled 62850000 weights Mon Jan 19 22:07:47 2015
+fill_grid() filled 62900000 weights Mon Jan 19 22:08:22 2015
+fill_grid() filled 62950000 weights Mon Jan 19 22:08:49 2015
+fill_grid() filled 63000000 weights Mon Jan 19 22:09:07 2015
+fill_grid() filled 63050000 weights Mon Jan 19 22:09:39 2015
+fill_grid() filled 63100000 weights Mon Jan 19 22:09:59 2015
+fill_grid() filled 63150000 weights Mon Jan 19 22:10:17 2015
+fill_grid() filled 63200000 weights Mon Jan 19 22:10:36 2015
+fill_grid() filled 63250000 weights Mon Jan 19 22:11:03 2015
+fill_grid() filled 63300000 weights Mon Jan 19 22:11:18 2015
+fill_grid() filled 63350000 weights Mon Jan 19 22:11:31 2015
+fill_grid() filled 63400000 weights Mon Jan 19 22:11:46 2015
+fill_grid() filled 63450000 weights Mon Jan 19 22:12:01 2015
+fill_grid() filled 63500000 weights Mon Jan 19 22:12:26 2015
+fill_grid() filled 63550000 weights Mon Jan 19 22:12:39 2015
+fill_grid() filled 63600000 weights Mon Jan 19 22:12:50 2015
+fill_grid() filled 63650000 weights Mon Jan 19 22:13:01 2015
+fill_grid() filled 63700000 weights Mon Jan 19 22:13:13 2015
+fill_grid() filled 63750000 weights Mon Jan 19 22:13:35 2015
+fill_grid() filled 63800000 weights Mon Jan 19 22:13:54 2015
+fill_grid() filled 63850000 weights Mon Jan 19 22:14:06 2015
+fill_grid() filled 63900000 weights Mon Jan 19 22:14:17 2015
+fill_grid() filled 63950000 weights Mon Jan 19 22:14:29 2015
+fill_grid() filled 64000000 weights Mon Jan 19 22:14:48 2015
+fill_grid() filled 64050000 weights Mon Jan 19 22:15:06 2015
+fill_grid() filled 64100000 weights Mon Jan 19 22:15:20 2015
+fill_grid() filled 64150000 weights Mon Jan 19 22:15:32 2015
+fill_grid() filled 64200000 weights Mon Jan 19 22:15:45 2015
+fill_grid() filled 64250000 weights Mon Jan 19 22:15:58 2015
+fill_grid() filled 64300000 weights Mon Jan 19 22:16:15 2015
+fill_grid() filled 64350000 weights Mon Jan 19 22:16:30 2015
+fill_grid() filled 64400000 weights Mon Jan 19 22:16:44 2015
+fill_grid() filled 64450000 weights Mon Jan 19 22:16:58 2015
+fill_grid() filled 64500000 weights Mon Jan 19 22:17:11 2015
+fill_grid() filled 64550000 weights Mon Jan 19 22:17:26 2015
+fill_grid() filled 64600000 weights Mon Jan 19 22:17:41 2015
+fill_grid() filled 64650000 weights Mon Jan 19 22:17:55 2015
+fill_grid() filled 64700000 weights Mon Jan 19 22:18:09 2015
+fill_grid() filled 64750000 weights Mon Jan 19 22:18:23 2015
+fill_grid() filled 64800000 weights Mon Jan 19 22:18:37 2015
+fill_grid() filled 64850000 weights Mon Jan 19 22:18:51 2015
+
+************* Integration by Vegas (iteration  15) **************
+*                                                               *
+*  integral  =  27455.993       accum. integral =  27439.277    *
+*  std. dev. =  34.466531       accum. std. dev =  8.1402408    *
+*   max. wt. =    23.1110                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9480       ****************
+
+ Writing out intermediate results for iteration          15
+fill_grid() filled 64900000 weights Mon Jan 19 22:19:18 2015
+fill_grid() filled 64950000 weights Mon Jan 19 22:19:30 2015
+fill_grid() filled 65000000 weights Mon Jan 19 22:19:39 2015
+fill_grid() filled 65050000 weights Mon Jan 19 22:19:50 2015
+fill_grid() filled 65100000 weights Mon Jan 19 22:20:13 2015
+fill_grid() filled 65150000 weights Mon Jan 19 22:20:51 2015
+fill_grid() filled 65200000 weights Mon Jan 19 22:21:07 2015
+fill_grid() filled 65250000 weights Mon Jan 19 22:21:52 2015
+fill_grid() filled 65300000 weights Mon Jan 19 22:22:15 2015
+fill_grid() filled 65350000 weights Mon Jan 19 22:22:35 2015
+fill_grid() filled 65400000 weights Mon Jan 19 22:23:11 2015
+fill_grid() filled 65450000 weights Mon Jan 19 22:23:32 2015
+fill_grid() filled 65500000 weights Mon Jan 19 22:23:51 2015
+fill_grid() filled 65550000 weights Mon Jan 19 22:24:13 2015
+fill_grid() filled 65600000 weights Mon Jan 19 22:24:37 2015
+fill_grid() filled 65650000 weights Mon Jan 19 22:24:51 2015
+fill_grid() filled 65700000 weights Mon Jan 19 22:25:06 2015
+fill_grid() filled 65750000 weights Mon Jan 19 22:25:20 2015
+fill_grid() filled 65800000 weights Mon Jan 19 22:25:46 2015
+fill_grid() filled 65850000 weights Mon Jan 19 22:26:00 2015
+fill_grid() filled 65900000 weights Mon Jan 19 22:26:12 2015
+fill_grid() filled 65950000 weights Mon Jan 19 22:26:23 2015
+fill_grid() filled 66000000 weights Mon Jan 19 22:26:34 2015
+fill_grid() filled 66050000 weights Mon Jan 19 22:26:52 2015
+fill_grid() filled 66100000 weights Mon Jan 19 22:27:15 2015
+fill_grid() filled 66150000 weights Mon Jan 19 22:27:28 2015
+fill_grid() filled 66200000 weights Mon Jan 19 22:27:39 2015
+fill_grid() filled 66250000 weights Mon Jan 19 22:27:51 2015
+fill_grid() filled 66300000 weights Mon Jan 19 22:28:05 2015
+fill_grid() filled 66350000 weights Mon Jan 19 22:28:27 2015
+fill_grid() filled 66400000 weights Mon Jan 19 22:28:43 2015
+fill_grid() filled 66450000 weights Mon Jan 19 22:28:55 2015
+fill_grid() filled 66500000 weights Mon Jan 19 22:29:08 2015
+fill_grid() filled 66550000 weights Mon Jan 19 22:29:20 2015
+fill_grid() filled 66600000 weights Mon Jan 19 22:29:36 2015
+fill_grid() filled 66650000 weights Mon Jan 19 22:29:54 2015
+fill_grid() filled 66700000 weights Mon Jan 19 22:30:08 2015
+fill_grid() filled 66750000 weights Mon Jan 19 22:30:22 2015
+fill_grid() filled 66800000 weights Mon Jan 19 22:30:36 2015
+fill_grid() filled 66850000 weights Mon Jan 19 22:30:50 2015
+fill_grid() filled 66900000 weights Mon Jan 19 22:31:06 2015
+fill_grid() filled 66950000 weights Mon Jan 19 22:31:22 2015
+fill_grid() filled 67000000 weights Mon Jan 19 22:31:37 2015
+fill_grid() filled 67050000 weights Mon Jan 19 22:31:51 2015
+fill_grid() filled 67100000 weights Mon Jan 19 22:32:05 2015
+fill_grid() filled 67150000 weights Mon Jan 19 22:32:20 2015
+
+************* Integration by Vegas (iteration  16) **************
+*                                                               *
+*  integral  =  27494.536       accum. integral =  27442.851    *
+*  std. dev. =  30.957525       accum. std. dev =  7.8726248    *
+*   max. wt. =    23.1110                                       *
+*                                                               *
+**************   chi**2/iteration =  1.083       ****************
+
+ Writing out intermediate results for iteration          16
+fill_grid() filled 67200000 weights Mon Jan 19 22:32:48 2015
+fill_grid() filled 67250000 weights Mon Jan 19 22:32:59 2015
+fill_grid() filled 67300000 weights Mon Jan 19 22:33:08 2015
+fill_grid() filled 67350000 weights Mon Jan 19 22:33:19 2015
+fill_grid() filled 67400000 weights Mon Jan 19 22:33:53 2015
+fill_grid() filled 67450000 weights Mon Jan 19 22:34:17 2015
+fill_grid() filled 67500000 weights Mon Jan 19 22:34:32 2015
+fill_grid() filled 67550000 weights Mon Jan 19 22:35:15 2015
+fill_grid() filled 67600000 weights Mon Jan 19 22:35:35 2015
+fill_grid() filled 67650000 weights Mon Jan 19 22:35:56 2015
+fill_grid() filled 67700000 weights Mon Jan 19 22:36:30 2015
+fill_grid() filled 67750000 weights Mon Jan 19 22:36:49 2015
+fill_grid() filled 67800000 weights Mon Jan 19 22:37:08 2015
+fill_grid() filled 67850000 weights Mon Jan 19 22:37:36 2015
+fill_grid() filled 67900000 weights Mon Jan 19 22:37:53 2015
+fill_grid() filled 67950000 weights Mon Jan 19 22:38:08 2015
+fill_grid() filled 68000000 weights Mon Jan 19 22:38:23 2015
+fill_grid() filled 68050000 weights Mon Jan 19 22:38:41 2015
+fill_grid() filled 68100000 weights Mon Jan 19 22:39:05 2015
+fill_grid() filled 68150000 weights Mon Jan 19 22:39:17 2015
+fill_grid() filled 68200000 weights Mon Jan 19 22:39:28 2015
+fill_grid() filled 68250000 weights Mon Jan 19 22:39:40 2015
+fill_grid() filled 68300000 weights Mon Jan 19 22:39:54 2015
+fill_grid() filled 68350000 weights Mon Jan 19 22:40:19 2015
+fill_grid() filled 68400000 weights Mon Jan 19 22:40:34 2015
+fill_grid() filled 68450000 weights Mon Jan 19 22:40:45 2015
+fill_grid() filled 68500000 weights Mon Jan 19 22:40:56 2015
+fill_grid() filled 68550000 weights Mon Jan 19 22:41:10 2015
+fill_grid() filled 68600000 weights Mon Jan 19 22:41:33 2015
+fill_grid() filled 68650000 weights Mon Jan 19 22:41:50 2015
+fill_grid() filled 68700000 weights Mon Jan 19 22:42:03 2015
+fill_grid() filled 68750000 weights Mon Jan 19 22:42:15 2015
+fill_grid() filled 68800000 weights Mon Jan 19 22:42:29 2015
+fill_grid() filled 68850000 weights Mon Jan 19 22:42:48 2015
+fill_grid() filled 68900000 weights Mon Jan 19 22:43:04 2015
+fill_grid() filled 68950000 weights Mon Jan 19 22:43:19 2015
+fill_grid() filled 69000000 weights Mon Jan 19 22:43:33 2015
+fill_grid() filled 69050000 weights Mon Jan 19 22:43:47 2015
+fill_grid() filled 69100000 weights Mon Jan 19 22:44:02 2015
+fill_grid() filled 69150000 weights Mon Jan 19 22:44:19 2015
+fill_grid() filled 69200000 weights Mon Jan 19 22:44:34 2015
+fill_grid() filled 69250000 weights Mon Jan 19 22:44:50 2015
+fill_grid() filled 69300000 weights Mon Jan 19 22:45:05 2015
+fill_grid() filled 69350000 weights Mon Jan 19 22:45:20 2015
+
+************* Integration by Vegas (iteration  17) **************
+*                                                               *
+*  integral  =  27462.689       accum. integral =  27444.127    *
+*  std. dev. =  30.030222       accum. std. dev =  7.6152880    *
+*   max. wt. =    23.1110                                       *
+*                                                               *
+**************   chi**2/iteration =  1.041       ****************
+
+ Writing out intermediate results for iteration          17
+fill_grid() filled 69400000 weights Mon Jan 19 22:45:45 2015
+fill_grid() filled 69450000 weights Mon Jan 19 22:46:02 2015
+fill_grid() filled 69500000 weights Mon Jan 19 22:46:12 2015
+fill_grid() filled 69550000 weights Mon Jan 19 22:46:21 2015
+fill_grid() filled 69600000 weights Mon Jan 19 22:46:36 2015
+fill_grid() filled 69650000 weights Mon Jan 19 22:47:19 2015
+fill_grid() filled 69700000 weights Mon Jan 19 22:47:34 2015
+fill_grid() filled 69750000 weights Mon Jan 19 22:48:07 2015
+fill_grid() filled 69800000 weights Mon Jan 19 22:48:37 2015
+fill_grid() filled 69850000 weights Mon Jan 19 22:48:55 2015
+fill_grid() filled 69900000 weights Mon Jan 19 22:49:30 2015
+fill_grid() filled 69950000 weights Mon Jan 19 22:49:51 2015
+fill_grid() filled 70000000 weights Mon Jan 19 22:50:09 2015
+fill_grid() filled 70050000 weights Mon Jan 19 22:50:31 2015
+fill_grid() filled 70100000 weights Mon Jan 19 22:50:57 2015
+fill_grid() filled 70150000 weights Mon Jan 19 22:51:12 2015
+fill_grid() filled 70200000 weights Mon Jan 19 22:51:27 2015
+fill_grid() filled 70250000 weights Mon Jan 19 22:51:43 2015
+fill_grid() filled 70300000 weights Mon Jan 19 22:52:09 2015
+fill_grid() filled 70350000 weights Mon Jan 19 22:52:22 2015
+fill_grid() filled 70400000 weights Mon Jan 19 22:52:33 2015
+fill_grid() filled 70450000 weights Mon Jan 19 22:52:44 2015
+fill_grid() filled 70500000 weights Mon Jan 19 22:52:57 2015
+fill_grid() filled 70550000 weights Mon Jan 19 22:53:23 2015
+fill_grid() filled 70600000 weights Mon Jan 19 22:53:39 2015
+fill_grid() filled 70650000 weights Mon Jan 19 22:53:50 2015
+fill_grid() filled 70700000 weights Mon Jan 19 22:54:01 2015
+fill_grid() filled 70750000 weights Mon Jan 19 22:54:14 2015
+fill_grid() filled 70800000 weights Mon Jan 19 22:54:36 2015
+fill_grid() filled 70850000 weights Mon Jan 19 22:54:54 2015
+fill_grid() filled 70900000 weights Mon Jan 19 22:55:08 2015
+fill_grid() filled 70950000 weights Mon Jan 19 22:55:20 2015
+fill_grid() filled 71000000 weights Mon Jan 19 22:55:33 2015
+fill_grid() filled 71050000 weights Mon Jan 19 22:55:51 2015
+fill_grid() filled 71100000 weights Mon Jan 19 22:56:09 2015
+fill_grid() filled 71150000 weights Mon Jan 19 22:56:24 2015
+fill_grid() filled 71200000 weights Mon Jan 19 22:56:37 2015
+fill_grid() filled 71250000 weights Mon Jan 19 22:56:50 2015
+fill_grid() filled 71300000 weights Mon Jan 19 22:57:06 2015
+fill_grid() filled 71350000 weights Mon Jan 19 22:57:22 2015
+fill_grid() filled 71400000 weights Mon Jan 19 22:57:38 2015
+fill_grid() filled 71450000 weights Mon Jan 19 22:57:53 2015
+fill_grid() filled 71500000 weights Mon Jan 19 22:58:08 2015
+fill_grid() filled 71550000 weights Mon Jan 19 22:58:24 2015
+
+************* Integration by Vegas (iteration  18) **************
+*                                                               *
+*  integral  =  27446.245       accum. integral =  27444.263    *
+*  std. dev. =  29.043198       accum. std. dev =  7.3662747    *
+*   max. wt. =    23.1110                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9803       ****************
+
+ Writing out intermediate results for iteration          18
+fill_grid() filled 71600000 weights Mon Jan 19 22:58:47 2015
+fill_grid() filled 71650000 weights Mon Jan 19 22:59:06 2015
+fill_grid() filled 71700000 weights Mon Jan 19 22:59:16 2015
+fill_grid() filled 71750000 weights Mon Jan 19 22:59:25 2015
+fill_grid() filled 71800000 weights Mon Jan 19 22:59:39 2015
+fill_grid() filled 71850000 weights Mon Jan 19 23:00:23 2015
+fill_grid() filled 71900000 weights Mon Jan 19 23:00:38 2015
+fill_grid() filled 71950000 weights Mon Jan 19 23:01:00 2015
+fill_grid() filled 72000000 weights Mon Jan 19 23:01:41 2015
+fill_grid() filled 72050000 weights Mon Jan 19 23:01:58 2015
+fill_grid() filled 72100000 weights Mon Jan 19 23:02:34 2015
+fill_grid() filled 72150000 weights Mon Jan 19 23:02:56 2015
+fill_grid() filled 72200000 weights Mon Jan 19 23:03:14 2015
+fill_grid() filled 72250000 weights Mon Jan 19 23:03:35 2015
+fill_grid() filled 72300000 weights Mon Jan 19 23:04:03 2015
+fill_grid() filled 72350000 weights Mon Jan 19 23:04:19 2015
+fill_grid() filled 72400000 weights Mon Jan 19 23:04:35 2015
+fill_grid() filled 72450000 weights Mon Jan 19 23:04:51 2015
+fill_grid() filled 72500000 weights Mon Jan 19 23:05:18 2015
+fill_grid() filled 72550000 weights Mon Jan 19 23:05:32 2015
+fill_grid() filled 72600000 weights Mon Jan 19 23:05:43 2015
+fill_grid() filled 72650000 weights Mon Jan 19 23:05:55 2015
+fill_grid() filled 72700000 weights Mon Jan 19 23:06:08 2015
+fill_grid() filled 72750000 weights Mon Jan 19 23:06:35 2015
+fill_grid() filled 72800000 weights Mon Jan 19 23:06:50 2015
+fill_grid() filled 72850000 weights Mon Jan 19 23:07:02 2015
+fill_grid() filled 72900000 weights Mon Jan 19 23:07:13 2015
+fill_grid() filled 72950000 weights Mon Jan 19 23:07:26 2015
+fill_grid() filled 73000000 weights Mon Jan 19 23:07:49 2015
+fill_grid() filled 73050000 weights Mon Jan 19 23:08:08 2015
+fill_grid() filled 73100000 weights Mon Jan 19 23:08:21 2015
+fill_grid() filled 73150000 weights Mon Jan 19 23:08:32 2015
+fill_grid() filled 73200000 weights Mon Jan 19 23:08:45 2015
+fill_grid() filled 73250000 weights Mon Jan 19 23:09:04 2015
+fill_grid() filled 73300000 weights Mon Jan 19 23:09:21 2015
+fill_grid() filled 73350000 weights Mon Jan 19 23:09:36 2015
+fill_grid() filled 73400000 weights Mon Jan 19 23:09:49 2015
+fill_grid() filled 73450000 weights Mon Jan 19 23:10:02 2015
+fill_grid() filled 73500000 weights Mon Jan 19 23:10:17 2015
+fill_grid() filled 73550000 weights Mon Jan 19 23:10:33 2015
+fill_grid() filled 73600000 weights Mon Jan 19 23:10:48 2015
+fill_grid() filled 73650000 weights Mon Jan 19 23:11:03 2015
+fill_grid() filled 73700000 weights Mon Jan 19 23:11:18 2015
+fill_grid() filled 73750000 weights Mon Jan 19 23:11:33 2015
+fill_grid() filled 73800000 weights Mon Jan 19 23:11:50 2015
+
+************* Integration by Vegas (iteration  19) **************
+*                                                               *
+*  integral  =  27435.609       accum. integral =  27443.717    *
+*  std. dev. =  28.393272       accum. std. dev =  7.1302225    *
+*   max. wt. =    23.1110                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9307       ****************
+
+ Writing out intermediate results for iteration          19
+fill_grid() filled 73850000 weights Mon Jan 19 23:12:16 2015
+fill_grid() filled 73900000 weights Mon Jan 19 23:12:26 2015
+fill_grid() filled 73950000 weights Mon Jan 19 23:12:35 2015
+fill_grid() filled 74000000 weights Mon Jan 19 23:12:48 2015
+fill_grid() filled 74050000 weights Mon Jan 19 23:13:31 2015
+fill_grid() filled 74100000 weights Mon Jan 19 23:13:46 2015
+fill_grid() filled 74150000 weights Mon Jan 19 23:14:04 2015
+fill_grid() filled 74200000 weights Mon Jan 19 23:14:47 2015
+fill_grid() filled 74250000 weights Mon Jan 19 23:15:04 2015
+fill_grid() filled 74300000 weights Mon Jan 19 23:15:33 2015
+fill_grid() filled 74350000 weights Mon Jan 19 23:16:00 2015
+fill_grid() filled 74400000 weights Mon Jan 19 23:16:18 2015
+fill_grid() filled 74450000 weights Mon Jan 19 23:16:38 2015
+fill_grid() filled 74500000 weights Mon Jan 19 23:17:07 2015
+fill_grid() filled 74550000 weights Mon Jan 19 23:17:22 2015
+fill_grid() filled 74600000 weights Mon Jan 19 23:17:38 2015
+fill_grid() filled 74650000 weights Mon Jan 19 23:17:53 2015
+fill_grid() filled 74700000 weights Mon Jan 19 23:18:20 2015
+fill_grid() filled 74750000 weights Mon Jan 19 23:18:34 2015
+fill_grid() filled 74800000 weights Mon Jan 19 23:18:46 2015
+fill_grid() filled 74850000 weights Mon Jan 19 23:18:58 2015
+fill_grid() filled 74900000 weights Mon Jan 19 23:19:10 2015
+fill_grid() filled 74950000 weights Mon Jan 19 23:19:34 2015
+fill_grid() filled 75000000 weights Mon Jan 19 23:19:52 2015
+fill_grid() filled 75050000 weights Mon Jan 19 23:20:04 2015
+fill_grid() filled 75100000 weights Mon Jan 19 23:20:15 2015
+fill_grid() filled 75150000 weights Mon Jan 19 23:20:27 2015
+fill_grid() filled 75200000 weights Mon Jan 19 23:20:46 2015
+fill_grid() filled 75250000 weights Mon Jan 19 23:21:08 2015
+fill_grid() filled 75300000 weights Mon Jan 19 23:21:21 2015
+fill_grid() filled 75350000 weights Mon Jan 19 23:21:33 2015
+fill_grid() filled 75400000 weights Mon Jan 19 23:21:45 2015
+fill_grid() filled 75450000 weights Mon Jan 19 23:22:02 2015
+fill_grid() filled 75500000 weights Mon Jan 19 23:22:21 2015
+fill_grid() filled 75550000 weights Mon Jan 19 23:22:36 2015
+fill_grid() filled 75600000 weights Mon Jan 19 23:22:49 2015
+fill_grid() filled 75650000 weights Mon Jan 19 23:23:02 2015
+fill_grid() filled 75700000 weights Mon Jan 19 23:23:15 2015
+fill_grid() filled 75750000 weights Mon Jan 19 23:23:32 2015
+fill_grid() filled 75800000 weights Mon Jan 19 23:23:48 2015
+fill_grid() filled 75850000 weights Mon Jan 19 23:24:02 2015
+fill_grid() filled 75900000 weights Mon Jan 19 23:24:17 2015
+fill_grid() filled 75950000 weights Mon Jan 19 23:24:32 2015
+fill_grid() filled 76000000 weights Mon Jan 19 23:24:47 2015
+
+************* Integration by Vegas (iteration  20) **************
+*                                                               *
+*  integral  =  27491.691       accum. integral =  27444.992    *
+*  std. dev. =  43.157073       accum. std. dev =  7.0348565    *
+*   max. wt. =    31.8005                                       *
+*                                                               *
+**************   chi**2/iteration = 0.9450       ****************
+
+
+
+Value of final tota integral is    30822.9656 +/-     7.0445 fb
+
+ Total number of shots       :    441943040
+ Total no. failing cuts      :    378330627
+ Number failing jet cuts     :            0
+ Number failing process cuts :    359022784
+
+   Jet efficiency : 100.00%
+   Cut efficiency :  15.05%
+ Total efficiency :  15.05%
+
+ Contribution from parton sub-processes:
+ ---------------------------------------
+       GG     |           0.00000    0.00%
+       GQ     |        4809.50157   15.60%
+       GQB    |        3494.59723   11.34%
+       QG     |        4810.50733   15.61%
+       QBG    |        3494.68190   11.34%
+       QQ     |           0.00000    0.00%
+       QBQB   |           0.00000    0.00%
+       QQB    |        7107.24297   23.06%
+       QBQ    |        7106.43458   23.06%
+ ---------------------------------------
+
+ ****************************************************
+ output files  Z_only_tota_CT10nlo_25__25__CMSDY2D11-BIN1
+ ****************************************************
+Write out grids ...
+saving grid N=1	of 1	appl::grid::Write() CMSDY2D11-BIN1_rapidity.root	dirname grid	pdfname 
+grid::Write()size(untrimmed)=2700 kB	size(trimmed)=721 kB (26.7%)
+size(untrimmed)=2764800	size(trimmed)=738600	fraction=26.7144 %
+ ***********************************************
+ saved grids Mon Jan 19 23:24:55 2015
+ ***********************************************

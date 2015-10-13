@@ -1,0 +1,7 @@
+***********************************************************************
+ExpName: CDFR2KT
+Author: FastNLO authors
+Date: 2010
+CodesUsed: NLOjet++/FastNLO (scenario fnt2004 from FastNLO webpage) 
+AdditionalInfo: incl. jets, kT algo D=0.7
+***********************************************************************
