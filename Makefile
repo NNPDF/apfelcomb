@@ -20,7 +20,7 @@ gen: rmxeq mkdep mkgen
 GCC = g++ -std=c++11
 
 # APPLCOMB paths
-RESULTSDIR=   -D  RESULTS_PATH="../data/" -D  DATA_PATH="../data/"
+RESULTSDIR=   -D  RESULTS_PATH="../nnpdfcpp/data/" -D  DATA_PATH="../nnpdfcpp/data/"
 APPLGRIDDIR=  -D  APPL_PATH="../../external/APPLgrids/Current/"
 DATABASEDIR=  -D  DB_PATH="./"
 
