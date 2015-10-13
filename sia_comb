@@ -1,0 +1,2 @@
+#!/bin/bash
+./dis_comb $1 $2 sia.db 1

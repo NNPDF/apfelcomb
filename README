@@ -1,0 +1,37 @@
+************************************************
+*    Instructions on how to run APFELcomb      *
+************************************************
+
+PREREQUISITES
+* Download and compile latest version of APFEL trunk
+git clone https://github.com/scarrazza/apfel.git
+./configure --prefix=/your/location/
+make
+make clean
+* Add paths to your .bashrc
+
+INSTALL LIBNNPDF
+* cd /nnpdfcpp/trunk/libnnpdf/
+* Configure and install
+./configure --prefix=/your/location --enable-safemode
+(Note the latest option is necessary)
+make
+make install
+* Add paths to your .bashrc
+
+APPLGRID DATABASE
+* For each new observable add info on APPLgrid to the applgrid.db in the /nnpdfcpp/trunk/apfelcomb directory. All entries are trivial but three
+  --> maxprec = maximum relative precision of data in the new dataset
+  --> xmin = this is obtained by running
+  ./appl_gridinfo <APPLGRID_location>
+  --> nxpt = this is obtained by running
+  ./appl_optgrid <entry number in the database> <entry number in the theory database>
+  (The theory database.nb is in /data/theory.db. For example 11 is the entry for NLO as=0.118 FONLLB...)
+   Nxpt is the minimum number of points in the FK grid to obtain a max precision better than the precision of the data.
+   NB: if two tables need to be merged nxpt must be the same
+
+RUNNING APFELcomb
+* Once the applgrid.db is all set, run 
+./appl_comb <entry number in the database> <entry number in the theory database>
+* In a short time you should get your FK tables
+
