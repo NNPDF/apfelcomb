@@ -304,8 +304,8 @@ namespace QCD
       APFEL::SetPoleMasses(par.mc, par.mb, par.mt);
     else if (par.HQMASS.compare("MSBAR") == 0 )
     {
-      APFEL::SetMassScaleReference(par.Qmc, par.Qmb, par.Qmt);
       APFEL::SetMSbarMasses(par.mc, par.mb, par.mt);
+      APFEL::SetMassScaleReference(par.Qmc, par.Qmb, par.Qmt);
     }
     else
     {

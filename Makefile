@@ -21,7 +21,7 @@ GCC = g++ -std=c++11
 
 # APPLCOMB paths
 RESULTSDIR=   -D  RESULTS_PATH="../nnpdfcpp/data/" -D  DATA_PATH="../nnpdfcpp/data/"
-APPLGRIDDIR=  -D  APPL_PATH="../../external/APPLgrids/Current/"
+APPLGRIDDIR=  -D  APPL_PATH="../applgrids/"
 DATABASEDIR=  -D  DB_PATH="./"
 
 # main programs and required modules 
