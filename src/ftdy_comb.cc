@@ -65,17 +65,21 @@ void exportGrid(QCD::qcd_param const& par, NNPDF::CommonData const& cd, std::str
   delete FK;
 }
 
-
-int main(int argc, char* argv[]) {
-  
-  if (argc!=3)
-  {
+void quitmessage()
+{
     cout << "Usage: ftdy_comb <dataset id> <theory id>"<<endl;
     cout << "        Available dataset IDs: "<<endl;
     for (int i=0; i<FTDY::nsets; i++)
       cout << "        "<<i+1<<" : "<<FTDY::setnames[i]<<endl;
     exit(1);
-  }
+}
+
+int main(int argc, char* argv[]) {
+  
+  if (argc!=3)
+    quitmessage();
+  if ( atoi(argv[1]) > FTDY::nsets  || atoi(argv[1]) == 0 )
+    quitmessage();
 
   Splash();
 
