@@ -30,6 +30,12 @@ APPLGRID DATABASE
    Nxpt is the minimum number of points in the FK grid to obtain a max precision better than the precision of the data.
    NB: if two tables need to be merged nxpt must be the same
 
+GENFK SCRIPTS
+* For each new set, you need to add a corresponding genFK script into the /genFK_scripts/ folder
+  In this script you should perform any post-processing required (merging FK tables, normalising, etc).
+  Minimally this script should perform a check that the FK table file is present.
+  Lots of examples are provided in /genFK_scripts/
+
 RUNNING APFELcomb
 * Once the applgrid.db is all set, run 
 ./appl_comb <entry number in the database> <entry number in the theory database>
