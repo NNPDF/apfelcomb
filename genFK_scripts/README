@@ -4,7 +4,7 @@ These scripts follow the format <SETNAME>_genFK.sh
 and are used at the end of APFELComb FK table generation to
 convert the APFELComb output to the final format.
 
-Typically this involves a mergeFK call to combine separate
+Typically this involves a FKmerge call to combine separate
 tables, and sometimes the creation of a COMPOUND file.
 
 Each file is automatically copied to the appropriate table

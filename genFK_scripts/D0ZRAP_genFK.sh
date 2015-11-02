@@ -5,7 +5,7 @@ then
 	exit 1;
 fi
 
-mergeFK \
+FKmerge \
 FK_D0ZRAP_TOT_1.dat \
 FK_D0ZRAP_TOT_1.dat \
 FK_D0ZRAP_TOT_1.dat \
