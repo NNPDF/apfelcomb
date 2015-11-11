@@ -23,8 +23,9 @@
 
 namespace FTDY
 {
+
 	// Available stuff
-	static const int nsets = 7;
+	static const int nsets = 23;
 	static const std::string setnames[nsets] = 
 		{
 		"DYE605",
@@ -33,18 +34,50 @@ namespace FTDY
 		"POSDYU",
 		"POSDYD",
 		"POSDYS",
-		"POSDYC"
+		"POSDYC",
+		"POSDYCBD",
+		"POSDYCBDB",
+		"POSDYCBS",
+		"POSDYCBSB",
+		"POSDYCD",
+		"POSDYCDB",
+		"POSDYCS",
+		"POSDYCSB",
+		"POSDYUBD",
+		"POSDYUBDB",
+		"POSDYUBS",
+		"POSDYUBSB",
+		"POSDYUD",
+		"POSDYUDB",
+		"POSDYUS",
+		"POSDYUSB"
 		};
 
-	static const int nx[7] = 
+	static const int nx[nsets] = 
 		{
-		60,
-		60,
-		60,
-		60,
-		60,
-		60,
-		60		
+		40,
+		40,
+		40,
+		40,
+		40,
+		40,
+		40,	
+		40,
+		40,
+		40,
+		40,
+		40,
+		40,
+		40,	
+		40,
+		40,
+		40,
+		40,
+		40,
+		40,
+		40,	
+		40,
+		40
 		};
 
 	// Populate FK table
