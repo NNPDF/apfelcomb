@@ -26,7 +26,7 @@ DATABASEDIR=  -D  DB_PATH="./"
 
 # main programs and required modules 
 
-MAIN = src/appl_comb src/dis_comb src/ftdy_comb src/appl_optgrid src/appl_gridinfo
+MAIN = src/appl_comb src/dis_comb src/ftdy_comb src/appl_optgrid src/appl_gridinfo src/cfac_scale
 
 MODULES = src/fk_appl src/fk_utils src/fk_qcd src/nnpdfdb src/fk_dis src/fk_ftdy
 
