@@ -79,11 +79,10 @@ int main(int argc, char* argv[]) {
   for (int i=0; i< cd.GetNData(); i++)
   {
     const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i],2.0);
-    const double perDiff = 100.0*fabs(cFac[i]-fac1)/cFac[i];
-
-    std::cout << cFac[i]<<"  "<<fac1 <<"  "<<std::sqrt(cd.GetKinematics(i,1))<<"  "<<100.0*fabs(cFac[i]-fac1)/cFac[i]<<std::endl; 
     outstream << fac1 <<endl;
   }
+
+  std::cout << "CFactors for " << setName << " converted" <<std::endl;
 
   instream.close();
   outstream.close();
