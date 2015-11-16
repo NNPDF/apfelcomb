@@ -92,6 +92,17 @@ int main(int argc, char* argv[]) {
   QCD::qcd_param par;
   QCD::parse_input(iTh, par);
 
+  // Fix positivity observables to NLO and disable TMCs
+  if (FTDY::pos[iDt])
+  {
+    par.evol_pto = std::min(par.evol_pto,(size_t)1);
+    par.TMC = false;
+
+    std::cout<< "****** POSITIVITY OBSERVABLE ******"<<std::endl;
+    std::cout<< "Limiting PTO to NLO, disabling TMCs"<<std::endl;
+    std::cout<< "***********************************"<<std::endl;
+  }
+
   // Setup directory
   const std::string setname = FTDY::setnames[iDt-1];
   setupDir(iTh, setname);

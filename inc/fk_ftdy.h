@@ -80,6 +80,33 @@ namespace FTDY
 		40
 		};
 
+	static const bool pos[nsets] = 
+		{
+		false,
+		false,
+		false,
+		true,
+		true,
+		true,
+		true,	
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,	
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,
+		true,	
+		true,
+		true
+		};
+
 	// Populate FK table
 	void computeGrid(QCD::qcd_param const&, NNPDF::CommonData const&);
   	void processFK(QCD::qcd_param const&, NNPDF::CommonData const&, std::string const&, NNPDF::FKGenerator*);
