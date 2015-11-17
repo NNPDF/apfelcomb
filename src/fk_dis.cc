@@ -134,4 +134,15 @@ namespace DIS
     return q2max;
   }
 
+    // Get the maximum scale of an applgrid
+  double getQ2min(const NNPDF::CommonData& g)
+  {
+    double q2min = 0;
+    
+    for (int i=0; i<g.GetNData(); i++)
+     q2min = fmin(q2min, g.GetKinematics(i,1));
+    
+    return q2min;
+  }
+
 }
