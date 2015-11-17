@@ -84,7 +84,7 @@ namespace DIS
 
   void computeFK(dis_param const& par, NNPDF::CommonData const& cd, NNPDF::FKGenerator* FK)
   {
-    for (int d=0; d<par.ndata; d++)
+    for (size_t d=0; d<par.ndata; d++)
     {
       std::cout << d<<"/"<<cd.GetNData() <<" datapoints computed"<<std::endl;
       const double x = cd.GetKinematics(d,0);
@@ -95,7 +95,7 @@ namespace DIS
       if (Q < par.Q0)
         continue;
 
-      for(int ix=0; ix<QCD::getNXGrid(); ix++) 
+      for(size_t ix=0; ix<QCD::getNXGrid(); ix++) 
         for(int ifl=0; ifl<14; ifl++) 
           FK->Fill(d, ix, ifl, QCD::diskernel(par.process, x, Q, y, ifl, ix) );
     }
