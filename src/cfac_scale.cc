@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
 
   // Read Cfactors
   double* cFac = new double[cd.GetNData()];
-  std::ifstream instream(cFacPath);
-  std::ofstream outstream(cFacOut);
+  std::ifstream instream(cFacPath.c_str());
+  std::ofstream outstream(cFacOut.c_str());
 
   for (int i=0; i< 9; i++)
   {

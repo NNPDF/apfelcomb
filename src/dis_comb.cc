@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
   }
   gettimeofday(&t2, NULL);
 
-  for (size_t o=0; o<cd.GetNData(); o++)
+  for (int o=0; o<cd.GetNData(); o++)
       cout << "APFEL result, bin: "<<o<<"  = "<<xsec[o]<<endl;
 
     // compute and print the elapsed time in millisec
