@@ -1,11 +1,11 @@
 # Core Makefile
 
-include ../Makefile.inc
+include ../../Makefile.inc
 
-CXXFLAGS = 	$(PRJCXXFLAGS) -I.
+CXXFLAGS = 	$(PRJCXXFLAGS) -I ..
 LDFLAGS	 = 	$(PRJLDFLAGS)
 
-CORELIB = libac_core.a
+CORELIB = ../libac_core.a
 COREOBJ = fk_appl.o fk_dis.o fk_ftdy.o fk_qcd.o fk_utils.o nnpdfdb.o
 
 all : $(CORELIB)
