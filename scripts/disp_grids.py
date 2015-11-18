@@ -3,6 +3,8 @@
 import sqlite3 as lite
 import sys,os
 
+currentPath = os.path.dirname(os.path.realpath(__file__))
+
 # Attempt to find tablulate
 import imp
 try:
@@ -20,7 +22,7 @@ from tabulate import tabulate
 con = None
 
 try:
-    con = lite.connect('applgrid.db')
+    con = lite.connect(currentPath+'/../db/applgrid.db')
     
     cur = con.cursor()    
     cur.execute('SELECT SQLITE_VERSION()')
@@ -41,7 +43,7 @@ try:
 
     print "********************** Available CommonData **********************" 
 
-    con = lite.connect('dis.db')
+    con = lite.connect(currentPath+'/../db/dis.db')
     cur = con.cursor() 
 
     cur.execute('SELECT id, setname, gridname FROM sets')
@@ -56,7 +58,7 @@ try:
     if len(sys.argv) > 1 and sys.argv[1] == "sia":
         print "********************** Available CommonData SIA **********************" 
 
-        con = lite.connect('sia.db')
+        con = lite.connect(currentPath+'/../db/sia.db')
         cur = con.cursor() 
         
         cur.execute('SELECT id, setname, gridname FROM sets')
