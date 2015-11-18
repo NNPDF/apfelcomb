@@ -2,10 +2,10 @@
 // and Sigma matrices (combined applgrid - A matrices)
 // n.p.hartland@ed.ac.uk  - 03/12
 
-#include "fk_appl.h"
-#include "fk_qcd.h"
-#include "fk_utils.h"
-#include "nnpdfdb.h"
+#include "apfelcomb/fk_appl.h"
+#include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/nnpdfdb.h"
 
 #include <sys/time.h>
 

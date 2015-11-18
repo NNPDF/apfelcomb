@@ -1,8 +1,8 @@
 
-#include "fk_dis.h"
-#include "fk_qcd.h"
-#include "fk_utils.h"
-#include "nnpdfdb.h"
+#include "apfelcomb/fk_dis.h"
+#include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/nnpdfdb.h"
 
 #include <sys/time.h>
 

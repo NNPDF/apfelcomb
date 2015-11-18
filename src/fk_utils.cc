@@ -5,7 +5,7 @@
  */
 
 
-#include "fk_utils.h"
+#include "apfelcomb/fk_utils.h"
 #include "NNPDF/common.h"
 
 #include "appl_grid/appl_grid.h"

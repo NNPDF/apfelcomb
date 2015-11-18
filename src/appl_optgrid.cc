@@ -13,9 +13,9 @@
 #include <numeric>
 #include <sys/time.h>
 
-#include "fk_utils.h"
-#include "fk_appl.h"
-#include "fk_qcd.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/fk_appl.h"
+#include "apfelcomb/fk_qcd.h"
 
 using namespace std;
 

@@ -3,28 +3,13 @@
 //
 // nph  03/15
 
-#include "LHAPDF/LHAPDF.h"
-
-#include <vector>
 #include <iostream>
 #include <cstdlib>
-#include <fstream>
 #include <string>
-#include <time.h>
-#include <sys/time.h>
 #include <cstdio>
 
-#include "fk_utils.h"
-#include "fk_qcd.h"
-#include "fk_ftdy.h"
-#include "fk_pdf.h"
-
-#include "NNPDF/fastkernel.h"
-#include "NNPDF/thpredictions.h"
-#include "NNPDF/lhapdfset.h"
-
-#include <NNPDF/common.h>
-#include <NNPDF/commondata.h>
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/fk_ftdy.h"
 
 #include "APFEL/APFEL.h"
 

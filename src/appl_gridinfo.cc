@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "fk_appl.h"
+#include "apfelcomb/fk_appl.h"
 #include "appl_grid/appl_grid.h"
 
 #include "LHAPDF/LHAPDF.h"
