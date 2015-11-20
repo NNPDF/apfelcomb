@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
   const std::string cFacName = argv[2];
   const std::string cFacPath = dataPath() + "/NNLOCFAC/CF_QCD_"+cFacName+".dat";
-  const std::string cFacOut  = dataPath() + "/theory_" + std::to_string(tTh) + "/cfactors/CF_QCD_"+cFacName+".dat";
+  const std::string cFacOut  = dataPath() + "/theory_" + std::to_string(tTh) + "/cfactor/CF_QCD_"+cFacName+".dat";
 
   const std::string setName = argv[3];
   const std::string cDataPath = dataPath() + "/commondata/DATA_"+setName+".dat";
@@ -62,7 +62,11 @@ int main(int argc, char* argv[]) {
   {
     std::string dum;
     getline(instream,dum);
-    outstream << dum<<endl;
+    if ( i == 5 )
+      outstream << dum<<" -> Converted to alpha_s: " << tPar.alphas<< endl;
+    else
+      outstream << dum<<endl;
+
   }
 
   for (int i=0; i< cd.GetNData(); i++)
