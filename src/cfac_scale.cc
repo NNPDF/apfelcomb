@@ -87,7 +87,15 @@ int main(int argc, char* argv[]) {
   {
     const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i],2.0);
     outstream << fac1 <<endl;
-    std::cout <<std::setw(8)<< std::sqrt(cd.GetKinematics(i,1)) <<"\t"<< std::setw(8)<< cFac[i] << "\t"<<std::setw(8)<<fac1<<std::endl;
+
+    // Print to screen
+    std::cout << std::setw(8)
+              << std::sqrt(cd.GetKinematics(i,1)) 
+              <<"\t"<< std::setw(8)
+              << cFac[i] 
+              << "\t"<<std::setw(8)
+              <<fac1
+              <<std::endl;
   }
 
   std::cout << "CFactors for " << setName << " converted" <<std::endl;
