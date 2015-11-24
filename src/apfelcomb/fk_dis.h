@@ -56,5 +56,6 @@ namespace DIS
 	// Kinematic info fetchers
 	double getXmin (const NNPDF::CommonData& cdata);
 	double getQ2max(const NNPDF::CommonData& cdata);
+	double getQ2min(const NNPDF::CommonData& cdata);
 }
 

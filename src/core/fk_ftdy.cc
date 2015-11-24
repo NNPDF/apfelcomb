@@ -1,7 +1,7 @@
 
-#include "fk_ftdy.h"
-#include "fk_qcd.h"
-#include "nnpdfdb.h"
+#include "apfelcomb/fk_ftdy.h"
+#include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/nnpdfdb.h"
 
 #include <sys/time.h>
 

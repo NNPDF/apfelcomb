@@ -1,8 +1,8 @@
 
-#include "fk_dis.h"
-#include "fk_qcd.h"
-#include "fk_utils.h"
-#include "nnpdfdb.h"
+#include "apfelcomb/fk_dis.h"
+#include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/nnpdfdb.h"
 
 #include <sys/time.h>
 
@@ -84,7 +84,7 @@ namespace DIS
 
   void computeFK(dis_param const& par, NNPDF::CommonData const& cd, NNPDF::FKGenerator* FK)
   {
-    for (int d=0; d<par.ndata; d++)
+    for (size_t d=0; d<par.ndata; d++)
     {
       std::cout << d<<"/"<<cd.GetNData() <<" datapoints computed"<<std::endl;
       const double x = cd.GetKinematics(d,0);
@@ -95,7 +95,7 @@ namespace DIS
       if (Q < par.Q0)
         continue;
 
-      for(int ix=0; ix<QCD::getNXGrid(); ix++) 
+      for(size_t ix=0; ix<QCD::getNXGrid(); ix++) 
         for(int ifl=0; ifl<14; ifl++) 
           FK->Fill(d, ix, ifl, QCD::diskernel(par.process, x, Q, y, ifl, ix) );
     }
@@ -132,6 +132,17 @@ namespace DIS
      q2max = fmax(q2max, g.GetKinematics(i,1));
     
     return q2max;
+  }
+
+    // Get the maximum scale of an applgrid
+  double getQ2min(const NNPDF::CommonData& g)
+  {
+    double q2min = 0;
+    
+    for (int i=0; i<g.GetNData(); i++)
+     q2min = fmin(q2min, g.GetKinematics(i,1));
+    
+    return q2min;
   }
 
 }

@@ -14,10 +14,10 @@
 #include <sys/time.h>
 #include <cstdio>
 
-#include "fk_utils.h"
-#include "fk_qcd.h"
-#include "fk_ftdy.h"
-#include "fk_pdf.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_ftdy.h"
+#include "apfelcomb/fk_pdf.h"
 
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/thpredictions.h"

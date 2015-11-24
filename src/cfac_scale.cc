@@ -12,10 +12,10 @@
 #include <sys/time.h>
 #include <cstdio>
 
-#include "fk_dis.h"
-#include "fk_utils.h"
-#include "fk_pdf.h"
-#include "fk_qcd.h"
+#include "apfelcomb/fk_dis.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/fk_pdf.h"
+#include "apfelcomb/fk_qcd.h"
 
 #include "NNPDF/commondata.h"
 
@@ -23,23 +23,29 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
   
+  if ( argc != 4 )
+  {
+    std::cerr << "Usage: " <<argv[0] <<" <target ThID> <cFactor_name> <set_name>" <<std::endl;
+    exit(-1);
+  }
+
   Splash();
 
   // base and target theoryIDs
   const int bTh = 3;
-  const int tTh = 8;
+  const int tTh = atoi(argv[1]);
 
   QCD::qcd_param bPar, tPar;
   QCD::parse_input(bTh, bPar);
   QCD::parse_input(tTh, tPar);
 
-  const std::string cFacName = argv[1];
-  const std::string cFacPath = "../nnpdfcpp/data/NNLOCFAC_0119/CF_QCD_"+cFacName+".dat";
-  const std::string cFacOut = "../nnpdfcpp/data/NNLOCFAC_0118/CF_QCD_"+cFacName+".dat";
+  const std::string cFacName = argv[2];
+  const std::string cFacPath = dataPath() + "/NNLOCFAC/CF_QCD_"+cFacName+".dat";
+  const std::string cFacOut  = dataPath() + "/theory_" + std::to_string(tTh) + "/cfactor/CF_QCD_"+cFacName+".dat";
 
-  const std::string setName = argv[2];
-  const std::string cDataPath = "../nnpdfcpp/data/commondata/DATA_"+setName+".dat";
-  const std::string sysTypePath = "../nnpdfcpp/data/commondata/systypes/SYSTYPE_"+setName+"_0.dat";
+  const std::string setName = argv[3];
+  const std::string cDataPath = dataPath() + "/commondata/DATA_"+setName+".dat";
+  const std::string sysTypePath = dataPath() + "/commondata/systypes/SYSTYPE_"+setName+"_0.dat";
 
   // Read CommonData 
   NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(cDataPath, sysTypePath);
@@ -56,7 +62,11 @@ int main(int argc, char* argv[]) {
   {
     std::string dum;
     getline(instream,dum);
-    outstream << dum<<endl;
+    if ( i == 5 )
+      outstream << dum<<" -> Converted to alpha_s: " << tPar.alphas<< endl;
+    else
+      outstream << dum<<endl;
+
   }
 
   for (int i=0; i< cd.GetNData(); i++)
@@ -76,10 +86,20 @@ int main(int argc, char* argv[]) {
   for (int i=0; i< cd.GetNData(); i++)
     alphas_1[i] = QCD::alphas( std::sqrt(cd.GetKinematics(i,1)));
 
+  std::cout <<std::setw(8)<< "Scale"<<"\t"<< std::setw(8)<< "OldCFAC" << "\t"<<std::setw(8)<<"NewCFAC"<<std::endl;
   for (int i=0; i< cd.GetNData(); i++)
   {
     const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i],2.0);
     outstream << fac1 <<endl;
+
+    // Print to screen
+    std::cout << std::setw(8)
+              << std::sqrt(cd.GetKinematics(i,1)) 
+              <<"\t"<< std::setw(8)
+              << cFac[i] 
+              << "\t"<<std::setw(8)
+              <<fac1
+              <<std::endl;
   }
 
   std::cout << "CFactors for " << setName << " converted" <<std::endl;

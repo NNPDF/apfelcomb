@@ -18,10 +18,10 @@
 #include <sys/time.h>
 #include <cstdio>
 
-#include "fk_dis.h"
-#include "fk_utils.h"
-#include "fk_pdf.h"
-#include "fk_qcd.h"
+#include "apfelcomb/fk_dis.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/fk_pdf.h"
+#include "apfelcomb/fk_qcd.h"
 
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/thpredictions.h"
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
   }
   gettimeofday(&t2, NULL);
 
-  for (size_t o=0; o<cd.GetNData(); o++)
+  for (int o=0; o<cd.GetNData(); o++)
       cout << "APFEL result, bin: "<<o<<"  = "<<xsec[o]<<endl;
 
     // compute and print the elapsed time in millisec

@@ -5,7 +5,7 @@
  */
 
 
-#include "nnpdfdb.h"
+#include "apfelcomb/nnpdfdb.h"
 
 namespace NNPDF
 {

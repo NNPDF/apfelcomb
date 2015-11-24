@@ -9,10 +9,10 @@
 #include "appl_grid/appl_grid.h"
 #include "appl_grid/appl_igrid.h"
 
-#include "fk_qcd.h"
-#include "fk_utils.h"
-#include "fk_xgrid.h"
-#include "nnpdfdb.h"
+#include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/fk_xgrid.h"
+#include "apfelcomb/nnpdfdb.h"
 
 #include "NNPDF/common.h"
 #include "NNPDF/fkgenerator.h"
