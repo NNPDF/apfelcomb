@@ -13,11 +13,11 @@ all: core $(MAIN)
 dev: core $(DEV)
 
 core:
-	$(MAKE) -C src/core	
+	@$(MAKE) -C src/core	
 
 clean:
 	-$(RM) -f $(MAIN) $(DEV)
-	$(MAKE) clean -C src/core
+	@$(MAKE) clean -C src/core
 
 force_look:
 	true

@@ -1,6 +1,6 @@
 // cfac_scale.cc
 // Code to perform scaling of c-factors according to alpha_S variations
-// Scaling:  C(alphas_1) = 1.0 + (C(alphas_0)-1.0)*pow(alphas_1/alphas_0,2.0);
+// Scaling:  C(alphas_1) = 1.0 + (C(alphas_0)-1.0)*pow(alphas_1/alphas_0,pto);
 #include "LHAPDF/LHAPDF.h"
 
 #include <vector>
@@ -31,16 +31,27 @@ int main(int argc, char* argv[]) {
 
   Splash();
 
-  // base and target theoryIDs
-  const int bTh = 3;
+  // target theoryIDs
   const int tTh = atoi(argv[1]);
-
-  QCD::qcd_param bPar, tPar;
-  QCD::parse_input(bTh, bPar);
+  QCD::qcd_param  tPar;
   QCD::parse_input(tTh, tPar);
 
+  const int bTh = 3;
+  QCD::qcd_param  bPar;
+  QCD::parse_input(bTh, bPar);
+
+
+  if (tPar.pto != 1 && tPar.pto !=2) 
+  {    
+    std::cerr << "TheoryID must be either NLO or NNLO for scaling C-factors!" <<std::endl;
+    exit(-1);
+  }
+
+
+  const std::string ptoString = (tPar.pto == 1) ? "NLO":"NNLO";
+
   const std::string cFacName = argv[2];
-  const std::string cFacPath = dataPath() + "/NNLOCFAC/CF_QCD_"+cFacName+".dat";
+  const std::string cFacPath = dataPath() + "/"+ptoString+"CFAC/CF_QCD_"+cFacName+".dat";
   const std::string cFacOut  = dataPath() + "/theory_" + std::to_string(tTh) + "/cfactor/CF_QCD_"+cFacName+".dat";
 
   const std::string setName = argv[3];
@@ -89,7 +100,7 @@ int main(int argc, char* argv[]) {
   std::cout <<std::setw(8)<< "Scale"<<"\t"<< std::setw(8)<< "OldCFAC" << "\t"<<std::setw(8)<<"NewCFAC"<<std::endl;
   for (int i=0; i< cd.GetNData(); i++)
   {
-    const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i],2.0);
+    const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i], tPar.pto);
     outstream << fac1 <<endl;
 
     // Print to screen
