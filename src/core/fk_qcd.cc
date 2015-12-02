@@ -331,6 +331,9 @@ namespace QCD
     APFEL::SetRenFacRatio(par.xiR/par.xiF);
     APFEL::SetRenQRatio(par.xiR);
     APFEL::SetFacQRatio(par.xiF);
+
+    // Small-x resummation
+    APFEL::SetSmallxResummation(par.SxRes, par.SxOrd);
     
     // Set maximum scale
     QM = sqrt(Q2max);
