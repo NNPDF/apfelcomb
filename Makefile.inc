@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CC= g++ -std=c++11
+CC= g++
 LD= g++
 
 SHELL=/bin/bash
@@ -32,9 +32,11 @@ LHAPDFLIBS = -L$(LHAPDFDIR) -lLHAPDF
 APPLINCS = -I$(shell applgrid-config --prefix)/include
 APPLCLIBS = -L$(shell applgrid-config --prefix)/lib -lAPPLgrid 
 
+# libnnpdf
 NNPDFINCLUDE= $(shell nnpdf-config --cppflags)
 NNPDFLIBS= $(shell nnpdf-config --ldflags)
 
+# gsl
 GSLINCLUDE=$(shell gsl-config --cflags)
 GSLLIBS=$(shell gsl-config --libs)
 

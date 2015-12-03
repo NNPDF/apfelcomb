@@ -1,14 +1,14 @@
 include Makefile.inc
 
 CXXFLAGS = 	$(PRJCXXFLAGS) 
-LDLIBS   =      ./src/libac_core.a $(PRJLDFLAGS)
+LDLIBS   =  ./src/libac_core.a $(PRJLDFLAGS)
 
 VPATH=./src
 MAIN = appl_comb dis_comb ftdy_comb ./src/cfac_scale
 DEV = appl_optgrid appl_gridinfo ftdy_hcx 
 
-.PHONY: core
-
+.PHONY: all dev core clean
+	
 all: core $(MAIN)
 dev: core $(DEV)
 
