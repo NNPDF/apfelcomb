@@ -1,8 +1,7 @@
 include Makefile.inc
 
 CXXFLAGS = 	$(PRJCXXFLAGS) 
-LDFLAGS	 = 	$(PRJLDFLAGS)
-LDLIBS   =      ./src/libac_core.a
+LDLIBS   =      $(PRJLDFLAGS) ./src/libac_core.a
 
 VPATH=./src
 MAIN = appl_comb dis_comb ftdy_comb ./src/cfac_scale
