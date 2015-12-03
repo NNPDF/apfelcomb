@@ -35,8 +35,11 @@ APPLCLIBS = -L$(shell applgrid-config --prefix)/lib -lAPPLgrid
 NNPDFINCLUDE= $(shell nnpdf-config --cppflags)
 NNPDFLIBS= $(shell nnpdf-config --ldflags)
 
+GSLINCLUDE=$(shell gsl-config --cflags)
+GSLLIBS=$(shell gsl-config --libs)
+
 # additional libraries to be included 
-PRJLDFLAGS = $(LHAPDFLIBS) $(APPLCLIBS) $(ROOTLIBS) $(APFELLIBS) $(NNPDFLIBS) -lsqlite3
+PRJLDFLAGS = $(LHAPDFLIBS) $(APPLCLIBS) $(ROOTLIBS) $(APFELLIBS) $(NNPDFLIBS) $(GSLLIBS) -lsqlite3
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
-PRJCXXFLAGS = -Wall -O3 $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE)
+PRJCXXFLAGS = -Wall -O3 $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE) $(GSLINCLUDE)

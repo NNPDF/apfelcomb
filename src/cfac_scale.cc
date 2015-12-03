@@ -21,6 +21,13 @@
 
 using namespace std;
 
+template < typename T > std::string to_string( const T& n )
+{
+	std::ostringstream stm ;
+	stm << n ;
+	return stm.str() ;
+}
+
 int main(int argc, char* argv[]) {
   
   if ( argc != 4 )
@@ -52,7 +59,7 @@ int main(int argc, char* argv[]) {
 
   const std::string cFacName = argv[2];
   const std::string cFacPath = dataPath() + "/"+ptoString+"CFAC/CF_QCD_"+cFacName+".dat";
-  const std::string cFacOut  = dataPath() + "/theory_" + std::to_string(tTh) + "/cfactor/CF_QCD_"+cFacName+".dat";
+  const std::string cFacOut  = dataPath() + "/theory_" + to_string(tTh) + "/cfactor/CF_QCD_"+cFacName+".dat";
 
   const std::string setName = argv[3];
   const std::string cDataPath = dataPath() + "/commondata/DATA_"+setName+".dat";
