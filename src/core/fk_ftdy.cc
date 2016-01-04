@@ -1,13 +1,13 @@
 
 #include "apfelcomb/fk_ftdy.h"
 #include "apfelcomb/fk_qcd.h"
-#include "apfelcomb/nnpdfdb.h"
 
 #include <sys/time.h>
 
 #include <NNPDF/common.h>
 #include <NNPDF/commondata.h>
 #include <NNPDF/utils.h>
+#include "NNPDF/nnpdfdb.h"
 
 #include "APFEL/APFEL.h"
 

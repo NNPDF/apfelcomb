@@ -2,12 +2,12 @@
 #include "apfelcomb/fk_dis.h"
 #include "apfelcomb/fk_qcd.h"
 #include "apfelcomb/fk_utils.h"
-#include "apfelcomb/nnpdfdb.h"
 
 #include <sys/time.h>
 
 #include <NNPDF/common.h>
 #include <NNPDF/commondata.h>
+#include "NNPDF/nnpdfdb.h"
 
 
 using namespace std;

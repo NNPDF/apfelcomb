@@ -12,10 +12,10 @@
 #include "apfelcomb/fk_qcd.h"
 #include "apfelcomb/fk_utils.h"
 #include "apfelcomb/fk_xgrid.h"
-#include "apfelcomb/nnpdfdb.h"
 
 #include "NNPDF/common.h"
 #include "NNPDF/fkgenerator.h"
+#include "NNPDF/nnpdfdb.h"
 
 #include <limits>
 
