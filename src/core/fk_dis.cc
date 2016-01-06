@@ -4,6 +4,7 @@
 #include "apfelcomb/fk_utils.h"
 
 #include <sys/time.h>
+#include <map>
 
 #include <NNPDF/common.h>
 #include <NNPDF/commondata.h>
@@ -39,8 +40,9 @@ namespace DIS
     // Fix positivity observables to NLO and disable TMCs
     if (param.positivity)
     {
+      param.thMap["TMC"] = '0'; 
+      param.thMap["PTO"] = to_string(std::min(param.evol_pto,(size_t)1)); 
       param.evol_pto = std::min(param.evol_pto,(size_t)1);
-      param.TMC = false;
 
       std::cout<< "****** POSITIVITY OBSERVABLE ******"<<std::endl;
       std::cout<< "Limiting PTO to NLO, disabling TMCs"<<std::endl;

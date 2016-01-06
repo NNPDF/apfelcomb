@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
     std::string dum;
     getline(instream,dum);
     if ( i == 5 )
-      outstream << dum<<" -> Converted to alpha_s: " << tPar.alphas<< endl;
+      outstream << dum<<" -> Converted to alpha_s: " << tPar.thMap["alphas"]<< endl;
     else
       outstream << dum<<endl;
 

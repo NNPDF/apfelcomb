@@ -95,8 +95,9 @@ int main(int argc, char* argv[]) {
   // Fix positivity observables to NLO and disable TMCs
   if (FTDY::pos[iDt])
   {
+    par.thMap["TMC"] = '0'; 
+    par.thMap["PTO"] = to_string(std::min(par.evol_pto,(size_t)1)); 
     par.evol_pto = std::min(par.evol_pto,(size_t)1);
-    par.TMC = false;
 
     std::cout<< "****** POSITIVITY OBSERVABLE ******"<<std::endl;
     std::cout<< "Limiting PTO to NLO, disabling TMCs"<<std::endl;
