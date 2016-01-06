@@ -105,7 +105,8 @@ namespace QCD
     // Fetch settings map
     theoryDB.ExtractMap(param.thID, APFEL::kValues, param.thMap);
 
-    // Set perturbative order
+    // Set perturbative order and initial scale
+    param.Q0 = atof(param.thMap["Q0"].c_str());
     param.evol_pto = atoi(param.thMap["PTO"].c_str());
     if (param.evol_pto == 2 and DIS_mode == false)
     {
@@ -124,7 +125,6 @@ namespace QCD
     }
 
     // Initial scale hardcoded
-    param.Q0      = NNPDF::dbquery<double>(theoryDB,innum,"Q0");
 
     cout << "                FastKernel Grid Combination                 "<<endl;
     cout << "    - TheoryID: "<<param.thID << endl;
@@ -162,7 +162,7 @@ namespace QCD
     // Theory configuration
     std::map<std::string, std::string>::const_iterator imap;
     for (imap = par.thMap.begin(); imap != par.thMap.end(); imap++)
-      FK.AddTag(FKHeader::THEORYINFO, (*imap).first, (*imap).second);
+      FK.AddTag(FKHeader::THEORYINFO, imap->first, imap->second);
   }
   
   // *********************** EVOLUTON FUNCTIONS *****************************

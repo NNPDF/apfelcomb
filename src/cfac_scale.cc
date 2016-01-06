@@ -21,13 +21,6 @@
 
 using namespace std;
 
-template < typename T > std::string to_string( const T& n )
-{
-	std::ostringstream stm ;
-	stm << n ;
-	return stm.str() ;
-}
-
 int main(int argc, char* argv[]) {
   
   if ( argc != 4 )
