@@ -108,7 +108,7 @@ namespace QCD
     // Set perturbative order and initial scale
     param.Q0 = atof(param.thMap["Q0"].c_str());
     param.evol_pto = atoi(param.thMap["PTO"].c_str());
-    if (param.evol_pto == 2 and DIS_mode == false)
+    if (param.evol_pto == 2 and DIS_mode == false and FTDY_mode == false)
     {
       cout << endl<<endl;
       cout << " ****************** WARNING ****************** "<<endl;
