@@ -93,7 +93,7 @@ int main(int argc, char* argv[]) {
   QCD::parse_input(iTh, par);
 
   // Fix positivity observables to NLO and disable TMCs
-  if (FTDY::pos[iDt])
+  if (FTDY::pos[iDt-1])
   {
     par.thMap["TMC"] = '0'; 
     par.thMap["PTO"] = to_string(std::min(par.evol_pto,(size_t)1)); 
