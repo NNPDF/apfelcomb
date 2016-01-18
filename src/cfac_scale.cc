@@ -21,13 +21,6 @@
 
 using namespace std;
 
-template < typename T > std::string to_string( const T& n )
-{
-	std::ostringstream stm ;
-	stm << n ;
-	return stm.str() ;
-}
-
 int main(int argc, char* argv[]) {
   
   if ( argc != 4 )
@@ -81,7 +74,7 @@ int main(int argc, char* argv[]) {
     std::string dum;
     getline(instream,dum);
     if ( i == 5 )
-      outstream << dum<<" -> Converted to alpha_s: " << tPar.alphas<< endl;
+      outstream << dum<<" -> Converted to alpha_s: " << tPar.thMap["alphas"]<< endl;
     else
       outstream << dum<<endl;
 

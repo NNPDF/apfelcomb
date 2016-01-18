@@ -5,6 +5,7 @@
  */
 
 #include "APFEL/APFEL.h"
+#include "APFEL/APFELdev.h"
 
 #include "appl_grid/appl_grid.h"
 #include "appl_grid/appl_igrid.h"
@@ -94,8 +95,6 @@ namespace QCD
 
     // Load theory choices DB
     NNPDF::IndexDB theoryDB(resultsPath()+"theory.db", "theoryIndex");
-
-  // Fetch number of entries
     const int entries =theoryDB.GetNEntries();
     if (innum < 0 || innum > entries)
     {
@@ -103,9 +102,13 @@ namespace QCD
       exit(-1);
     }
 
-    // Set perturbative order
-    param.evol_pto = NNPDF::dbquery<int>(theoryDB,innum,"PTO");
-    if (param.evol_pto == 2 and DIS_mode == false)
+    // Fetch settings map
+    theoryDB.ExtractMap(param.thID, APFEL::kValues, param.thMap);
+
+    // Set perturbative order and initial scale
+    param.Q0 = atof(param.thMap["Q0"].c_str());
+    param.evol_pto = atoi(param.thMap["PTO"].c_str());
+    if (param.evol_pto == 2 and DIS_mode == false and FTDY_mode == false)
     {
       cout << endl<<endl;
       cout << " ****************** WARNING ****************** "<<endl;
@@ -121,52 +124,7 @@ namespace QCD
       param.pto = param.evol_pto + 1;
     }
 
-    param.FNS = NNPDF::dbquery<string>(theoryDB,innum,"FNS");
-    param.damp =  NNPDF::dbquery<bool>(theoryDB,innum,"DAMP");
-    param.IC =  NNPDF::dbquery<bool>(theoryDB,innum,"IC");
-
-    param.MODEV   = NNPDF::dbquery<string>(theoryDB,innum,"ModEv");
-    param.xiR =  NNPDF::dbquery<double>(theoryDB,innum,"XIR");
-    param.xiF =  NNPDF::dbquery<double>(theoryDB,innum,"XIF");
-
-    param.nff      = NNPDF::dbquery<int>(theoryDB,innum,"NfFF");
-    param.nf_as      = NNPDF::dbquery<int>(theoryDB,innum,"MaxNfAs");
-    param.nf_pdf      = NNPDF::dbquery<int>(theoryDB,innum,"MaxNfPdf");
-
-    param.Q0      = NNPDF::dbquery<double>(theoryDB,innum,"Q0");
-    param.alphas  = NNPDF::dbquery<double>(theoryDB,innum,"alphas");
-    param.QREF    = NNPDF::dbquery<double>(theoryDB,innum,"Qref");
-
-    param.QED       = NNPDF::dbquery<bool>(theoryDB,innum,"QED");
-    param.alpha_qed = NNPDF::dbquery<double>(theoryDB,innum,"alphaqed");
-    param.QEDREF    = NNPDF::dbquery<double>(theoryDB,innum,"Qedref");
-
-    param.SxRes   = NNPDF::dbquery<bool>(theoryDB,innum,"SxRes");
-    param.SxOrd   = NNPDF::dbquery<string>(theoryDB,innum,"SxOrd");
-
-    
-    param.HQMASS  = NNPDF::dbquery<string>(theoryDB,innum,"HQ");
-    param.mc = NNPDF::dbquery<double>(theoryDB,innum,"mc");
-    param.mb = NNPDF::dbquery<double>(theoryDB,innum,"mb");
-    param.mt = NNPDF::dbquery<double>(theoryDB,innum,"mt");
-    param.Qmc = NNPDF::dbquery<double>(theoryDB,innum,"Qmc");
-    param.Qmb = NNPDF::dbquery<double>(theoryDB,innum,"Qmb");
-    param.Qmt = NNPDF::dbquery<double>(theoryDB,innum,"Qmt");
-
-    param.mz = NNPDF::dbquery<double>(theoryDB,innum,"MZ");
-    param.mw = NNPDF::dbquery<double>(theoryDB,innum,"MW");
-
-    param.gf = NNPDF::dbquery<double>(theoryDB,innum,"GF");
-    param.sin2tw = NNPDF::dbquery<double>(theoryDB,innum,"SIN2TW");
-
-    param.TMC = NNPDF::dbquery<bool>(theoryDB,innum,"TMC");
-    param.Mt = NNPDF::dbquery<double>(theoryDB,innum,"MP");
-
-    // Parse CKM
-    std::stringstream CKMstring(NNPDF::dbquery<string>(theoryDB,innum,"CKM"));
-    for (int i=0; i<3; i++)
-      for (int j=0; j<3; j++)
-        CKMstring >> param.CKM[i][j];
+    // Initial scale hardcoded
 
     cout << "                FastKernel Grid Combination                 "<<endl;
     cout << "    - TheoryID: "<<param.thID << endl;
@@ -201,41 +159,10 @@ namespace QCD
     }
     FK.AddTag(FKHeader::BLOB, "FlavourMap", fMapHeader.str());
 
-    // Theory Configuration
-    FK.AddTag(FKHeader::THEORYINFO, "TheoryID", par.thID);
-    FK.AddTag(FKHeader::THEORYINFO, "PTO", par.evol_pto); 
-    FK.AddTag(FKHeader::THEORYINFO, "FNS", par.FNS);
-    FK.AddTag(FKHeader::THEORYINFO, "DAMP", par.damp); 
-    FK.AddTag(FKHeader::THEORYINFO, "IC", par.IC); 
-    FK.AddTag(FKHeader::THEORYINFO, "ModEv", par.MODEV); 
-    FK.AddTag(FKHeader::THEORYINFO, "XIR", par.xiR); 
-    FK.AddTag(FKHeader::THEORYINFO, "XIF", par.xiF); 
-    FK.AddTag(FKHeader::THEORYINFO, "NfFF", par.nff);
-    FK.AddTag(FKHeader::THEORYINFO, "MaxNfAs", par.nf_as);
-    FK.AddTag(FKHeader::THEORYINFO, "MaxNfPdf", par.nf_pdf); 
-    FK.AddTag(FKHeader::THEORYINFO, "Q0", par.Q0);
-    FK.AddTag(FKHeader::THEORYINFO, "alphas", par.alphas); 
-    FK.AddTag(FKHeader::THEORYINFO, "Qref", par.QREF); 
-    FK.AddTag(FKHeader::THEORYINFO, "QED", par.QED); 
-    FK.AddTag(FKHeader::THEORYINFO, "alphaqed", par.alpha_qed); 
-    FK.AddTag(FKHeader::THEORYINFO, "Qedref", par.QEDREF); 
-    FK.AddTag(FKHeader::THEORYINFO, "SxRes", par.SxRes); 
-    FK.AddTag(FKHeader::THEORYINFO, "SxOrd", par.SxOrd); 
-    FK.AddTag(FKHeader::THEORYINFO, "HQ", par.HQMASS); 
-    FK.AddTag(FKHeader::THEORYINFO, "mc", par.mc); 
-    FK.AddTag(FKHeader::THEORYINFO, "Qmc", par.Qmc); 
-    FK.AddTag(FKHeader::THEORYINFO, "mb", par.mb); 
-    FK.AddTag(FKHeader::THEORYINFO, "Qmb", par.Qmb); 
-    FK.AddTag(FKHeader::THEORYINFO, "mt", par.mt); 
-    FK.AddTag(FKHeader::THEORYINFO, "Qmt", par.Qmt); 
-    //FK.AddTheoryInfo("CKM", par.); 
-    FK.AddTag(FKHeader::THEORYINFO, "MZ", par.mz); 
-    FK.AddTag(FKHeader::THEORYINFO, "MW", par.mw); 
-    FK.AddTag(FKHeader::THEORYINFO, "GF", par.gf); 
-    FK.AddTag(FKHeader::THEORYINFO, "SIN2TW", par.sin2tw); 
-    FK.AddTag(FKHeader::THEORYINFO, "TMC", par.TMC); 
-    FK.AddTag(FKHeader::THEORYINFO, "MP", par.Mt);
-
+    // Theory configuration
+    std::map<std::string, std::string>::const_iterator imap;
+    for (imap = par.thMap.begin(); imap != par.thMap.end(); imap++)
+      FK.AddTag(FKHeader::THEORYINFO, imap->first, imap->second);
   }
   
   // *********************** EVOLUTON FUNCTIONS *****************************
@@ -244,97 +171,14 @@ namespace QCD
   // Initialise QCD according to parameters
   void initQCD(qcd_param const& par, const double& Q2max)
   {
-    // Cleanup
-    APFEL::CleanUp();
-    
+    APFEL::SetParam(par.thMap);
+
     // Init Q0
     QCD::Q0 = par.Q0;
-    
-    // Theory, perturbative order of evolution
-    if (!par.QED)
-      APFEL::SetTheory(string("QCD"));
-    else
-      APFEL::SetTheory(string("QavDP"));
-    APFEL::SetPerturbativeOrder(par.evol_pto);
 
-
-    if (par.MODEV.compare("EXA") == 0)
-    {
-      APFEL::SetPDFEvolution("exactalpha");
-      APFEL::SetAlphaEvolution("exact");
-    }
-    else if (par.MODEV.compare("EXP") == 0)
-    {
-      APFEL::SetPDFEvolution("expandalpha");
-      APFEL::SetAlphaEvolution("expanded");
-    }
-    else if (par.MODEV.compare("TRN") == 0)
-    {
-      APFEL::SetPDFEvolution("truncated");
-      APFEL::SetAlphaEvolution("expanded");
-    }
-    else
-    {
-      std::cerr << " ERROR: Unrecognised MODEV: "<<par.MODEV<<std::endl;
-      exit(-1);
-    }
-    
-    // Coupling
-    APFEL::SetAlphaQCDRef(par.alphas, par.QREF);
-    if (par.QED)
-      APFEL::SetAlphaQEDRef(par.alpha_qed,par.QEDREF);
-    
-    // EW
-    APFEL::SetWMass(par.mw);
-    APFEL::SetZMass(par.mz);
-    APFEL::SetGFermi(par.gf);
-    APFEL::SetSin2ThetaW(par.sin2tw);
-
-    APFEL::SetCKM(par.CKM[0][0], par.CKM[0][1], par.CKM[0][2],
-                  par.CKM[1][0], par.CKM[1][1], par.CKM[1][2],
-                  par.CKM[2][0], par.CKM[2][1], par.CKM[2][2]);
-
-    // TMCs
-    APFEL::SetProtonMass(par.Mt);
-    if (par.TMC)
-      APFEL::EnableTargetMassCorrections(true);
-
-    // Heavy Quark Masses
-    if (par.HQMASS.compare("POLE") == 0 )
-      APFEL::SetPoleMasses(par.mc, par.mb, par.mt);
-    else if (par.HQMASS.compare("MSBAR") == 0 )
-    {
-      APFEL::SetMSbarMasses(par.mc, par.mb, par.mt);
-      APFEL::SetMassScaleReference(par.Qmc, par.Qmb, par.Qmt);
-    }
-    else
-    {
-      cerr << "Error: Unrecognised HQMASS"<<endl;
-      exit(-1);
-    }
-    
-    // Heavy Quark schemes
-    APFEL::SetMassScheme(par.FNS);
-    APFEL::EnableDampingFONLL(par.damp);
-    if (par.FNS.compare("FFNS") == 0)
-      APFEL::SetFFNS(par.nff);
-    else
-      APFEL::SetVFNS();
-    
-    APFEL::SetMaxFlavourAlpha(par.nf_as);
-    APFEL::SetMaxFlavourPDFs(par.nf_pdf);
-    
     // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);
 
-    // Scale ratios
-    APFEL::SetRenFacRatio(par.xiR/par.xiF);
-    APFEL::SetRenQRatio(par.xiR);
-    APFEL::SetFacQRatio(par.xiF);
-
-    // Small-x resummation
-    APFEL::SetSmallxResummation(par.SxRes, par.SxOrd);
-    
     // Set maximum scale
     QM = sqrt(Q2max);
     APFEL::SetQLimits( Q0, QM );
