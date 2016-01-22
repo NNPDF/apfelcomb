@@ -57,8 +57,6 @@ namespace Colour {
     std::ostream& operator<<(std::ostream& os, Code code);
 }
 
-const double PI=3.1415926535897932384626433832795;
-
 // Display helpers
 void DisplayHR();
 void Splash();

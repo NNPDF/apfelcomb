@@ -314,9 +314,9 @@ namespace APP
           const double Q   = sqrt( igrid->fQ2( igrid->gettau(t)) );
           const double as  = QCD::alphas(Q);
           
-          double pal = invNruns*pow(as/(2*PI),((double) LO+pto))/(deltaobs);
+          double pal = invNruns*pow(as/(2*M_PI),((double) LO+pto))/(deltaobs);
           if (g->calculation() == appl::grid::AMCATNLO) // aMC@NLO uses different normalisation for alpha_S
-            pal = invNruns*pow(as*(4*PI),((double) LO+pto))/(deltaobs);
+            pal = invNruns*pow(as*(4*M_PI),((double) LO+pto))/(deltaobs);
           
           for (int a=0; a<igrid->Ny1(); a++  )     //APPLGRID x1 loop
           {
