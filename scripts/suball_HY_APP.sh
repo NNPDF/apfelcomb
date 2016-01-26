@@ -1,12 +1,10 @@
 #!/bin/bash
-TH=21
+TH=$1
 
-for i in `seq 0 70`;
+for i in `seq 0 76`;
 do
     FILENAME=apfelcomb$i-$TH
-    echo "./appl_comb $i $TH
-./dis_comb $i $TH
-./ftdy_comb $i $TH" > $FILENAME
+    echo "../appl_comb $i $TH" > $FILENAME
     chmod +x $FILENAME
     echo $FILENAME
     mpisubnopause "1-9 hrs" 1 $FILENAME
