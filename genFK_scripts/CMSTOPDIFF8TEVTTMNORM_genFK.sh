@@ -1,19 +1,13 @@
-#!/bin/bash
+# Merge together the ttbar total xsec grids N_dat times
+FKmerge FK_CMSTOPDIFF8TEVTOTDEN.dat FK_CMSTOPDIFF8TEVTOTDEN.dat FK_CMSTOPDIFF8TEVTOTDEN.dat FK_CMSTOPDIFF8TEVTOTDEN.dat FK_CMSTOPDIFF8TEVTOTDEN.dat FK_CMSTOPDIFF8TEVTOTDEN.dat FK_CMSTOPDIFF8TEVTOTDEN.dat  > FK_CMSTOPDIFF8TEVTOTTTM.dat
 
-if [ ! -e "FK_CMSTOPDIFF8TEVTTM.dat" ] 
-then
-	exit 1;
-fi
+# Remove the old, single-datapoint total xsec grid
+rm FK_CMSTOPDIFF8TEVTOTDEN.dat
 
-if [ ! -e "FK_CMSTOPDIFF8TEVTOT.dat" ]
-then
-        exit 1;
-fi
-
-
+# write the compound file
 echo "# COMPOUND FK
-FK: FK_CMSTOPDIFF8TEVTTM.dat
-FK: FK_CMSTOPDIFF8TEVTOT.dat
+FK: FK_CMSTOPDIFF8TEVTTMNUM.dat
+FK: FK_CMSTOPDIFF8TEVTOTTTM.dat
 OP: RATIO" > FK_CMSTOPDIFF8TEVTTMNORM-COMPOUND.dat
 
 # Cleanup
