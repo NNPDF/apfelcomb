@@ -167,6 +167,12 @@ namespace QCD
   
   // *********************** EVOLUTON FUNCTIONS *****************************
 
+  void initTimelike()
+  {
+    APFEL::SetPDFSet("MELA");
+    APFEL::SetTimeLikeEvolution(true);
+  }
+
 
   // Initialise QCD according to parameters
   void initQCD(qcd_param const& par, const double& Q2max)

@@ -42,12 +42,11 @@ int main(int argc, char* argv[]) {
   // APPLgrid and theory indices
   const int iDB = atoi(argv[1]);
   const int iTh = atoi(argv[2]);
+  const bool timelike = ( argc == 5 ) ? ((atoi(argv[4]) == 1) ? true:false):false;
 
   // Set mode flags
   QCD::setDISmode(true);
-  if (argc == 5)
-    if ( atoi(argv[4]) == 1 )
-        QCD::setSIAmode(true);
+  if (timelike) QCD::setSIAmode(true);
 
   // Parse parameters
   DIS::dis_param par;
@@ -68,6 +67,7 @@ int main(int argc, char* argv[]) {
 
   // Initialise QCD
   QCD::initQCD(par, DIS::getQ2max(cd));
+  if (timelike) QCD::initTimelike();
 
   par.nx = 50;
   par.maxprec = 1E-7;
