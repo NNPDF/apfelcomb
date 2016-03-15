@@ -376,7 +376,7 @@ namespace APP
                         genpdf->evaluate(fA[i][k],fB[j][l],H);
 
                         for (size_t ip=0; ip<nsubproc; ip++)
-                          //if (abs(sigma/xsec_fk[d]) > 1E-10) // should be a parameter
+                          if (W[ip] != 0 and H[ip] != 0)
                             fk->Fill( d, i, j, k, l, norm*W[ip]*H[ip] );
                       }
               }
