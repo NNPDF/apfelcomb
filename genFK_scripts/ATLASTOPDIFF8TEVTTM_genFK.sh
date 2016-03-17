@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -e "FK_ATALSTOPDIFF8TEVTTM.dat" ] 
+if [ -e "FK_ATLASTOPDIFF8TEVTTM.dat" ] 
 then
 	exit 0;
 else
