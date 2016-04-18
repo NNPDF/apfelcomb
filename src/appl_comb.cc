@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
   for (size_t o=0; o<par.nbins; o++)
     if (par.mask[o])
     {
-      cout << "  APPLGRID result, bin: "<<o<<"  = "<<xsec[ibin]<<endl;
+      cout << "  APPLGRID result, bin: "<<ibin<<"  = "<<xsec[o]<<endl;
       ibin++;
     }
   
