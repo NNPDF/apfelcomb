@@ -361,6 +361,18 @@ namespace QCD
     
   }
 
+  // Recalculate evolution if not cached
+  static void updateEvol(const double& Q){
+    if (Q != QC)
+    {
+      if (fabs(Q-Q0) < 1E-7) // Fuzzy comp
+        APFEL::EvolveAPFEL(Q0,Q0);
+      else
+        APFEL::EvolveAPFEL(Q0,Q);
+      QC = Q;
+    }
+  }
+
   // APFEL PDF return for APPLgrid (no photon!)
   void evolpdf_applgrid(const double& x, const double& Q, double* pdf)
   {
@@ -372,19 +384,25 @@ namespace QCD
         pdf[i+6]=0;
       return;
     }
-
-    // Recalculate if not cached
-    if (Q != QC)
-    {
-      if (fabs(Q-Q0) < 1E-7) // Fuzzy comp
-        APFEL::EvolveAPFEL(Q0,Q0);
-      else
-        APFEL::EvolveAPFEL(Q0,Q);
-      QC = Q;
-    }
-    
+    updateEvol(Q);
     for (int i=-6; i<7; i++)
       pdf[i+6]=APFEL::xPDF(i,x);
+  }
+
+  // APFEL PDF return for APPLgrid (no photon!) - antiproton version
+  void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf)
+  {
+    // A nice trick of APPLgrid is to request PDF x-values smaller than
+    // are actually used
+    if (xg != NULL && x<xg[0])
+    {
+      for (int i=-6; i<7; i++)
+        pdf[i+6]=0;
+      return;
+    }
+    updateEvol(Q);
+    for (int i=-6; i<7; i++)
+      pdf[-i+6]=APFEL::xPDF(i,x);
   }
 
     // APFEL PDF return
@@ -413,19 +431,17 @@ namespace QCD
   // Evaluate A values
   void avals(const int& xi, const double& xo, const int& fi, const double& Q, double* a)
   {
-    // Recalculate if not cached
-    if (Q != QC)
-    {
-      if (fabs(Q-Q0) < 1E-7) // Fuzzy comp
-        APFEL::EvolveAPFEL(Q0,Q0);
-      else
-        APFEL::EvolveAPFEL(Q0,Q);
-      QC = Q;
-    }
-
+    updateEvol(Q);
     for(int i=0; i<13; i++)
       a[i] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
-
+    return;
+  }
+  // Evaluate A values -ppbar
+  void avals_pbar(const int& xi, const double& xo, const int& fi, const double& Q, double* a)
+  {
+    updateEvol(Q);
+    for(int i=0; i<13; i++)
+      a[-1*(i-6) + 6] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
     return;
   }
 

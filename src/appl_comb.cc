@@ -71,13 +71,16 @@ int main(int argc, char* argv[]) {
   // Need to get the absolute smallest x-grid value in APPLgrid here, not the value in par, hence the false
   // This is due to APPLgrids convolution routine requesting the smallest x-grid value from the PDF
   QCD::initTruthGrid(APP::getXmin(g,false)); 
-
   DisplayHR();
   cout << "  --  High accuracy APPLgrid Result "<<endl;
   
-  // Compute with applgrid interface (at NLO)
+  // Compute with applgrid interface
   int pto = par.pto-1; if (par.ptmin == 1) pto = -1;
-  vector<double> xsec  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
+  vector<double> xsec;
+  if (par.ppbar == true)
+    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto );
+  else
+    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
 
   size_t ibin=0;
   for (size_t o=0; o<par.nbins; o++)

@@ -106,10 +106,12 @@ namespace QCD
   // APFEL PDF access functions
   void evolpdf(const double& x, const double& Q, double* pdf);
   void evolpdf_applgrid(const double& x, const double& Q, double* pdf); // Version for applgrid (no photon)
+  void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf); // Version for applgrid (no photon) with antiproton pdfs
   double alphas(const double& Q);
   
   // APFEL FK functions
   void avals(const int& xi, const double& xo, const int& fi, const double& Q, double*);
+  void avals_pbar(const int& xi, const double& xo, const int& fi, const double& Q, double*);
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta);
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y);
   

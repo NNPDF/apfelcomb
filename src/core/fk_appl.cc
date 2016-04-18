@@ -254,7 +254,6 @@ namespace APP
     const size_t io       = par.pto;
     const int    LO       = g->leadingOrder() + par.ptmin;
     const double invNruns = ( !g->getNormalised() && g->run() ) ? ( 1.0 / double(g->run()) ) : 1.0;
-    const int pptrans = par.ppbar == 0 ? 1:-1;
     
     // Progress monitoring
     int completedElements = 0;
@@ -368,7 +367,12 @@ namespace APP
                 // Compute evolution factors for second PDF
                 for (size_t ix = 0; ix < nxin; ix++)
                   for (size_t fl = 0; fl < 14; fl++)
-                    QCD::avals(ix,x2,fl,Q,fB[ix][fl]);
+                  {
+                    if (par.ppbar == true)
+                      QCD::avals_pbar(ix,x2,fl,Q,fB[ix][fl]);
+                    else
+                      QCD::avals(ix,x2,fl,Q,fB[ix][fl]);
+                  }
                 
                 for (size_t i=0; i<nxin; i++) // Loop over input pdf x1
                   for (size_t j=0; j<nxin; j++) // Loop over input pdf x2
