@@ -63,6 +63,7 @@ namespace APP
 
     param.fnlo      = NNPDF::dbquery<bool>(db,innum,"fnlo");
     param.pdfwgt    = NNPDF::dbquery<bool>(db,innum,"pdfwgt");
+    param.ppbar    = NNPDF::dbquery<bool>(db,innum,"ppbar");
 
     // Fetch datapoint mask
     string mask = NNPDF::dbquery<string>(db,innum,"mask");
@@ -142,6 +143,7 @@ namespace APP
     cout << "    - NData: "<<param.ndata<<endl;
     cout <<endl;
     cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
+    cout << "    - ppbar transform: "<<param.ppbar<<endl;
     cout <<endl;
     DisplayHR();
     
@@ -252,7 +254,8 @@ namespace APP
     const size_t io       = par.pto;
     const int    LO       = g->leadingOrder() + par.ptmin;
     const double invNruns = ( !g->getNormalised() && g->run() ) ? ( 1.0 / double(g->run()) ) : 1.0;
-
+    const int pptrans = par.ppbar == 0 ? 1:-1;
+    
     // Progress monitoring
     int completedElements = 0;
     const int nXelements = appl_countelements(par, g);

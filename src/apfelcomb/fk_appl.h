@@ -46,7 +46,7 @@ namespace APP
 	  bool   fnlo;      //!< Using fastNLO grids
 	  size_t fnlobin;   //!< Which bin in the fastNLO grid?
 	  bool pdfwgt;      //!< Using a PDF weight? Typically used for fastNLO grids
-	  
+	  bool ppbar;		//!< Does the grid need a pp -> ppbar transform?
 	  vector<bool> mask;//!< Mask for which bins to pick out as datapoints
 	  vector<int>  map; //!< Map to list which bins enter as datapoints
 	  
