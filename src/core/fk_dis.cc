@@ -12,6 +12,7 @@
 
 
 using namespace std;
+using NNPDF::FKHeader;
 
 namespace DIS
 {
@@ -71,13 +72,19 @@ namespace DIS
 
   void set_params(dis_param const& par, NNPDF::FKHeader& FK)
   {
-      FK.AddTag(NNPDF::FKHeader::BLOB, "GridDesc", par.desc);
-      FK.AddTag(NNPDF::FKHeader::GRIDINFO, "SETNAME", par.setname);
-      FK.AddTag(NNPDF::FKHeader::GRIDINFO, "NDATA", par.ndata);
-      FK.AddTag(NNPDF::FKHeader::GRIDINFO, "HADRONIC", false);
+    FK.AddTag(NNPDF::FKHeader::BLOB, "GridDesc", par.desc);
+    FK.AddTag(NNPDF::FKHeader::GRIDINFO, "SETNAME", par.setname);
+    FK.AddTag(NNPDF::FKHeader::GRIDINFO, "NDATA", par.ndata);
+    FK.AddTag(NNPDF::FKHeader::GRIDINFO, "HADRONIC", false);
 
-      // Set QCD parameters
-      QCD::set_params(par, FK);
+    // Full flavourmap
+    stringstream fMapHeader;
+    for (int i=0; i<14; i++)
+        fMapHeader << "1 ";
+    FK.AddTag(FKHeader::BLOB, "FlavourMap", fMapHeader.str());
+
+    // Set QCD parameters
+    QCD::set_params(par, FK);
   }
 
 

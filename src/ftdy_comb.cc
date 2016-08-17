@@ -30,20 +30,9 @@ using namespace std;
 
 void exportGrid(QCD::qcd_param const& par, NNPDF::CommonData const& cd, std::string const& gridname, std::string const& outFile)
 {
-  // Initalise FK table
-  std::stringstream desc;
-  desc  <<  "-----------------------------------------------------------"<<std::endl
-        <<  " FK_"<<gridname<<".dat"<<std::endl
-        <<  "-----------------------------------------------------------";
-
   // Setup FastKernel Header
   NNPDF::FKHeader FKhead;
-  QCD::set_params(par, FKhead);
-
-  FKhead.AddTag(NNPDF::FKHeader::BLOB, "GridDesc", desc.str());
-  FKhead.AddTag(NNPDF::FKHeader::GRIDINFO, "SETNAME", cd.GetSetName());
-  FKhead.AddTag(NNPDF::FKHeader::GRIDINFO, "NDATA", cd.GetNData());
-  FKhead.AddTag(NNPDF::FKHeader::GRIDINFO, "HADRONIC", true );
+  FTDY::set_params(par, gridname, cd.GetSetName(), cd.GetNData(), FKhead);
 
   // Generate FK table
   std::stringstream IO; FKhead.Print(IO);

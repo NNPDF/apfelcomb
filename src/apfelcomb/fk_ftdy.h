@@ -107,6 +107,9 @@ namespace FTDY
 		true
 		};
 
+	// Populate FK header
+	void set_params(QCD::qcd_param const& par, std::string const& gridname, std::string const& setname, int const& ndata, NNPDF::FKHeader& FK);
+
 	// Populate FK table
 	void computeGrid(QCD::qcd_param const&, NNPDF::CommonData const&);
   	void processFK(QCD::qcd_param const&, NNPDF::CommonData const&, std::string const&, NNPDF::FKGenerator*);

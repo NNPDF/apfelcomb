@@ -12,9 +12,38 @@
 #include "APFEL/APFEL.h"
 
 using namespace std;
+using NNPDF::FKHeader;
 
 namespace FTDY
 {
+
+  // *********************** FKHeader population ************************
+
+  void set_params(QCD::qcd_param const& par, std::string const& gridname, std::string const& setname, int const& ndata, NNPDF::FKHeader& FK)
+  {
+    std::stringstream desc;
+    desc  <<  "-----------------------------------------------------------"<<std::endl
+          <<  " FK_"<<gridname<<".dat"<<std::endl
+          <<  "-----------------------------------------------------------";
+
+    FK.AddTag(FKHeader::BLOB, "GridDesc", desc.str());
+    FK.AddTag(FKHeader::GRIDINFO, "SETNAME", setname);
+    FK.AddTag(FKHeader::GRIDINFO, "NDATA", ndata);
+    FK.AddTag(FKHeader::GRIDINFO, "HADRONIC", true);
+
+    // Full flavourmap
+    stringstream fMapHeader;
+    for (int i=0; i<14; i++)
+    {
+      for (int i=0; i<14; i++)
+        fMapHeader << "1 ";
+      fMapHeader<<std::endl;
+    }
+    FK.AddTag(FKHeader::BLOB, "FlavourMap", fMapHeader.str());
+
+    // Set QCD parameters
+    QCD::set_params(par, FK);
+  }
 
   // Populate FK table
   void computeGrid(QCD::qcd_param const& par, NNPDF::CommonData const& cd)

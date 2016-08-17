@@ -160,6 +160,15 @@ namespace APP
       FK.AddTag(FKHeader::GRIDINFO, "NDATA", par.ndata);
       FK.AddTag(FKHeader::GRIDINFO, "HADRONIC", true);
 
+      // Full flavourmap
+      stringstream fMapHeader;
+      for (int i=0; i<14; i++)
+      {
+        for (int i=0; i<14; i++)
+          fMapHeader << "1 ";
+        fMapHeader<<std::endl;
+      }
+      FK.AddTag(FKHeader::BLOB, "FlavourMap", fMapHeader.str());
 
       // Set QCD parameters
       QCD::set_params(par, FK);
