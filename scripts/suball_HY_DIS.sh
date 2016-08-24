@@ -9,5 +9,5 @@ do
 rc=\$?; if [[ \$rc != 0 ]]; then echo \$rc > ./err/$FILENAME; fi" > $FILENAME
     chmod +x $FILENAME
     echo $FILENAME
-    addqueue -c "1-12 hrs" $FILENAME
+    addqueue -m 2 -c "1-12 hrs" $FILENAME
 done  
