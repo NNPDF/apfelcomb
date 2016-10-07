@@ -23,15 +23,7 @@ FKmerge FK_ATLASZPT7TEV-BIN1_TOT.tmp.dat  FK_ATLASZPT7TEV-BIN2_TOT.tmp.dat  FK_A
 FKmerge FK_ATLASZPT7TEV-BIN1_ptZ.tmp.dat  FK_ATLASZPT7TEV-BIN2_ptZ.tmp.dat  FK_ATLASZPT7TEV-BIN3_ptZ.tmp.dat >  FK_ATLASZPT7TEV_ptZ.dat
 
 # Remove the temporary grids
-rm FK_ATLASZPT7TEV-BIN1_TOT.dat
-rm FK_ATLASZPT7TEV-BIN2_TOT.dat
-rm FK_ATLASZPT7TEV-BIN3_TOT.dat
-rm FK_ATLASZPT7TEV-BIN1_TOT.tmp.dat
-rm FK_ATLASZPT7TEV-BIN2_TOT.tmp.dat
-rm FK_ATLASZPT7TEV-BIN3_TOT.tmp.dat
-rm FK_ATLASZPT7TEV-BIN1_ptZ.tmp.dat
-rm FK_ATLASZPT7TEV-BIN2_ptZ.tmp.dat
-rm FK_ATLASZPT7TEV-BIN3_ptZ.tmp.dat
+rm FK_ATLASZPT7TEV-BIN*
 
 ## write the compound file for each bin
 echo "# COMPOUND FK

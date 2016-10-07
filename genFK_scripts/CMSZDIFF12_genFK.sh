@@ -4,4 +4,6 @@ FKmerge FK_CMSZDIFF12-BIN1_ptZ.dat FK_CMSZDIFF12-BIN2_ptZ.dat FK_CMSZDIFF12-BIN3
 # Check return value
 RETCODE=$?; if [[ $RETCODE != 0 ]]; then exit $RETCODE; fi
 
+rm FK_CMSZDIFF12-BIN*
+
 exit 0
