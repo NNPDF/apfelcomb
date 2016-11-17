@@ -89,6 +89,12 @@ namespace APP
     string readme((std::istreambuf_iterator<char>(readmefile)),
                 std::istreambuf_iterator<char>());
     param.readme = readme;
+
+    // Get common grids
+    vector<int> commonGrids = NNPDF::dbmatch(db, "setname", param.setname);
+    for ( auto i : commonGrids)
+      param.inventory.push_back(NNPDF::dbquery<string>(db,i,"gridname"));
+
     /*
      *        ***    VERIFICATION    ***
      */
@@ -144,6 +150,8 @@ namespace APP
     cout <<endl;
     cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
     cout << "    - ppbar transform: "<<param.ppbar<<endl;
+    cout <<endl;
+    cout << "    - Common grids: "<<param.inventory.size()<<endl;
     cout <<endl;
     DisplayHR();
     

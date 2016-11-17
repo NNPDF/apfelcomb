@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
   APP::parse_input(iDB, par);
 
   // Setup directory
-  setupDir(iTh, par.setname);
+  setupDir(iTh, par.setname, par.inventory);
 
   appl::grid *g = NULL;
   fastnlo *fg   = NULL;

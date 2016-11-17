@@ -72,7 +72,7 @@ vector<double> dsplit(string in)
 
 // ************ Theory Dir **************************
 
-void setupDir(int const& theoryID, std::string const& setname)
+void setupDir(int const& theoryID, std::string const& setname, vector<std::string> const& reqgrids)
 {
   // Setup required directories
   stringstream theoryDir;
@@ -102,6 +102,13 @@ void setupDir(int const& theoryID, std::string const& setname)
     std::cerr <<  "                 please add a genFK script for this dataset!"<<std::endl;
     exit(-1);
   }
+
+  // Write set inventory to file
+  const std::string invPath = theoryDir.str()  + "apfelcomb/" + setname + "/inventory";
+  std::ofstream invStream(invPath.c_str());
+  for (auto grid : reqgrids)
+    invStream << grid << std::endl;
+  invStream.close();
 
   // Setup GenAll script
   std::ifstream  src("genFK_scripts/genAll.sh", std::ios::binary);

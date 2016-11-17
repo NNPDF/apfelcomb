@@ -35,7 +35,7 @@ namespace APP
 	  string setname;   //!< Name of the set to which the grid belongs
 	  string gridname;  //!< Name of the grid to be generated
 	  string gridfile;	//!< Path for the applgrid file
-	  	  
+
 	  string desc;      //!< FKTable description
 	  string readme;	//!< APPLgrid README
 	  
@@ -54,6 +54,7 @@ namespace APP
 	  double xmin;      //!< Minimum x-value to be used in interpolation
 	  double maxprec;   //!< Highest experimental precision reached in dataset
 
+	  vector<string> inventory; //!< List of common grids required for set
 	};
 
 	// Parse APPLgrid data into FKHeader form

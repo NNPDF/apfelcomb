@@ -95,7 +95,8 @@ int main(int argc, char* argv[]) {
 
   // Setup directory
   const std::string setname = FTDY::setnames[iDt-1];
-  setupDir(iTh, setname);
+  std::vector<std::string> inventory; inventory.push_back(setname); // DOESNT HANDLE DYE886R!
+  setupDir(iTh, setname, inventory);
 
   const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; //!< Path for the commondata file
   const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_0.dat"; //!< Path for the SYSTYPE file
