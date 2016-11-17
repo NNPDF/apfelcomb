@@ -5,35 +5,7 @@ then
 	exit 1;
 fi
 
-FKmerge \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat \
-FK_D0ZRAP_TOT_1.dat > FK_D0ZRAP_TOT.dat
+FKselfmerge FK_D0ZRAP_TOT_1.dat 28 > FK_D0ZRAP_TOT.dat
 
 RETCODE=$?; if [[ $RETCODE != 0 ]]; then exit $RETCODE; fi
 
