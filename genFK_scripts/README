@@ -9,3 +9,7 @@ tables, and sometimes the creation of a COMPOUND file.
 
 Each file is automatically copied to the appropriate table
 directory by APFELComb and renamed to genFK.sh.
+
+Note that it is no longer a requirement to add a genFK script
+purely for the purposes of checking the grid output. This
+is now done automatically.
