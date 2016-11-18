@@ -98,9 +98,7 @@ void setupDir(int const& theoryID, std::string const& setname, vector<std::strin
     dst << src.rdbuf(); chmod( dest.c_str() , imode);
   } else
   {
-    std::cerr <<  "APFELcomb Error: no genFK script found at " <<source.c_str()<<std::endl;
-    std::cerr <<  "                 please add a genFK script for this dataset!"<<std::endl;
-    exit(-1);
+    std::cout <<  "Warning: no genFK script found at " <<source.c_str()<<std::endl;
   }
 
   // Write set inventory to file
