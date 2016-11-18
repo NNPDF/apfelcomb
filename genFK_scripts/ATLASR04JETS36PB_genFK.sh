@@ -6,5 +6,4 @@ RETCODE=$?; if [[ $RETCODE != 0 ]]; then exit $RETCODE; fi
 
 # Cleanup 
 rm FK_ATLASR04JETS7TEV_ETA*
-
 exit 0

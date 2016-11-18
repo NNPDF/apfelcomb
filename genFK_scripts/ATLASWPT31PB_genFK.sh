@@ -1,14 +1,3 @@
-# Check for Distribution grids
-if [ ! -e "FK_ATLASWPT31PB_WP.dat" ] 
-then
-	exit 1;
-fi
-
-if [ ! -e "FK_ATLASWPT31PB_WM.dat" ]
-then
-        exit 1;
-fi
-
 # Merge together the WP total xsec grids N_dat times
 FKselfmerge FK_ATLASWPT31PB_WP_TOT_1.dat 11 > FK_ATLASWPT31PB_WP_TOT.dat
 RETCODE=$?; if [[ $RETCODE != 0 ]]; then exit $RETCODE; fi

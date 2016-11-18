@@ -6,5 +6,4 @@ RETCODE=$?; if [[ $RETCODE != 0 ]]; then exit $RETCODE; fi
 
 # Cleanup 
 rm FK_CMSDY2D11_BIN*
-
 exit 0
