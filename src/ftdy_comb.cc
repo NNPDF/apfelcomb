@@ -95,7 +95,16 @@ int main(int argc, char* argv[]) {
 
   // Setup directory
   const std::string setname = FTDY::setnames[iDt-1];
-  std::vector<std::string> inventory; inventory.push_back(setname); // DOESNT HANDLE DYE886R!
+  std::vector<std::string> inventory;
+  if (setname == "DYE886R")
+  {
+    inventory.push_back("DYE886R_P");
+    inventory.push_back("DYE886R_D");
+  }
+  else
+  {
+    inventory.push_back(setname);
+  }
   setupDir(iTh, setname, inventory);
 
   const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; //!< Path for the commondata file
