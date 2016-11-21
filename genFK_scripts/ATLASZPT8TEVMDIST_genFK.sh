@@ -10,5 +10,4 @@ RETCODE=$?; if [[ $RETCODE != 0 ]]; then exit $RETCODE; fi
 
 # Cleanup
 rm FK_ATLASZPT8TEV-MLLBIN*
-
 exit 0

@@ -6,5 +6,4 @@ RETCODE=$?; if [[ $RETCODE != 0 ]]; then exit $RETCODE; fi
 
 # Cleanup
 rm FK_CMSTTBARTOT7TEV.dat FK_CMSTTBARTOT8TEV.dat FK_CMSTTBARTOT13TEV.dat 
-
 exit 0
