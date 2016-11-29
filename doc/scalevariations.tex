@@ -1,0 +1,160 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage[numbers, sort]{natbib}
+\usepackage{hyperref}
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\ba}{\begin{eqnarray}}
+\newcommand{\ea}{\end{eqnarray}}
+
+\newcommand{\ns}{\normalsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+% abbreviate Greek
+\newcommand{\ax}{\alpha}
+\newcommand{\bx}{\beta}
+\newcommand{\cx}{\gamma}
+\newcommand{\dx}{\delta}
+\newcommand{\ox}{\omega}
+\newcommand{\lx}{\lambda}
+\newcommand{\gx}{\gamma}
+\newcommand{\ab}{\bar\alpha}
+\newcommand{\bb}{\bar\beta}
+\newcommand{\cb}{\bar\gamma}
+\newcommand{\db}{\bar\delta}
+\newcommand{\Sx}{\Sigma}
+\newcommand{\Lx}{\Lambda}
+\newcommand{\Ox}{\Omega}
+\newcommand{\Dx}{\Delta}
+\newcommand{\Gx}{\Gamma}
+\newcommand{\te}{\tilde \epsilon}
+\newcommand{\tm}{\tilde \mu}
+\newcommand{\tmu}{\tilde \mu}
+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%
+% Cal
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cM}{\mathcal M}
+\newcommand{\W}{\mathcal W}
+\newcommand{\V}{\mathcal V}
+\def\Im{\,{\rm Im}\, }
+\def\Re{\,{\rm Re}\, }
+
+\newcommand{\nsub}{n_\mathrm{sub}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%
+
+\title{Scale variations in {\tt FK} tables}
+\author{Valerio Bertone, Nathan Hartland}
+\begin{document}
+\maketitle
+%\tableofcontents
+%\clearpage
+\section{Scale variations in {\tt APPLgrids}}
+In the {\tt APPLgrid} framework, the computation of a generic observable $\sigma$ evaluated at some variation of the factorisation ($\xi_FQ$) and
+renormalisation($\xi_RQ$) scales can be broken down into four components at next-to-leading order
+\be \sigma(\xi_F, \xi_R) = \left( \sigma_B + \sigma_R + \sigma_{F1} + \sigma_{F2}\right)(\xi_F, \xi_R).\ee
+Firstly we have the 'basic' component, which is simply the standard {\tt APPLgrid} product evaluated at the modified scales,
+\be \sigma_B(\xi_F, \xi_R) =  \left(\tilde{\alpha}_s^{p}(\xi_R^2Q^2_\tau) 
+     W_{\alpha\beta,\tau}^{(0)(s)}+ \tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) W_{\alpha\beta,\tau}^{(1)(s)} \right)
+     F^{(s)}_{\alpha\beta}\left[f_1, f_2\right]\left(\xi_F^2{Q^2_\tau}\right), \ee
+where we use the shorthand
+\be \tilde{\alpha}_s(\xi_R^2Q^2_\tau) =  \frac{1}{2\pi}\alpha_s\left(\xi_R^2 {Q^2_\tau}\right), \ee
+and the subprocess parton densities are constructed as
+\be \label{eq:basicsubproc}
+  F^{(s)}_{\alpha\beta,\tau}\left[f_1, f_2\right]\left(\xi_F^2{Q^2_\tau}\right) =\sum_{i,j} C^{(s)}_{ij} 
+  f^{(1)}_i(x_{\alpha},\xi_F^2Q^2_\tau)f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau)\,,
+\ee
+for the appropriate partonic subprocess defined by the $C$. Next we have a term proportional to the logarithm of $\xi_R$:
+\be \sigma_R(\xi_F, \xi_R) = \tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) 
+      \pi  \beta_0 p \ln \xi_R^2
+         \,
+         W_{\alpha\beta,\tau}^{(0)(s)}
+    F^{(s)}_{\alpha\beta}\left[f_1, f_2\right]\left(\xi_F^2{Q^2_\tau}\right)  \ee
+and terms proportional to the logarithm of $\xi_F$:
+\be \sigma_{F1}(\xi_F, \xi_R) =-\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau)
+\ln \xi_F^2  W_{\alpha\beta,\tau}^{(0)(s)}
+F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau}),
+\ee
+\be \sigma_{F2}(\xi_F, \xi_R) =-\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau)
+\ln \xi_F^2  W_{\alpha\beta,\tau}^{(0)(s)}
+F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau}).
+\ee
+Here the parton subprocesses are calculated using one PDF and one convolution of PDFs with leading order splitting functions $P_0$:
+\be \label{eq:convsubprocess1} F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau})=\sum_{i,j} C^{(s)}_{ij} 
+ f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau)\,  \int_{x_\alpha}^1 \frac{dz}{z}P^0_{ik}\left(\frac{x_\alpha}{z}\right)f^{(1)}_k(z,\xi_F^2Q^2_\tau), \ee
+
+\be \label{eq:convsubprocess2} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})=\sum_{i,j} C^{(s)}_{ij} 
+ f_j^{(1)}(x_{\alpha},\xi_F^2Q^2_\tau)\,  \int_{x_\beta}^1 \frac{dz}{z}P^0_{jl}\left(\frac{x_\beta}{z}\right)f^{(2)}_l(z,\xi_F^2Q^2_\tau). \ee
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The {\tt FK} procedure for scale variations}
+In {\tt FK} tables we relate the general-scale PDFs used above to initial scale PDFs through DGLAP evolution factors as
+\begin{equation}\label{eq:fastPDFfinal_recalled}
+  f_i(x_{\alpha},\xi_F^2Q^2_\tau) = \sum_{k}
+  \sum_\beta A^\tau_{\alpha\beta, ik}\;
+  f_k(x_\beta,Q^2_0)\,, 
+\end{equation}
+It is therefore simple to write the subprocess densities in Eqn. \ref{eq:basicsubproc} in terms of initial state PDFs
+\begin{equation}\label{eq:FK1}
+\begin{array}{rcl}
+F^{(s)}_{\alpha\beta}[f_1, f_2](\xi_F^2Q^2_\tau) &=&  \displaystyle \sum_{i,j} \sum_{k,l}
+                               \sum_{\delta,\gamma} C^{(s)}_{ij}
+                               \left[  A^\tau_{\alpha\delta ik}\;
+                               f_k(x_\delta,Q^2_0) A^\tau_{\beta\gamma
+                               jl}\; f_l(x_\gamma,Q^2_0) \right]\;\;\;
+  \\
+\\
+&=& \displaystyle \sum_{k,l}\sum_{\delta,\gamma}
+\widetilde{C}^{(s),\tau}_{kl,\alpha\beta\gamma\delta}
+f_k(x_\delta,Q^2_0) f_l(x_\gamma,Q^2_0)\,.
+\end{array}
+\end{equation}
+To do the same for the subprocess densities in terms of convolutions in Eqns. \ref{eq:convsubprocess1}, \ref{eq:convsubprocess2} requires some more legwork.
+Firstly we recall that in this framework PDFs are represented upon an interpolation grid
+\be f_i(x,Q_\tau^2) \simeq \sum_\gamma^{N_x} f_i(x_\gamma, Q_\tau^2)\mathcal{I}^{(\gamma)}(x).\ee
+Therefore we can write the convolutions in Eqns. \ref{eq:convsubprocess1}, \ref{eq:convsubprocess2} as
+\be \label{eq:deconvolute} \left[P_0\otimes f\right]_{i}(x_\alpha,  \xi_F^2Q_\tau^2) = \sum_\gamma \sum_k B_{\alpha\gamma, ik} f_k(x_\gamma, \xi_F^2Q_\tau^2),\ee
+where
+\be B_{\alpha\gamma, ik} = \int_{x_\alpha}^1 \frac{dz}{z} P_{ik}^0\left(\frac{x_\alpha}{z}\right)\mathcal{I}^{(\gamma)}(z).\ee
+Therefore with Eqn. \ref{eq:deconvolute} we can place the subprocess densities involving convolutions at the same level as the standard subprocess densities, directly in terms of parton distributions evaluated upon an interpolation grid.
+
+\be \label{eq:deconvsubprocess1} F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau})=\sum_\gamma \sum_{i,j,k} C^{(s)}_{ij} B_{\alpha\gamma, ik} \, 
+ f_k^{(1)}(x_\gamma, \xi_F^2Q_\tau^2)\, f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau), \ee
+\be \label{eq:deconvsubprocess1} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})=\sum_\gamma \sum_{i,j,k} C^{(s)}_{ij} B_{\beta\gamma, jk} \, 
+ f_i^{(1)}(x_\alpha, \xi_F^2Q_\tau^2)\, f_k^{(2)}(x_{\gamma},\xi_F^2Q^2_\tau). \ee
+ These expressions are now more naturally amenable to the precomputation of their evolution as per Eqn. \ref{eq:FK1}.
+\clearpage
+\begin{thebibliography}{1}
+
+
+
+\end{thebibliography}
+
+\end{document} 
