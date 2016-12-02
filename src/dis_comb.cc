@@ -67,7 +67,6 @@ int main(int argc, char* argv[]) {
 
   // Initialise QCD
   QCD::initQCD(par, DIS::getQ2max(cd));
-  if (timelike) QCD::initTimelike();
 
   par.nx = 50;
   par.maxprec = 1E-7;

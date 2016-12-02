@@ -110,7 +110,7 @@ namespace DIS
       if (Q < par.Q0)
         continue;
 
-      for(size_t ix=0; ix<QCD::getNXGrid(); ix++) 
+      for(size_t ix=0; ix<FK->GetNx(); ix++) 
         for(int ifl=0; ifl<14; ifl++) 
           FK->Fill(d, ix, ifl, QCD::diskernel(par.process, x, Q, y, ifl, ix) );
     }
@@ -121,7 +121,7 @@ namespace DIS
   double getXmin(const NNPDF::CommonData& g)
   {
     // Proton mass for scaling variable
-    const double M2proton = pow(QCD::getProtonMass(),2);
+    const double M2proton = pow(APFEL::GetProtonMass(),2);
 
     double ximin = 1.0;
     for (int i=0; i<g.GetNData(); i++)

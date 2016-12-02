@@ -4,15 +4,15 @@
  * *  nph 09/14
  */
 
+#include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_utils.h"
+#include "apfelcomb/fk_xgrid.h"
+
 #include "APFEL/APFEL.h"
 #include "APFEL/APFELdev.h"
 
 #include "appl_grid/appl_grid.h"
 #include "appl_grid/appl_igrid.h"
-
-#include "apfelcomb/fk_qcd.h"
-#include "apfelcomb/fk_utils.h"
-#include "apfelcomb/fk_xgrid.h"
 
 #include "NNPDF/common.h"
 #include "NNPDF/fkgenerator.h"
@@ -35,26 +35,11 @@ namespace QCD
   static double Q0 = 0; // Initial scale  Q0
   static double QM = 0; // Maximum scale  QM
   static double QC = 0; // Cached scale   QC
-  
-  static int nx = 0; // Number of initial scale x-points
-  static double* xg = 0; // Initial scale x-grid
 
   // Set modes
   void setDISmode(bool const& mode) {DIS_mode=mode;};
   void setFTDYmode(bool const& mode) {FTDY_mode=mode;};
   void setSIAmode(bool const& mode) {SIA_mode=mode;};
-
-  // Return number of x-points in grid
-  size_t getNXGrid() { return (size_t) nx; };
-  
-  // Return X value (APFEL coordinates)
-  double getXVal( const int idx) { return xg[idx]; };
-
-  // Return APFEL proton mass
-  double getProtonMass()
-  {
-    return APFEL::GetProtonMass();
-  }
 
   // *********************** BASIS ROTATION *****************************
   
@@ -140,12 +125,12 @@ namespace QCD
     FK.AddTag(FKHeader::VERSIONS, "APFEL", APFEL::GetVersion());
     FK.AddTag(FKHeader::VERSIONS, "libnnpdf", NNPDF::getVersion());
 
-    FK.AddTag(FKHeader::GRIDINFO, "NX", nx);
+    FK.AddTag(FKHeader::GRIDINFO, "NX", APFEL::nIntervals());
 
     // x-grid header
     stringstream xGheader;
-    for (int i=0; i<nx; i++)
-      xGheader << std::setprecision(16) << std::scientific << xg[i] <<std::endl;
+    for (int i=0; i<APFEL::nIntervals(); i++)
+      xGheader << std::setprecision(16) << std::scientific << APFEL::xGrid(i) <<std::endl;
 
     FK.AddTag(FKHeader::BLOB, "xGrid", xGheader.str());
 
@@ -156,13 +141,6 @@ namespace QCD
   }
   
   // *********************** EVOLUTON FUNCTIONS *****************************
-
-  void initTimelike()
-  {
-    APFEL::SetPDFSet("MELA");
-    APFEL::SetTimeLikeEvolution(true);
-  }
-
 
   // Initialise QCD according to parameters
   void initQCD(qcd_param const& par, const double& Q2max)
@@ -218,16 +196,11 @@ namespace QCD
   // Initialise APFEL for evolution factors
   // Note here nx is the number of x-points to be output to the Fk table
   // Therefore it doesn't include x=1. This is added manually in this function
-  void initEvolgrid(int const& _nx, double const& xmin)
+  void initEvolgrid(int const& nx, double const& xmin)
   {
     // Reset cache
     QC = 0;
-    
-    // Re-init
-    nx = _nx;
-    if (xg != 0)
-      delete[] xg;
-    xg = new double[nx+1];
+    double* xg = new double[nx+1];
 
     // Special requirements for FTDY in APFEL
     if (FTDY_mode)
@@ -272,83 +245,8 @@ namespace QCD
     else
       APFEL::InitializeAPFEL();
     
+    delete[] xg;
     return;
-  }
-
-  void initNNPDF30Grid()
-  {
-    // Reset cache
-    QC = 0;
-    nx = 50;
-
-    if (xg != 0)
-      delete[] xg;
-    xg = new double[nx];
-
-    xg[0] = 1E-07;
-    xg[1] = 1.73780082874938E-07;
-    xg[2] = 3.01995172040202E-07;
-    xg[3] = 5.24807460249773E-07;
-    xg[4] = 9.1201083935591E-07;
-    xg[5] = 1.58489319246111E-06;
-    xg[6] = 2.75422870333817E-06;
-    xg[7] = 4.78630092322639E-06;
-    xg[8] = 8.31763771102671E-06;
-    xg[9] = 1.44543977074593E-05;
-    xg[10] = 2.51188643150958E-05;
-    xg[11] = 4.36515832240166E-05;
-    xg[12] = 7.58577575029184E-05;
-    xg[13] = 0.000131825673855641;
-    xg[14] = 0.000229086765276777;
-    xg[15] = 0.000398107170553497;
-    xg[16] = 0.000691830970918937;
-    xg[17] = 0.00120226443461741;
-    xg[18] = 0.00208929613085404;
-    xg[19] = 0.00363078054770101;
-    xg[20] = 0.00630957344480194;
-    xg[21] = 0.0109647819614318;
-    xg[22] = 0.0190546071796325;
-    xg[23] = 0.0331131121482591;
-    xg[24] = 0.0575439937337157;
-    xg[25] = 0.1;
-    xg[26] = 0.1375;
-    xg[27] = 0.175;
-    xg[28] = 0.2125;
-    xg[29] = 0.25;
-    xg[30] = 0.2875;
-    xg[31] = 0.325;
-    xg[32] = 0.3625;
-    xg[33] = 0.4;
-    xg[34] = 0.4375;
-    xg[35] = 0.475;
-    xg[36] = 0.5125;
-    xg[37] = 0.55;
-    xg[38] = 0.5875;
-    xg[39] = 0.625;
-    xg[40] = 0.6625;
-    xg[41] = 0.7;
-    xg[42] = 0.7375;
-    xg[43] = 0.775;
-    xg[44] = 0.8125;
-    xg[45] = 0.85;
-    xg[46] = 0.8875;
-    xg[47] = 0.925;
-    xg[48] = 0.9625;
-    xg[49] = 1;
-
-    // Set evolution operator parameters
-    APFEL::EnableWelcomeMessage(false);
-    APFEL::SetFastEvolution(false);
-    APFEL::EnableEvolutionOperator(true); // Enable the computation of the Evolution Operator
-    APFEL::SetNumberOfGrids(1);           // The evolution will be done on a number of subgrids defined here
-    APFEL::SetExternalGrid(1,nx-1,5,xg);    // Set the grid as external (np: number of intervals, 3: interpolation degree, xg: defined above)
-
-    // Start APFEL
-    if (DIS_mode)
-      APFEL::InitializeAPFEL_DIS();
-    else
-      APFEL::InitializeAPFEL();
-    
   }
 
   // Recalculate evolution if not cached
@@ -368,7 +266,7 @@ namespace QCD
   {
     // A nice trick of APPLgrid is to request PDF x-values smaller than
     // are actually used
-    if (xg != NULL && x<xg[0])
+    if (x<APFEL::xGrid(0))
     {
       for (int i=-6; i<7; i++)
         pdf[i+6]=0;
@@ -384,7 +282,7 @@ namespace QCD
   {
     // A nice trick of APPLgrid is to request PDF x-values smaller than
     // are actually used
-    if (xg != NULL && x<xg[0])
+    if (x<APFEL::xGrid(0))
     {
       for (int i=-6; i<7; i++)
         pdf[i+6]=0;

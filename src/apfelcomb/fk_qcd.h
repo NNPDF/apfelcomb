@@ -6,6 +6,9 @@
 
 #pragma once
 
+#include "APFEL/APFEL.h"
+#include "APFEL/APFELdev.h"
+ 
 #include "NNPDF/common.h"
 
 namespace appl{
@@ -96,12 +99,9 @@ namespace QCD
   // Initialise the APFEL interface
   void initQCD(qcd_param const& par, const double& Q2max);
   void initEvolgrid(const int& nx, const double& xmin);
-
-  void initTimelike();
   
   void initNNPDF30Grid(); // Initialise NNPDF30 style x-grid for test purposes
   void initTruthGrid(const double& xmin); // Initialise very large evolution grid for test purposes
-
 
   // APFEL PDF access functions
   void evolpdf(const double& x, const double& Q, double* pdf);
@@ -115,16 +115,8 @@ namespace QCD
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta);
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y);
   
-  // Initialised x-grid values
-  size_t  getNXGrid();
-  double  getXVal(const int idx);
-
   // mode setters
   void setDISmode(bool const& mode);
   void setFTDYmode(bool const& mode);
   void setSIAmode(bool const& mode);
-
-  // Proton mass fetcher (for xi)
-  double getProtonMass();
-
 }
