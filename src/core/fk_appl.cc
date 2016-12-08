@@ -186,6 +186,53 @@ namespace APP
 
   // *********************** APPLgrid helpers ****************************
 
+  // If nonzero is true, get the smallest x-value regardless of weight
+  // if false, get the smallest x-value associated with a non-zero weight
+  double getXmin(const appl::grid* g, const bool& nonzero)
+  {
+    // Run over all grids to verify kinematic limits
+    double xmin = 1.0;
+    
+    for(int i=0; i<2; i++)  // pto
+      for (int j=0; j<g->Nobs(); j++)
+      {
+        appl::igrid const *igrid = g->weightgrid(i, j);
+        const size_t nsubproc = g->subProcesses(0);
+
+        for (int ix1=0; ix1<igrid->Ny1(); ix1++)
+          for (int ix2=0; ix2<igrid->Ny2(); ix2++)
+            for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
+              for (size_t ip=0; ip<nsubproc; ip++)
+                {
+                  // Associated weight
+                  const bool zero_weight = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,ix1,ix2) == 0;
+
+                  if (!zero_weight || !nonzero) 
+                  {
+                    xmin = min(xmin, igrid->fx(igrid->gety1(ix1)));
+                    xmin = min(xmin, igrid->fx(igrid->gety2(ix2)));
+                  }
+                }
+      }
+    
+    return xmin;
+  }
+
+  // Get the maximum scale of an applgrid
+  double getQ2max(const appl::grid* g)
+  {
+    // Find maximum required scale
+    double Q2max = g->weightgrid(0, 0)->getQ2max();
+    for(int i=0; i<2; i++)  // pto
+      for (int j=0; j<g->Nobs(); j++) // bin
+      {
+        appl::igrid const *igrid = g->weightgrid(i, j);
+        Q2max = max(Q2max, igrid->getQ2max());
+      }
+    return Q2max;
+  }
+
+
   // Translates 'loop' order to appl::grid index
   // This is specifically in order to translate aMC@NLO-like four-part grids
   // into LO and NLO components.
@@ -196,6 +243,15 @@ namespace APP
     if (g->calculation() == appl::grid::AMCATNLO)
       return (pto==0) ? 3:0;
     return pto;
+  }
+
+  // Returns the APPLgrid PDF object associated with the ith subgrid of g
+  appl::appl_pdf* get_appl_pdf( appl::grid *g, int const& i )
+  {
+    const std::string pdfnames = g->getGenpdf();
+    std::vector<std::string> pdfvec = splitpdf( pdfnames );
+    const size_t isubproc = pdfvec.size() == 1 ? 0:i;
+    return appl::appl_pdf::getpdf( pdfvec[isubproc] );
   }
 
   // Returns the minimum and maxiumum x-grid points for a specified subgrid slice.
@@ -217,7 +273,7 @@ namespace APP
         }
   }
 
-// ************** Count of computable elements ************************
+  // Progress update ****************************************************
 
   int countElements(appl_param const& par, appl::grid* g)
   {
@@ -238,8 +294,6 @@ namespace APP
       }
     return nElm;
   } 
-
-  // Progress update ****************************************************
 
   void statusUpdate(timeval const& t1, int const& totElements, int& compElements)
   {
@@ -301,18 +355,12 @@ namespace APP
   {
     // Combination parameters
     const size_t nxin     = fk->GetNx();
-    const size_t ndata    = fk->GetNData();
-    const size_t io       = par.pto;
     const int    LO       = g->leadingOrder() + par.ptmin;
     const double invNruns = ( !g->getNormalised() && g->run() ) ? ( 1.0 / double(g->run()) ) : 1.0;
     
     // Progress monitoring
     int completedElements = 0;
     const int nXelements = countElements(par, g);
-
-    // Fetch PDF subprocess generator names
-    const std::string pdfnames = g->getGenpdf();
-    std::vector<std::string> pdfvec = splitpdf( pdfnames );
 
      // define evolution factor arrays
     double*** fA = alloc_evfactor(nxin);
@@ -322,31 +370,24 @@ namespace APP
     timeval t1;
     gettimeofday(&t1, NULL);
    
-    for (size_t d=0; d<ndata; d++)
+    for (size_t d=0; d<fk->GetNData(); d++)
     {    
       // Fetch associated applgrid info
       const size_t bin      = par.map[d];
       const double deltaobs = g->deltaobs(bin);
 
-      for (size_t pto=0; pto<((size_t) io); pto++) // Loop over perturbative order
+      for (size_t pto=0; pto<((size_t) par.pto); pto++) // Loop over perturbative order
       {
-        // aMC@NLO convolution uses Born = grid 3
-        //                          NLO  = grid 0
-        int ptord = pto + par.ptmin;
-        if (g->calculation() == appl::grid::AMCATNLO)
-          ptord = (pto==0) ? 3:0;
-
-        // setup subprocess generator
-        const size_t isubproc = pdfvec.size() == 1 ? 0:ptord;
-        appl::appl_pdf *genpdf = appl::appl_pdf::getpdf( pdfvec[isubproc] );
+        const int gidx = get_grid_idx(g, pto+par.ptmin);
+        appl::appl_pdf *genpdf = get_appl_pdf( g, gidx );
 
         // define subprocess weight array, IPD array
-        const size_t nsubproc = g->subProcesses(ptord);
+        const size_t nsubproc = g->subProcesses(gidx);
         double *W = new double[nsubproc];
         double *H = new double[nsubproc];
         
         // Fetch grid pointer
-        appl::igrid const *igrid = g->weightgrid(ptord, bin);
+        appl::igrid const *igrid = g->weightgrid(gidx, bin);
       
         for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
         {
@@ -364,10 +405,8 @@ namespace APP
             // Get x-value
             const double x1 = igrid->fx(igrid->gety1(a));
             
-            // Set trimmed limits
+            // Set trimmed limits and compute evolution factors for first PDF
             int nxlow, nxhigh; get_igrid_limits(igrid, nsubproc, t, a, nxlow, nxhigh);
-
-            // Compute evolution factors for first PDF
             if (nxlow <= nxhigh) // Only if there are nonzero entries
               for (size_t ix = 0; ix < nxin; ix++)
                 for (size_t fl = 0; fl < 14; fl++)
@@ -438,51 +477,4 @@ namespace APP
     return;
 
   }
-
-// If nonzero is true, get the smallest x-value regardless of weight
-// if false, get the smallest x-value associated with a non-zero weight
-  double getXmin(const appl::grid* g, const bool& nonzero)
-  {
-    // Run over all grids to verify kinematic limits
-    double xmin = 1.0;
-    
-    for(int i=0; i<2; i++)  // pto
-      for (int j=0; j<g->Nobs(); j++)
-      {
-        appl::igrid const *igrid = g->weightgrid(i, j);
-        const size_t nsubproc = g->subProcesses(0);
-
-        for (int ix1=0; ix1<igrid->Ny1(); ix1++)
-          for (int ix2=0; ix2<igrid->Ny2(); ix2++)
-            for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
-              for (size_t ip=0; ip<nsubproc; ip++)
-                {
-                  // Associated weight
-                  const bool zero_weight = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,ix1,ix2) == 0;
-
-                  if (!zero_weight || !nonzero) 
-                  {
-                    xmin = min(xmin, igrid->fx(igrid->gety1(ix1)));
-                    xmin = min(xmin, igrid->fx(igrid->gety2(ix2)));
-                  }
-                }
-      }
-    
-    return xmin;
-  }
-
-  // Get the maximum scale of an applgrid
-  double getQ2max(const appl::grid* g)
-  {
-    // Find maximum required scale
-    double Q2max = g->weightgrid(0, 0)->getQ2max();
-    for(int i=0; i<2; i++)  // pto
-      for (int j=0; j<g->Nobs(); j++) // bin
-      {
-        appl::igrid const *igrid = g->weightgrid(i, j);
-        Q2max = max(Q2max, igrid->getQ2max());
-      }
-    return Q2max;
-  }
-
 }
