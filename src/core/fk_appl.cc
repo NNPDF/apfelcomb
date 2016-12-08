@@ -377,15 +377,13 @@ namespace APP
   // ******************* FK Table computation ****************************
 
   void computeFK(appl_param const& par, appl::grid* g, NNPDF::FKGenerator* fk)
-  {
-    // Combination parameters
-    const size_t nxin     = fk->GetNx();
-    
+  {    
     // Progress monitoring
     int completedElements = 0;
     const int nXelements = countElements(par, g);
 
      // define evolution factor arrays
+    const int nxin = fk->GetNx();
     double*** fA = alloc_evfactor(nxin);
     double*** fB = alloc_evfactor(nxin);
     
@@ -399,32 +397,26 @@ namespace APP
       const size_t bin      = par.map[d];
       for (size_t pto=0; pto<((size_t) par.pto); pto++) // Loop over perturbative order
       {
+        // Determine grid index, allocate subprocess arrays
         const int gidx = get_grid_idx(g, pto+par.ptmin);
         appl::appl_pdf *genpdf = get_appl_pdf( g, gidx );
-
-        // define subprocess weight array, IPD array
         const size_t nsubproc = g->subProcesses(gidx);
         double *W = new double[nsubproc];
         double *H = new double[nsubproc];
         
-        // Fetch grid pointer
+        // Fetch grid pointer and loop over Q
         appl::igrid const *igrid = g->weightgrid(gidx, bin);
-      
-        for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
+        for (int t=0; t<igrid->Ntau(); t++) 
         {
-          // *********************************************************************************************************************
-
           const double Q   = sqrt( igrid->fQ2( igrid->gettau(t)) );
           const double as  = QCD::alphas(Q);
           
-          for (int a=0; a<igrid->Ny1(); a++  )     //APPLGRID x1 loop
+          for (int a=0; a<igrid->Ny1(); a++  )
           {
-            // Get x-value
-            const double x1 = igrid->fx(igrid->gety1(a));
-            
-            // Set trimmed limits and compute evolution factors for first PDF
+            // Compute nonzero evolution factors
+            const double x1 = igrid->fx(igrid->gety1(a));           
             int nxlow, nxhigh; get_igrid_limits(igrid, nsubproc, t, a, nxlow, nxhigh);
-            if (nxlow <= nxhigh) // Only if there are nonzero entries
+            if (nxlow <= nxhigh) 
               for (size_t ix = 0; ix < nxin; ix++)
                 for (size_t fl = 0; fl < 14; fl++)
                   QCD::avals(ix,x1,fl,Q,fA[ix][fl]);
@@ -457,10 +449,10 @@ namespace APP
                       QCD::avals(ix,x2,fl,Q,fB[ix][fl]);
                   }
                 
-                for (size_t i=0; i<nxin; i++) // Loop over input pdf x1
-                  for (size_t j=0; j<nxin; j++) // Loop over input pdf x2
-                    for (size_t k=0; k<14; k++) // loop over flavour 1
-                      for (size_t l=0; l<14; l++) // loop over flavour 2
+                for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
+                  for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
+                    for (size_t k=0; k<14; k++)         // loop over flavour 1
+                      for (size_t l=0; l<14; l++)       // loop over flavour 2
                       {
                         // Rotate to subprocess basis
                         genpdf->evaluate(fA[i][k],fB[j][l],H);
