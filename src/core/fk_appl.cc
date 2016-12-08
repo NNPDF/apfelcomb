@@ -273,6 +273,31 @@ namespace APP
         }
   }
 
+  // Computes the normalisation required for translating APPLgrid weights to FK ones
+  // e.g including factors of alpha_S, bin width etc.
+  // g is the APPLgrid being combined with evolution factors.
+  // pto specified the perturbative order being combined, as the value of alpha_S in the current bin,
+  // and x1/x2 specify the numerical values of the PDF x-values for the first and second PDF respectively.
+  double compute_wgt_norm(appl::grid *g, int const& d, double const& pto, double const& as, double const& x1, double const& x2)
+  {
+    // PDF x and bin width normalisation
+    double norm = 1.0/(x1*x2*g->deltaobs(d));
+
+    // Normalisation by number of runs
+    appl::grid* g_nc = const_cast<appl::grid*>(g);
+    if ( !g->getNormalised() && g_nc->run() )
+      norm*=1.0/double(g_nc->run());
+
+    // Factor of alpha_S
+    const double LO = g->leadingOrder();
+    if (g->calculation() == appl::grid::AMCATNLO)
+      norm*=pow(as*(4.0*M_PI), LO+pto );
+    else
+      norm*=pow(as/(2.0*M_PI), LO+pto );
+
+    return norm;
+  }
+
   // Progress update ****************************************************
 
   int countElements(appl_param const& par, appl::grid* g)
@@ -355,8 +380,6 @@ namespace APP
   {
     // Combination parameters
     const size_t nxin     = fk->GetNx();
-    const int    LO       = g->leadingOrder() + par.ptmin;
-    const double invNruns = ( !g->getNormalised() && g->run() ) ? ( 1.0 / double(g->run()) ) : 1.0;
     
     // Progress monitoring
     int completedElements = 0;
@@ -374,8 +397,6 @@ namespace APP
     {    
       // Fetch associated applgrid info
       const size_t bin      = par.map[d];
-      const double deltaobs = g->deltaobs(bin);
-
       for (size_t pto=0; pto<((size_t) par.pto); pto++) // Loop over perturbative order
       {
         const int gidx = get_grid_idx(g, pto+par.ptmin);
@@ -395,10 +416,6 @@ namespace APP
 
           const double Q   = sqrt( igrid->fQ2( igrid->gettau(t)) );
           const double as  = QCD::alphas(Q);
-          
-          double pal = invNruns*pow(as/(2*M_PI),((double) LO+pto))/(deltaobs);
-          if (g->calculation() == appl::grid::AMCATNLO) // aMC@NLO uses different normalisation for alpha_S
-            pal = invNruns*pow(as*(4*M_PI),((double) LO+pto))/(deltaobs);
           
           for (int a=0; a<igrid->Ny1(); a++  )     //APPLGRID x1 loop
           {
@@ -420,16 +437,15 @@ namespace APP
               // fetch weight values
               bool nonzero=false;
               for (size_t ip=0; ip<nsubproc; ip++)
-                if (( W[ip] = pal*(*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,a,b) )!=0)
+                if (( W[ip] = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,a,b) )!=0)
                   nonzero=true;
               
               // If nonzero, perform combination
               if (nonzero)
               {
                 // Calculate normalisation factor
-                double norm = 1.0/(x1*x2);
-                if (par.pdfwgt)
-                  norm *= igrid->weightfun(x1)*igrid->weightfun(x2);
+                const double pdfnrm =  par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
+                const double norm = pdfnrm*compute_wgt_norm(g, bin, pto+par.ptmin, as, x1, x2);
                 
                 // Compute evolution factors for second PDF
                 for (size_t ix = 0; ix < nxin; ix++)
