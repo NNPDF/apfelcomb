@@ -182,57 +182,62 @@ namespace APP
       QCD::set_params(par, FK);
   }
 
+
+
+  // *********************** APPLgrid helpers ****************************
+
+  // Translates 'loop' order to appl::grid index
+  // This is specifically in order to translate aMC@NLO-like four-part grids
+  // into LO and NLO components.
+  // aMC@NLO-like convolution uses Born = grid 3
+  //                               NLO  = grid 0
+  int get_grid_idx( appl::grid *g, int const& pto )
+  {
+    if (g->calculation() == appl::grid::AMCATNLO)
+      return (pto==0) ? 3:0;
+    return pto;
+  }
+
+  // Returns the minimum and maxiumum x-grid points for a specified subgrid slice.
+  // igrid is the requested subgrid, nsubproc the number of subprocesses held within igrid.
+  // tau specified the bin in scale to be investigated, and alpha specifies the bin in x1.
+  // nxlow and nxhigh return the minumum and maxiumum bins in x2 respectively.
+  void get_igrid_limits(appl::igrid const* igrid, int const& nsubproc, int const& tau, int const& alpha, int& nxlow, int& nxhigh)
+  {
+    // Need to remove const due to APPLgrid non-const methods
+    appl::igrid* igrid_nc = const_cast<appl::igrid*>(igrid);
+    nxlow=igrid->Ny2(); nxhigh=0;
+    tsparse1d<double> *ts1;
+    for (int tsp=0; tsp<nsubproc; tsp++)
+      if ((*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))[tau] != NULL)
+        if (( ts1 = (*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))[tau]->trimmed(alpha) ) != NULL)
+        {                
+          nxlow  = std::min(ts1->lo(), nxlow);
+          nxhigh = std::max(ts1->hi(), nxhigh);
+        }
+  }
+
 // ************** Count of computable elements ************************
 
-  int appl_countelements(appl_param const& par, appl::grid* g)
+  int countElements(appl_param const& par, appl::grid* g)
   {
     // Counter
-    int nXelements = 0;
-
-    const size_t ndata    = par.ndata;
-    for (size_t d=0; d<ndata; d++)
-    {
-      const size_t io       = par.pto;
-      const size_t bin = par.map[d];
-      for (size_t pto=0; pto<io; pto++) 
+    int nElm = 0;
+    for (auto bin : par.map )
+      for (size_t pto=0; pto<par.pto; pto++) 
       {
-        // aMC@NLO convolution uses Born = grid 3
-        //                          NLO  = grid 0
-        int ptord = pto + par.ptmin;
-        if (g->calculation() == appl::grid::AMCATNLO)
-          ptord = (pto==0) ? 3:0;
-        
-        // Fetch grid pointer
-        appl::igrid const *igrid = g->weightgrid(ptord, bin);
-        for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
-          for (int a=0; a<igrid->Ny1(); a++  )     //APPLGRID x1 loop
+        int gidx = get_grid_idx(g, pto); // APPLgrid grid index
+        appl::igrid const *igrid = g->weightgrid(gidx, bin);
+        const size_t nsubproc = g->subProcesses(gidx);     // Number of subprocesses
+        for (int t=0; t<igrid->Ntau(); t++)     // Loop over scale bins
+          for (int a=0; a<igrid->Ny1(); a++  )  // Loop over x1 bins
           {
-            // Set trimmed limits
-            int nxlow=igrid->Ny2();
-            int nxhigh=0;
-            
-            // Fetch sparse structure
-            const size_t nsubproc = g->subProcesses(ptord);
-            for (size_t tsp=0; tsp<nsubproc; tsp++)
-            {
-              tsparse1d<double> *ts1;
-              if ((*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(tsp))[t] != NULL)
-                if (( ts1 = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(tsp))[t]->trimmed(a) ) != NULL)
-                {                
-                  nxlow  = min(ts1->lo(), nxlow);
-                  nxhigh = max(ts1->hi(), nxhigh);
-                }
-            }
-
-            // Count number of x-elements to be run over
-            for (int b=nxlow; b<=nxhigh; b++) 
-              nXelements++;
-          }
-        }
+            int nxlow, nxhigh; get_igrid_limits(igrid, nsubproc, t, a, nxlow, nxhigh);
+            nElm += std::max(0,nxhigh - nxlow + 1);
+          }        
       }
-
-    return nXelements;
-  }
+    return nElm;
+  } 
 
   // Progress update ****************************************************
 
@@ -261,7 +266,7 @@ namespace APP
   }
 
 
-  // ******************* FK Table computation ****************************
+// ********************* Evolution factors ******************************
 
     // Allocates the arrays used for evolution factors
   double*** alloc_evfactor(int const& nxin)
@@ -288,6 +293,10 @@ namespace APP
     delete[] f;
   }
 
+
+
+  // ******************* FK Table computation ****************************
+
   void computeFK(appl_param const& par, appl::grid* g, NNPDF::FKGenerator* fk)
   {
     // Combination parameters
@@ -299,7 +308,7 @@ namespace APP
     
     // Progress monitoring
     int completedElements = 0;
-    const int nXelements = appl_countelements(par, g);
+    const int nXelements = countElements(par, g);
 
     // Fetch PDF subprocess generator names
     const std::string pdfnames = g->getGenpdf();
@@ -356,18 +365,7 @@ namespace APP
             const double x1 = igrid->fx(igrid->gety1(a));
             
             // Set trimmed limits
-            int nxlow=igrid->Ny2();
-            int nxhigh=0;
-            
-            // Fetch sparse structure
-            tsparse1d<double> *ts1;
-            for (size_t tsp=0; tsp<nsubproc; tsp++)
-              if ((*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(tsp))[t] != NULL)
-                if (( ts1 = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(tsp))[t]->trimmed(a) ) != NULL)
-                {                
-                  nxlow  = min(ts1->lo(), nxlow);
-                  nxhigh = max(ts1->hi(), nxhigh);
-                }
+            int nxlow, nxhigh; get_igrid_limits(igrid, nsubproc, t, a, nxlow, nxhigh);
 
             // Compute evolution factors for first PDF
             if (nxlow <= nxhigh) // Only if there are nonzero entries
