@@ -109,11 +109,15 @@ namespace QCD
       param.pto = param.evol_pto + 1;
     }
 
-    // Initial scale hardcoded
+    // Set scale variation parameters
+    param.xiF = atof(param.thMap["XIF"].c_str());
+    param.xiR = atof(param.thMap["XIR"].c_str());
 
     cout << "                FastKernel Grid Combination                 "<<endl;
     cout << "    - TheoryID: "<<param.thID << endl;
     cout << "    - Conv PTOrd: N"<<param.pto -1<<"LO"<<endl;
+    cout << "    - xi_F: " << param.xiF<<endl;
+    cout << "    - xi_R: " << param.xiR<<endl;
 
     return;
   }
@@ -154,7 +158,7 @@ namespace QCD
     APFEL::SetEpsilonTruncation(1E-1);
 
     // Set maximum scale
-    QM = sqrt(Q2max);
+    QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
     APFEL::SetQLimits( Q0, QM );
 
     if (SIA_mode) 

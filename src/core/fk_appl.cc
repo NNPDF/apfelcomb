@@ -408,8 +408,10 @@ namespace APP
         appl::igrid const *igrid = g->weightgrid(gidx, bin);
         for (int t=0; t<igrid->Ntau(); t++) 
         {
-          const double Q   = sqrt( igrid->fQ2( igrid->gettau(t)) );
-          const double as  = QCD::alphas(Q);
+          const double Q2  = igrid->fQ2( igrid->gettau(t));
+          const double QF  = sqrt(Q2)*par.xiF;
+          const double QR  = sqrt(Q2)*par.xiR;
+          const double as  = QCD::alphas(QR);
           
           for (int a=0; a<igrid->Ny1(); a++  )
           {
@@ -419,7 +421,7 @@ namespace APP
             if (nxlow <= nxhigh) 
               for (size_t ix = 0; ix < nxin; ix++)
                 for (size_t fl = 0; fl < 14; fl++)
-                  QCD::avals(ix,x1,fl,Q,fA[ix][fl]);
+                  QCD::avals(ix,x1,fl,QF,fA[ix][fl]);
             
             for (int b=nxlow; b<=nxhigh; b++) // Loop over applgrid x2
             {
@@ -444,9 +446,9 @@ namespace APP
                   for (size_t fl = 0; fl < 14; fl++)
                   {
                     if (par.ppbar == true)
-                      QCD::avals_pbar(ix,x2,fl,Q,fB[ix][fl]);
+                      QCD::avals_pbar(ix,x2,fl,QF,fB[ix][fl]);
                     else
-                      QCD::avals(ix,x2,fl,Q,fB[ix][fl]);
+                      QCD::avals(ix,x2,fl,QF,fB[ix][fl]);
                   }
                 
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1

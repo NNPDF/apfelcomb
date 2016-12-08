@@ -75,12 +75,12 @@ int main(int argc, char* argv[]) {
   cout << "  --  High accuracy APPLgrid Result "<<endl;
   
   // Compute with applgrid interface
-  int pto = par.pto-1; if (par.ptmin == 1) pto = -1;
+  const int pto = (par.ptmin == 1) ? -1:(par.pto-1);
   vector<double> xsec;
   if (par.ppbar == true)
-    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto );
+    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
   else
-    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
+    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
 
   size_t ibin=0;
   for (size_t o=0; o<par.nbins; o++)
