@@ -263,6 +263,31 @@ namespace APP
 
   // ******************* FK Table computation ****************************
 
+    // Allocates the arrays used for evolution factors
+  double*** alloc_evfactor(int const& nxin)
+  {
+    double*** f = new double**[nxin];
+    for (int i=0; i<nxin; i++)
+    {
+      f[i] = new double*[14];  // These are in EVLN basis (photon!)
+      for (size_t j=0; j<14; j++)
+        f[i][j] = new double[13]; // These are in APPLGRID basis (no photon!)
+    }
+    return f;
+  }
+
+  // Frees evolution factor array f
+  void free_evfactor( double*** f, int const& nxin )
+  {
+    for (int i=0; i<nxin; i++)
+    {    
+      for (size_t j=0; j<14; j++)
+        delete[] f[i][j];
+      delete[] f[i];
+    }
+    delete[] f;
+  }
+
   void computeFK(appl_param const& par, appl::grid* g, NNPDF::FKGenerator* fk)
   {
     // Combination parameters
@@ -281,20 +306,8 @@ namespace APP
     std::vector<std::string> pdfvec = splitpdf( pdfnames );
 
      // define evolution factor arrays
-    double*** fA = new double**[nxin];
-    double*** fB = new double**[nxin];
-    
-    for (size_t i=0; i<nxin; i++)
-    {
-      fA[i] = new double*[14];  // These are in EVLN basis (photon!)
-      fB[i] = new double*[14];  // These are in EVLN basis (photon!)
-      
-      for (size_t j=0; j<14; j++)
-      {
-        fA[i][j] = new double[13]; // These are in APPLGRID basis (no photon!)
-        fB[i][j] = new double[13]; // These are in APPLGRID basis (no photon!)
-      }
-    }
+    double*** fA = alloc_evfactor(nxin);
+    double*** fB = alloc_evfactor(nxin);
     
     // Begin progress timer
     timeval t1;
@@ -419,20 +432,8 @@ namespace APP
     } // /data
 
     // Cleanup
-    for (size_t i=0; i<nxin; i++)
-    {    
-      for (size_t j=0; j<14; j++)
-      {
-        delete[] fA[i][j];
-        delete[] fB[i][j];
-      }
-
-      delete[] fA[i];
-      delete[] fB[i];
-    }
-
-    delete[] fA;
-    delete[] fB;
+    free_evfactor(fA, nxin);
+    free_evfactor(fB, nxin);
         
     cout << "FastKernel table computed."<<endl;
     
