@@ -278,7 +278,7 @@ namespace APP
   // g is the APPLgrid being combined with evolution factors.
   // pto specified the perturbative order being combined, as the value of alpha_S in the current bin,
   // and x1/x2 specify the numerical values of the PDF x-values for the first and second PDF respectively.
-  double compute_wgt_norm(appl::grid *g, int const& d, double const& pto, double const& as, double const& x1, double const& x2)
+  double compute_wgt_norm(appl::grid *g, appl_param const& par, int const& d, double const& pto, double const& as, double const& x1, double const& x2)
   {
     // PDF x and bin width normalisation
     double norm = 1.0/(x1*x2*g->deltaobs(d));
@@ -291,10 +291,15 @@ namespace APP
     // Factor of alpha_S
     const double LO = g->leadingOrder();
     if (g->calculation() == appl::grid::AMCATNLO)
-      norm*=pow(as*(4.0*M_PI), LO+pto );
+    { norm*=pow(as*(4.0*M_PI), LO+pto ); }
+    else if (pto == 0 && par.evol_pto == 1) // NLO scale variation
+    {
+      const double pas = as/(2.0*M_PI);
+      norm*=pow(pas, LO)*(1+pas*2.0*M_PI*QCD::beta0()*LO*log(par.xiR*par.xiR));
+    }
     else
-      norm*=pow(as/(2.0*M_PI), LO+pto );
-
+    { norm*=pow(as/(2.0*M_PI), LO+pto ); }
+    
     return norm;
   }
 
@@ -439,8 +444,8 @@ namespace APP
               {
                 // Calculate normalisation factor
                 const double pdfnrm =  par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
-                const double norm = pdfnrm*compute_wgt_norm(g, bin, pto+par.ptmin, as, x1, x2);
-                
+                const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2);
+
                 // Compute evolution factors for second PDF
                 for (size_t ix = 0; ix < nxin; ix++)
                   for (size_t fl = 0; fl < 14; fl++)

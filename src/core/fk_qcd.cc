@@ -319,6 +319,15 @@ namespace QCD
   {
     return APFEL::AlphaQCD(Q);
   }
+
+  double beta0()
+  {
+    const double twopi = 2.*M_PI;
+    const double nc = 3;
+    const double nf = 5;  // This is what APPLgrid does
+    const double beta0=(11.*nc-2.*nf)/(6.*twopi);
+    return beta0;
+  }
   
   // Evaluate A values
   void avals(const int& xi, const double& xo, const int& fi, const double& Q, double* a)
