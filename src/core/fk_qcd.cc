@@ -346,6 +346,14 @@ namespace QCD
     return;
   }
 
+  void bvals(int const& xi, double const& xo, int const& fi, double* b){
+    const int pt = 0;
+    const int nf = 5;
+    for(int i=0; i<13; i++)
+      b[i] = APFEL::ExternalSplittingFunctions(std::string("Ev2Ph"),pt, nf,i-6,fi,xo,xi);
+    return;
+  }
+
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta)
   {
     // Out of range

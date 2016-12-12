@@ -389,8 +389,8 @@ namespace APP
 
      // define evolution factor arrays
     const int nxin = fk->GetNx();
-    double*** fA = alloc_evfactor(nxin);
-    double*** fB = alloc_evfactor(nxin);
+    double*** fA1 = alloc_evfactor(nxin);
+    double*** fA2 = alloc_evfactor(nxin);
     
     // Begin progress timer
     timeval t1;
@@ -420,13 +420,14 @@ namespace APP
           
           for (int a=0; a<igrid->Ny1(); a++  )
           {
-            // Compute nonzero evolution factors
             const double x1 = igrid->fx(igrid->gety1(a));           
             int nxlow, nxhigh; get_igrid_limits(igrid, nsubproc, t, a, nxlow, nxhigh);
+
+            // Compute nonzero evolution factors
             if (nxlow <= nxhigh) 
               for (size_t ix = 0; ix < nxin; ix++)
                 for (size_t fl = 0; fl < 14; fl++)
-                  QCD::avals(ix,x1,fl,QF,fA[ix][fl]);
+                  QCD::avals(ix,x1,fl,QF,fA1[ix][fl]);
             
             for (int b=nxlow; b<=nxhigh; b++) // Loop over applgrid x2
             {
@@ -451,9 +452,9 @@ namespace APP
                   for (size_t fl = 0; fl < 14; fl++)
                   {
                     if (par.ppbar == true)
-                      QCD::avals_pbar(ix,x2,fl,QF,fB[ix][fl]);
+                      QCD::avals_pbar(ix,x2,fl,QF,fA2[ix][fl]);
                     else
-                      QCD::avals(ix,x2,fl,QF,fB[ix][fl]);
+                      QCD::avals(ix,x2,fl,QF,fA2[ix][fl]);
                   }
                 
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
@@ -462,7 +463,7 @@ namespace APP
                       for (size_t l=0; l<14; l++)       // loop over flavour 2
                       {
                         // Rotate to subprocess basis
-                        genpdf->evaluate(fA[i][k],fB[j][l],H);
+                        genpdf->evaluate(fA1[i][k],fA2[j][l],H);
 
                         for (size_t ip=0; ip<nsubproc; ip++)
                           if (W[ip] != 0 and H[ip] != 0)
@@ -484,8 +485,8 @@ namespace APP
     } // /data
 
     // Cleanup
-    free_evfactor(fA, nxin);
-    free_evfactor(fB, nxin);
+    free_evfactor(fA1, nxin);
+    free_evfactor(fA2, nxin);
         
     cout << "FastKernel table computed."<<endl;
     
