@@ -114,26 +114,26 @@ Here the parton subprocesses are calculated using one PDF and one convolution of
 \be \label{eq:convsubprocess2} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})=\sum_{i,j} C^{(s)}_{ij} 
  f_j^{(1)}(x_{\alpha},\xi_F^2Q^2_\tau)\,  \int_{x_\beta}^1 \frac{dz}{z}P^0_{jl}\left(\frac{x_\beta}{z}\right)f^{(2)}_l(z,\xi_F^2Q^2_\tau). \ee
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The {\tt FK} procedure for scale variations}
-In {\tt FK} tables we relate the general-scale PDFs used above to initial scale PDFs through DGLAP evolution factors as
+\section{Interpolated procedure for factorisation scale variations}
+In {\tt FK} tables we relate the general-scale PDFs used above to initial scale evolution basis PDFs through DGLAP evolution factors as
 \begin{equation}\label{eq:fastPDFfinal_recalled}
   f_i(x_{\alpha},\xi_F^2Q^2_\tau) = \sum_{k}
-  \sum_\beta A^\tau_{\alpha\beta, ik}\;
-  f_k(x_\beta,Q^2_0)\,, 
+  \sum_\beta A^{(\tau)}_{\alpha\beta, ik}\;
+  N_k(x_\beta)\,, 
 \end{equation}
-It is therefore simple to write the subprocess densities in Eqn. \ref{eq:basicsubproc} in terms of initial state PDFs
+where the $N$ are evolution basis PDFs evaluated at $Q_0^2$. It is therefore simple to write the subprocess densities in Eqn. \ref{eq:basicsubproc} in terms of initial state PDFs
 \begin{equation}\label{eq:FK1}
 \begin{array}{rcl}
 F^{(s)}_{\alpha\beta}[f_1, f_2](\xi_F^2Q^2_\tau) &=&  \displaystyle \sum_{i,j} \sum_{k,l}
                                \sum_{\delta,\gamma} C^{(s)}_{ij}
-                               \left[  A^\tau_{\alpha\delta ik}\;
-                               f_k(x_\delta,Q^2_0) A^\tau_{\beta\gamma
-                               jl}\; f_l(x_\gamma,Q^2_0) \right]\;\;\;
+                               \left[  A^{(\tau)}_{\alpha\delta ik}\;
+                               N_k(x_\delta) A^{(\tau)}_{\beta\gamma
+                               jl}\; N_l(x_\gamma) \right]\;\;\;
   \\
 \\
 &=& \displaystyle \sum_{k,l}\sum_{\delta,\gamma}
 \widetilde{C}^{(s),\tau}_{kl,\alpha\beta\gamma\delta}
-f_k(x_\delta,Q^2_0) f_l(x_\gamma,Q^2_0)\,.
+N_k(x_\delta) N_l(x_\gamma)\,.
 \end{array}
 \end{equation}
 To do the same for the subprocess densities in terms of convolutions in Eqns. \ref{eq:convsubprocess1}, \ref{eq:convsubprocess2} requires some more legwork.
@@ -149,7 +149,44 @@ Therefore with Eqn. \ref{eq:deconvolute} we can place the subprocess densities i
  f_k^{(1)}(x_\gamma, \xi_F^2Q_\tau^2)\, f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau), \ee
 \be \label{eq:deconvsubprocess1} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})=\sum_\gamma \sum_{i,j,k} C^{(s)}_{ij} B_{\beta\gamma, jk} \, 
  f_i^{(1)}(x_\alpha, \xi_F^2Q_\tau^2)\, f_k^{(2)}(x_{\gamma},\xi_F^2Q^2_\tau). \ee
- These expressions are now more naturally amenable to the precomputation of their evolution as per Eqn. \ref{eq:FK1}.
+ These expressions are now more naturally amenable to the precomputation of their evolution as per Eqn. \ref{eq:FK1}. The terms proportional to logarithms of $\xi_F$ are therefore (sums implied)
+ \begin{align}
+\sigma_{F1} &=
+-\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau)
+\ln \xi_F^2  
+W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij} B_{\alpha\gamma, ik} \, 
+ f_k^{(1)}(x_\gamma, \xi_F^2Q_\tau^2)\, f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau) \nonumber \\
+ &=
+ -\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau)
+\ln \xi_F^2  
+W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij} B_{\alpha\gamma, ik} \, 
+A^{(\tau)}_{\gamma\delta, km} A^{(\tau)}_{\beta\epsilon, jn} N^{(1)}_{m}(x_\delta) N^{(2)}_{n}(x_\epsilon),
+ \end{align}
+and
+\begin{align}
+\sigma_{F2} &=
+-\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) \ln \xi_F^2  
+W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij} B_{\beta\gamma, jk} \, 
+ f_i^{(1)}(x_\alpha, \xi_F^2Q_\tau^2)\, f_k^{(2)}(x_{\gamma},\xi_F^2Q^2_\tau) \nonumber \\
+ &=
+-\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) \ln \xi_F^2  
+W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij} B_{\beta\gamma, jk} \, 
+A^{(\tau)}_{\alpha\delta, im} A^{(\tau)}_{\gamma\epsilon, kn} N^{(1)}_{m}(x_\delta) N^{(2)}_{n}(x_\epsilon).
+\end{align}
+It is then simple to arrange a total term proportional to $\log \xi_F$:
+\begin{align}
+\sigma_F &= \sigma_{F1} + \sigma_{F2}\\
+&= -\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) \ln \xi_F^2  W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij}  Q_{\alpha\beta\delta\epsilon, mn}^{(\tau)} N^{(1)}_{m}(x_\delta) N^{(2)}_{n}(x_\epsilon)
+\end{align}
+where
+\be
+Q_{\alpha\beta\delta\epsilon, mn}^{(\tau)} = \left\{ B_{\alpha\gamma, ik} \, 
+A^{(\tau)}_{\gamma\delta, km} A^{(\tau)}_{\beta\epsilon, jn} +  B_{\beta\gamma, jk} \, 
+A^{(\tau)}_{\alpha\delta, im} A^{(\tau)}_{\gamma\epsilon, kn}  \right\}.
+\ee
+
+
+ 
 \clearpage
 \begin{thebibliography}{1}
 
