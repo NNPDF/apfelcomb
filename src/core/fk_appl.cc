@@ -352,32 +352,19 @@ namespace APP
 
 // ********************* Evolution factors ******************************
 
-    // Allocates the arrays used for evolution factors
-  double*** alloc_evfactor(int const& nxin)
+  class EvolutionFactors
   {
-    double*** f = new double**[nxin];
-    for (int i=0; i<nxin; i++)
-    {
-      f[i] = new double*[14];  // These are in EVLN basis (photon!)
-      for (size_t j=0; j<14; j++)
-        f[i][j] = new double[13]; // These are in APPLGRID basis (no photon!)
-    }
-    return f;
-  }
+  public:
+    EvolutionFactors(const int _nxin):
+    nxin(_nxin),
+    data(new double[nxin*13*14]) {};
+    ~EvolutionFactors() {delete[] data;};
 
-  // Frees evolution factor array f
-  void free_evfactor( double*** f, int const& nxin )
-  {
-    for (int i=0; i<nxin; i++)
-    {    
-      for (size_t j=0; j<14; j++)
-        delete[] f[i][j];
-      delete[] f[i];
-    }
-    delete[] f;
-  }
-
-
+    double* operator()(int const& ix, int const& fi ) {return data+13*14*ix+13*fi;};
+  private:
+    const int nxin;
+    double* data;
+  };
 
   // ******************* FK Table computation ****************************
 
@@ -389,8 +376,8 @@ namespace APP
 
      // define evolution factor arrays
     const int nxin = fk->GetNx();
-    double*** fA1 = alloc_evfactor(nxin);
-    double*** fA2 = alloc_evfactor(nxin);
+    EvolutionFactors fA1(nxin);
+    EvolutionFactors fA2(nxin);
     
     // Begin progress timer
     timeval t1;
@@ -427,7 +414,7 @@ namespace APP
             if (nxlow <= nxhigh) 
               for (size_t ix = 0; ix < nxin; ix++)
                 for (size_t fl = 0; fl < 14; fl++)
-                  QCD::avals(ix,x1,fl,QF,fA1[ix][fl]);
+                  QCD::avals(ix,x1,fl,QF,fA1(ix,fl));
             
             for (int b=nxlow; b<=nxhigh; b++) // Loop over applgrid x2
             {
@@ -452,9 +439,9 @@ namespace APP
                   for (size_t fl = 0; fl < 14; fl++)
                   {
                     if (par.ppbar == true)
-                      QCD::avals_pbar(ix,x2,fl,QF,fA2[ix][fl]);
+                      QCD::avals_pbar(ix,x2,fl,QF,fA2(ix,fl));
                     else
-                      QCD::avals(ix,x2,fl,QF,fA2[ix][fl]);
+                      QCD::avals(ix,x2,fl,QF,fA2(ix,fl));
                   }
                 
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
@@ -463,7 +450,7 @@ namespace APP
                       for (size_t l=0; l<14; l++)       // loop over flavour 2
                       {
                         // Rotate to subprocess basis
-                        genpdf->evaluate(fA1[i][k],fA2[j][l],H);
+                        genpdf->evaluate(fA1(i,k),fA2(j,l),H);
 
                         for (size_t ip=0; ip<nsubproc; ip++)
                           if (W[ip] != 0 and H[ip] != 0)
@@ -484,10 +471,7 @@ namespace APP
       } // /pto
     } // /data
 
-    // Cleanup
-    free_evfactor(fA1, nxin);
-    free_evfactor(fA2, nxin);
-        
+      
     cout << "FastKernel table computed."<<endl;
     
     return;
