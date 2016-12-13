@@ -159,6 +159,8 @@ namespace QCD
 
     // Set maximum scale
     QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
+    if ( fabs(par.xiF - 1.0) > 1E-5)
+      QM = std::max(15000., QM); // HOPPET max scale in APPLgrid
     APFEL::SetQLimits( Q0, QM );
 
     if (SIA_mode) 
@@ -350,7 +352,7 @@ namespace QCD
     const int pt = 0;
     const int nf = 5;
     for(int i=0; i<13; i++)
-      b[i] = APFEL::ExternalSplittingFunctions(std::string("Ev2Ph"),pt, nf,i-6,fi,xo,xi);
+      b[i] = APFEL::ExternalSplittingFunctions(std::string("Ph2Ph"),pt, nf,i-6,fi,xo,xi);
     return;
   }
 
