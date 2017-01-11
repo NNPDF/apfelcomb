@@ -400,7 +400,11 @@ namespace APP
     const int nxin = fk->GetNx();
     EvolutionFactors fA1(nxin);
     EvolutionFactors fA2(nxin);
+
+    // Evolution factor derivatives
     SplittingFactors fB(nxin);
+    EvolutionFactors fdA1(nxin);
+    EvolutionFactors fdA2(nxin);
 
     // Begin progress timer
     timeval t1;

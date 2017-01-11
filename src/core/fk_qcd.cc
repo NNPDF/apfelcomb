@@ -236,6 +236,7 @@ namespace QCD
     // Just in case of numerical trouble
     xg[nx] = 1;
     
+  
     // Set evolution operator parameters
     APFEL::SetFastEvolution(false);
     APFEL::EnableEvolutionOperator(true); // Enable the computation of the Evolution Operator
@@ -250,6 +251,9 @@ namespace QCD
       APFEL::InitializeAPFEL_DIS();
     else
       APFEL::InitializeAPFEL();
+
+    // Needed to join the grids
+    APFEL::EvolveAPFEL(Q0,Q0);
     
     delete[] xg;
     return;
