@@ -85,11 +85,11 @@ Firstly we have the 'basic' component, which is simply the standard {\tt APPLgri
 \be \sigma_B(\xi_F, \xi_R) =  \left(\tilde{\alpha}_s^{p}(\xi_R^2Q^2_\tau) 
      W_{\alpha\beta,\tau}^{(0)(s)}+ \tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) W_{\alpha\beta,\tau}^{(1)(s)} \right)
      F^{(s)}_{\alpha\beta}\left[f_1, f_2\right]\left(\xi_F^2{Q^2_\tau}\right), \ee
-where we use the shorthand
+where sums over repeated indices are implied. We use the shorthand
 \be \tilde{\alpha}_s(\xi_R^2Q^2_\tau) =  \frac{1}{2\pi}\alpha_s\left(\xi_R^2 {Q^2_\tau}\right), \ee
 and the subprocess parton densities are constructed as
 \be \label{eq:basicsubproc}
-  F^{(s)}_{\alpha\beta,\tau}\left[f_1, f_2\right]\left(\xi_F^2{Q^2_\tau}\right) =\sum_{i,j} C^{(s)}_{ij} 
+  F^{(s)}_{\alpha\beta,\tau}\left[f_1, f_2\right]\left(\xi_F^2{Q^2_\tau}\right) = C^{(s)}_{ij} 
   f^{(1)}_i(x_{\alpha},\xi_F^2Q^2_\tau)f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau)\,,
 \ee
 for the appropriate partonic subprocess defined by the $C$. Next we have a term proportional to the logarithm of $\xi_R$:
@@ -108,48 +108,52 @@ F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau}),
 F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau}).
 \ee
 Here the parton subprocesses are calculated using one PDF and one convolution of PDFs with leading order splitting functions $P_0$:
-\be \label{eq:convsubprocess1} F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau})=\sum_{i,j} C^{(s)}_{ij} 
+\be \label{eq:convsubprocess1} F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau})= C^{(s)}_{ij} 
  f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau)\,  \int_{x_\alpha}^1 \frac{dz}{z}P^0_{ik}\left(\frac{x_\alpha}{z}\right)f^{(1)}_k(z,\xi_F^2Q^2_\tau), \ee
 
-\be \label{eq:convsubprocess2} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})=\sum_{i,j} C^{(s)}_{ij} 
+\be \label{eq:convsubprocess2} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})= C^{(s)}_{ij} 
  f_j^{(1)}(x_{\alpha},\xi_F^2Q^2_\tau)\,  \int_{x_\beta}^1 \frac{dz}{z}P^0_{jl}\left(\frac{x_\beta}{z}\right)f^{(2)}_l(z,\xi_F^2Q^2_\tau). \ee
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Interpolated procedure for factorisation scale variations}
 In {\tt FK} tables we relate the general-scale PDFs used above to initial scale evolution basis PDFs through DGLAP evolution factors as
 \begin{equation}\label{eq:fastPDFfinal_recalled}
-  f_i(x_{\alpha},\xi_F^2Q^2_\tau) = \sum_{k}
-  \sum_\beta A^{(\tau)}_{\alpha\beta, ik}\;
+  f_i(x_{\alpha},\xi_F^2Q^2_\tau) =
+  A^{(\tau)}_{\alpha\beta, ik}\;
   N_k(x_\beta)\,, 
 \end{equation}
 where the $N$ are evolution basis PDFs evaluated at $Q_0^2$. It is therefore simple to write the subprocess densities in Eqn. \ref{eq:basicsubproc} in terms of initial state PDFs
-\begin{equation}\label{eq:FK1}
-\begin{array}{rcl}
-F^{(s)}_{\alpha\beta}[f_1, f_2](\xi_F^2Q^2_\tau) &=&  \displaystyle \sum_{i,j} \sum_{k,l}
-                               \sum_{\delta,\gamma} C^{(s)}_{ij}
+\be
+F^{(s)}_{\alpha\beta}[f_1, f_2](\xi_F^2Q^2_\tau) =  \displaystyle
+                               C^{(s)}_{ij}
                                \left[  A^{(\tau)}_{\alpha\delta ik}\;
                                N_k(x_\delta) A^{(\tau)}_{\beta\gamma
-                               jl}\; N_l(x_\gamma) \right]\;\;\;
-  \\
-\\
-&=& \displaystyle \sum_{k,l}\sum_{\delta,\gamma}
-\widetilde{C}^{(s),\tau}_{kl,\alpha\beta\gamma\delta}
-N_k(x_\delta) N_l(x_\gamma)\,.
-\end{array}
-\end{equation}
+                               jl}\; N_l(x_\gamma) \right].
+ \label{eq:FK1}
+\ee
+In doing so the equation for the basic and renormalisation scale variation terms become particularly simple:
+ \begin{align}
+ \sigma_B + \sigma_R &=  \left\{  \tilde{\alpha}_s^{p}(\xi_R^2Q^2_\tau)W_{\alpha\beta,\tau}^{(0)(s)} + \tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) 
+      \left( \pi  \beta_0 p \ln \xi_R^2 W_{\alpha\beta,\tau}^{(0)(s)} + W_{\alpha\beta,\tau}^{(1)(s)} \right) \right\} \nonumber \\
+     &  
+     \times C^{(s)}_{ij}
+                A^{(\tau)}_{\alpha\delta im}\;
+                A^{(\tau)}_{\beta\epsilon jn}\;  N_m(x_\delta)N_n(x_\epsilon), 
+\end{align}
+where the initial state PDF is clearly factorised.
 To do the same for the subprocess densities in terms of convolutions in Eqns. \ref{eq:convsubprocess1}, \ref{eq:convsubprocess2} requires some more legwork.
 Firstly we recall that in this framework PDFs are represented upon an interpolation grid
-\be f_i(x,Q_\tau^2) \simeq \sum_\gamma^{N_x} f_i(x_\gamma, Q_\tau^2)\mathcal{I}^{(\gamma)}(x).\ee
+\be f_i(x,Q_\tau^2) \simeq f_i(x_\gamma, Q_\tau^2)\mathcal{I}^{(\gamma)}(x).\ee
 Therefore we can write the convolutions in Eqns. \ref{eq:convsubprocess1}, \ref{eq:convsubprocess2} as
-\be \label{eq:deconvolute} \left[P_0\otimes f\right]_{i}(x_\alpha,  \xi_F^2Q_\tau^2) = \sum_\gamma \sum_k B_{\alpha\gamma, ik} f_k(x_\gamma, \xi_F^2Q_\tau^2),\ee
+\be \label{eq:deconvolute} \left[P_0\otimes f\right]_{i}(x_\alpha,  \xi_F^2Q_\tau^2) =  B_{\alpha\gamma, ik} f_k(x_\gamma, \xi_F^2Q_\tau^2),\ee
 where
 \be B_{\alpha\gamma, ik} = \int_{x_\alpha}^1 \frac{dz}{z} P_{ik}^0\left(\frac{x_\alpha}{z}\right)\mathcal{I}^{(\gamma)}(z).\ee
 Therefore with Eqn. \ref{eq:deconvolute} we can place the subprocess densities involving convolutions at the same level as the standard subprocess densities, directly in terms of parton distributions evaluated upon an interpolation grid.
 
-\be \label{eq:deconvsubprocess1} F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau})=\sum_\gamma \sum_{i,j,k} C^{(s)}_{ij} B_{\alpha\gamma, ik} \, 
+\be \label{eq:deconvsubprocess1} F^{(s)}_{\alpha\beta}[P_0\otimes f_1, f_2](\xi_F^2{Q^2_\tau})= C^{(s)}_{ij} B_{\alpha\gamma, ik} \, 
  f_k^{(1)}(x_\gamma, \xi_F^2Q_\tau^2)\, f_j^{(2)}(x_{\beta},\xi_F^2Q^2_\tau), \ee
-\be \label{eq:deconvsubprocess1} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})=\sum_\gamma \sum_{i,j,k} C^{(s)}_{ij} B_{\beta\gamma, jk} \, 
+\be \label{eq:deconvsubprocess1} F^{(s)}_{\alpha\beta}[f_1, P_0\otimes f_2](\xi_F^2{Q^2_\tau})= C^{(s)}_{ij} B_{\beta\gamma, jk} \, 
  f_i^{(1)}(x_\alpha, \xi_F^2Q_\tau^2)\, f_k^{(2)}(x_{\gamma},\xi_F^2Q^2_\tau). \ee
- These expressions are now more naturally amenable to the precomputation of their evolution as per Eqn. \ref{eq:FK1}. The terms proportional to logarithms of $\xi_F$ are therefore (sums implied)
+ These expressions are now more naturally amenable to the precomputation of their evolution as per Eqn. \ref{eq:FK1}. The terms proportional to logarithms of $\xi_F$ are therefore 
  \begin{align}
 \sigma_{F1} &=
 -\tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau)
@@ -181,5 +185,15 @@ It is then simple to arrange a total term proportional to $\log \xi_F$:
 A^{(\tau)}_{\gamma\delta, km} A^{(\tau)}_{\beta\epsilon, jn} +  B_{\beta\gamma, jk} \, 
 A^{(\tau)}_{\alpha\delta, im} A^{(\tau)}_{\gamma\epsilon, kn}  \right\}.
 \end{align}
+Finally we can combine this with the previous expression for the basic and renormalisation scale variation terms for a complete expression of the FK product with scale variations.
+\be \sigma = O_{\delta\eta m n} N_m(x_\delta)N_n(x_\epsilon)\ee
+where the FK table $O$ is given by
+ \begin{align}
+ O_{\delta\eta m n} &=    \tilde{\alpha}_s^{p}(\xi_R^2Q^2_\tau)W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij} A^{(\tau)}_{\alpha\delta im}\; A^{(\tau)}_{\beta\epsilon jn} \nonumber \\
+  & + \tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) W_{\alpha\beta,\tau}^{(1)(s)} C^{(s)}_{ij} A^{(\tau)}_{\alpha\delta im}\; A^{(\tau)}_{\beta\epsilon jn} \nonumber \\
+  & + \tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) \pi \beta_0 p \ln \xi_R^2 W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij} A^{(\tau)}_{\alpha\delta im}\; A^{(\tau)}_{\beta\epsilon jn} \nonumber \\
+  & - \tilde{\alpha}_s^{p+1}(\xi_R^2Q^2_\tau) \ln \xi_F^2  W_{\alpha\beta,\tau}^{(0)(s)} C^{(s)}_{ij} \left\{ B_{\alpha\gamma, ik} \, A^{(\tau)}_{\gamma\delta, km} A^{(\tau)}_{\beta\epsilon, jn} +  B_{\beta\gamma, jk} \, A^{(\tau)}_{\alpha\delta, im} A^{(\tau)}_{\gamma\epsilon, kn}  \right\}.  
+  \end{align}
+
 
 \end{document} 

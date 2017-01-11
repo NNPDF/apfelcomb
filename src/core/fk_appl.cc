@@ -366,6 +366,28 @@ namespace APP
     double* data;
   };
 
+
+  class SplittingFactors
+  {
+  public:
+    SplittingFactors(const int _nxin):
+    nxin(_nxin),
+    data(new double[nxin*nxin*13*13]) 
+    {
+      for (int xi = 0; xi<nxin; xi++)
+      for (int xo = 0; xo<nxin; xo++)
+      for (int fo = 0; fo<13; fo++)
+      for (int fi = 0; fi<13; fi++)
+        (*this)(xo,xi,fo,fi) = QCD::bvals(xo, xi, fo, fi);
+    };
+    ~SplittingFactors() {delete[] data;};
+
+    double& operator()(int const& xo, int const& xi, int const& fo, int const& fi ) {return data[nxin*13*13*xo + 13*13*xi + 13*fo + fi];};
+  private:
+    const int nxin;
+    double* data;
+  };
+
   // ******************* FK Table computation ****************************
 
   void computeFK(appl_param const& par, appl::grid* g, NNPDF::FKGenerator* fk)
@@ -378,7 +400,8 @@ namespace APP
     const int nxin = fk->GetNx();
     EvolutionFactors fA1(nxin);
     EvolutionFactors fA2(nxin);
-    
+    SplittingFactors fB(nxin);
+
     // Begin progress timer
     timeval t1;
     gettimeofday(&t1, NULL);
