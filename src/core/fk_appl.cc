@@ -441,7 +441,9 @@ namespace APP
           const int nxin = fk->GetNx();
           EvolutionFactors fA1(nxin, igrid->Ny1());
           EvolutionFactors fA2(nxin, igrid->Ny2());
-          
+          EvolutionFactors fdA1(nxin, igrid->Ny1());
+          EvolutionFactors fdA2(nxin, igrid->Ny2());   
+
           // Compute nonzero evolution factors
           const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
           const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
@@ -449,12 +451,19 @@ namespace APP
             for (size_t fl = 0; fl < 14; fl++)
             {
               for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
+              {
                 QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+                QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+
+              }
               for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
                 if (par.ppbar == true)
                   QCD::avals_pbar(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
                 else
+                {
                   QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+                  QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
+                }
             }
 
           for (int a=0; a<igrid->Ny1(); a++  )
