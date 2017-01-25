@@ -356,7 +356,20 @@ namespace QCD
   {
     const int pt = 0;
     const int nf = 5;
-    return APFEL::ExternalSplittingFunctions(std::string("Ph2Ph"),pt,nf,fo-6,fi-6,xo,xi);
+    return APFEL::ExternalSplittingFunctions(std::string("Ev2Ph"),pt,nf,fo-6,fi,xo,xi);
+  }
+
+  // Split A values
+  void davals(const int& beta, const double& alpha, const int& j, const double& Q, double* a)
+  {
+    updateEvol(Q);
+    for(int i=0; i<13; i++)
+    {
+      a[i] = 0;
+      for(int k=0; k<13; k++)
+        for(int g=0; g<APFEL::nIntervals(); g++)
+          a[i] += bvals(alpha, g, i, k)*APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,APFEL::xGrid(g),beta);
+    }
   }
 
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta)

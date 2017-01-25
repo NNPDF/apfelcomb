@@ -366,24 +366,6 @@ namespace APP
     double* data;
   };
 
-
-  class SplittingFactors
-  {
-  public:
-    SplittingFactors(int const& _nxin, int const& _nxout):
-    nxin(_nxin),
-    nxout(_nxout),
-    data(new double[nxin*nxout*13*13]) 
-    {};
-    ~SplittingFactors() {delete[] data;};
-
-    double& operator()(int const& xo, int const& xi, int const& fo, int const& fi ) {return data[nxin*13*13*xo + 13*13*xi + 13*fo + fi];};
-  private:
-    const int nxin;
-    const int nxout;
-    double* data;
-  };
-
   // ******************* FK Table computation ****************************
 
   void computeFK(appl_param const& par, appl::grid* g, NNPDF::FKGenerator* fk)
@@ -396,6 +378,11 @@ namespace APP
     const int nxin = fk->GetNx();
     EvolutionFactors fA1(nxin);
     EvolutionFactors fA2(nxin);
+
+    // Evolution factor derivatives
+    const double xmin_total = getXmin(g, true);
+    EvolutionFactors fdA1(nxin);
+    EvolutionFactors fdA2(nxin);
 
     // Begin progress timer
     timeval t1;
@@ -416,22 +403,6 @@ namespace APP
         
         // Fetch grid pointer and loop over Q
         appl::igrid const *igrid = g->weightgrid(gidx, bin);
-
-        // Prepare splitting functions
-        // These functions take an input x-grid in the APFEL basis and output in the APPLgrid basis
-        // Input and output flavours are in the APFEL physical basis
-        SplittingFactors fB1(nxin, igrid->Ny1());
-        SplittingFactors fB2(nxin, igrid->Ny2());
-        for (int xi = 0; xi<nxin; xi++)
-        for (int fo = 0; fo<13; fo++)
-        for (int fi = 0; fi<13; fi++)
-        {
-          for (int xo = 0; xo<igrid->Ny1(); xo++)
-            fB1(xo,xi,fo,fi) = QCD::bvals(igrid->fx(igrid->gety1(xo)), xi, fo, fi);
-          for (int xo = 0; xo<igrid->Ny2(); xo++)
-            fB2(xo,xi,fo,fi) = QCD::bvals(igrid->fx(igrid->gety2(xo)), xi, fo, fi);
-        }
-
         for (int t=0; t<igrid->Ntau(); t++) 
         {
           const double Q2  = igrid->fQ2( igrid->gettau(t));
@@ -448,7 +419,10 @@ namespace APP
             if (nxlow <= nxhigh) 
               for (size_t ix = 0; ix < nxin; ix++)
                 for (size_t fl = 0; fl < 14; fl++)
+                {
                   QCD::avals(ix,x1,fl,QF,fA1(ix,fl));
+                  QCD::davals(ix,x1,fl,QF,fdA1(ix,fl));
+                }
             
             for (int b=nxlow; b<=nxhigh; b++) // Loop over applgrid x2
             {
@@ -475,7 +449,10 @@ namespace APP
                     if (par.ppbar == true)
                       QCD::avals_pbar(ix,x2,fl,QF,fA2(ix,fl));
                     else
+                    {
                       QCD::avals(ix,x2,fl,QF,fA2(ix,fl));
+                      QCD::davals(ix,x2,fl,QF,fdA2(ix,fl));
+                    }
                   }
                 
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
