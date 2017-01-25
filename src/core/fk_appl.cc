@@ -323,15 +323,20 @@ namespace APP
     const double LO = g->leadingOrder();
     if (g->calculation() == appl::grid::AMCATNLO)
     { norm*=pow(as*(4.0*M_PI), LO+pto ); }
-    else if (pto == 0 && par.evol_pto == 1) // NLO scale variation
-    {
-      const double pas = as/(2.0*M_PI);
-      norm*=pow(pas, LO)*(1+pas*2.0*M_PI*QCD::beta0()*LO*log(par.xiR*par.xiR));
-    }
     else
     { norm*=pow(as/(2.0*M_PI), LO+pto ); }
     
     return norm;
+  }
+
+  // Computes the normalisation required in the case of varying renormalisation scales,
+  // This normalisation multiplies the leading-order weights, along with the overall
+  // normalisation described above
+  double compute_wgt_renscale(appl::grid *g, appl_param const& par, int const& d, double const& pto, double const& as, double const& x1, double const& x2)
+  {
+    const double LO = g->leadingOrder();
+    const double pas = as/(2.0*M_PI);
+    return pas*2.0*M_PI*QCD::beta0()*LO*log(par.xiR*par.xiR);
   }
 
   // Progress update ****************************************************
@@ -425,8 +430,14 @@ namespace APP
         const int gidx = get_grid_idx(g, pto+par.ptmin);
         appl::appl_pdf *genpdf = get_appl_pdf( g, gidx );
         const size_t nsubproc = g->subProcesses(gidx);
-        double *W = new double[nsubproc];
-        double *H = new double[nsubproc];
+        double *W = new double[nsubproc];   // Weight array
+        double *H = new double[nsubproc];   // Evolution factor array
+        double *H1 = new double[nsubproc]; // Split evolution factor array 1
+        double *H2 = new double[nsubproc]; // Split evolution factor array 2
+
+        // Renormalisation and factorisation scale variation terms
+        const bool vary_ren = pto == 0 && par.evol_pto == 1 && par.xiR != 1.0;
+        const bool vary_fac = pto == 0 && par.evol_pto == 1 && par.xiF != 1.0;
         
         // Fetch grid pointer and loop over Q
         appl::igrid const *igrid = g->weightgrid(gidx, bin);
@@ -453,8 +464,7 @@ namespace APP
               for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
               {
                 QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
-                QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
-
+                if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
               }
               for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
                 if (par.ppbar == true)
@@ -462,7 +472,7 @@ namespace APP
                 else
                 {
                   QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-                  QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
+                  if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
                 }
             }
 
@@ -485,7 +495,9 @@ namespace APP
                 const double x2 = igrid->fx(igrid->gety2(b));
                 const double pdfnrm =  par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
                 const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2);
-                
+                const double renscale = vary_ren ? compute_wgt_renscale(g, par, bin, pto+par.ptmin, as, x1, x2):0;
+                const double facscale = vary_fac ? -(as/(2.0*M_PI))*log(par.xiF*par.xiF):0;
+
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
                   for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
                     for (size_t k=0; k<14; k++)         // loop over flavour 1
@@ -494,9 +506,21 @@ namespace APP
                         // Rotate to subprocess basis
                         genpdf->evaluate(fA1(a,i,k),fA2(b,j,l),H);
 
+                        if (vary_fac)
+                        {
+                          genpdf->evaluate(fdA1(a,i,k),fA2(b,j,l),H1);
+                          genpdf->evaluate(fA1(a,i,k),fdA2(b,j,l),H2);
+                        }
+
                         for (size_t ip=0; ip<nsubproc; ip++)
-                          if (W[ip] != 0 and H[ip] != 0)
-                            fk->Fill( d, i, j, k, l, norm*W[ip]*H[ip] );
+                          if (W[ip] != 0)
+                          {
+                            if (H[ip] != 0)
+                              fk->Fill( d, i, j, k, l, norm*(1.0+renscale)*W[ip]*H[ip] );
+                            if (vary_fac && ( H1[ip] != 0 || H2[ip] != 0 ))
+                              fk->Fill( d, i, j, k, l, norm*facscale*W[ip]*(H1[ip] + H2[ip]));
+                          }
+
                       }
               }
 
@@ -509,6 +533,8 @@ namespace APP
         // Free subprocess arrays
         delete[] W;
         delete[] H;
+        delete[] H1;
+        delete[] H2;
 
       } // /pto
     } // /data
