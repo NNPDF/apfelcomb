@@ -275,7 +275,7 @@ namespace APP
     return limits;
   }
 
-  // Returns the minimum and maximum used values of x1
+  // Returns the minimum and maximum used values of x1 across all grid slices
   std::pair<int,int> get_igrid_limits_x1(appl::igrid const* igrid, int const& nsubproc, int const& tau)
   {
     std::pair<int,int> limits(igrid->Ny1(), 0);
@@ -291,7 +291,7 @@ namespace APP
     return limits;
   }
 
-  // Returns the minimum and maximum used values of x2
+  // Returns the minimum and maximum used values of x2 across all grid slices
   std::pair<int,int> get_igrid_limits_x2(appl::igrid const* igrid, int const& nsubproc, int const& tau)
   {
     std::pair<int,int> limits(igrid->Ny2(), 0);
@@ -386,14 +386,20 @@ namespace APP
   class EvolutionFactors
   {
   public:
-    EvolutionFactors(const int _nxin):
+    EvolutionFactors(const int _nxin, const int _nxout):
     nxin(_nxin),
-    data(new double[nxin*13*14]) {};
+    nxout(_nxout),
+    data(new double[nxout*nxin*13*14]) 
+    {
+      for (int i=0; i<nxout*nxin*13*14; i++)
+        data[i] = 0;
+    };
     ~EvolutionFactors() {delete[] data;};
 
-    double* operator()(int const& ix, int const& fi ) {return data+13*14*ix+13*fi;};
+    double* operator()(int const& ox, int const& ix, int const& fi ) {return data+13*14*nxin*ox+13*14*ix+13*fi;};
   private:
     const int nxin;
+    const int nxout;
     double* data;
   };
 
@@ -404,15 +410,6 @@ namespace APP
     // Progress monitoring
     int completedElements = 0;
     const int nXelements = countElements(par, g);
-
-     // define evolution factor arrays
-    const int nxin = fk->GetNx();
-    EvolutionFactors fA1(nxin);
-    EvolutionFactors fA2(nxin);
-
-    // Evolution factor derivatives
-    EvolutionFactors fdA1(nxin);
-    EvolutionFactors fdA2(nxin);
 
     // Begin progress timer
     timeval t1;
@@ -439,23 +436,32 @@ namespace APP
           const double QF  = sqrt(Q2)*par.xiF;
           const double QR  = sqrt(Q2)*par.xiR;
           const double as  = QCD::alphas(QR);
+
+          // define evolution factor arrays
+          const int nxin = fk->GetNx();
+          EvolutionFactors fA1(nxin, igrid->Ny1());
+          EvolutionFactors fA2(nxin, igrid->Ny2());
           
+          // Compute nonzero evolution factors
+          const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
+          const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
+          for (size_t ix = 0; ix < nxin; ix++)
+            for (size_t fl = 0; fl < 14; fl++)
+            {
+              for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
+                QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+              for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
+                if (par.ppbar == true)
+                  QCD::avals_pbar(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+                else
+                  QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+            }
+
           for (int a=0; a<igrid->Ny1(); a++  )
           {
-            const double x1 = igrid->fx(igrid->gety1(a));           
             const std::pair<int,int> limits = get_slice_limits(igrid, nsubproc, t, a);  
-
-            // Compute nonzero evolution factors
-            if (limits.first <= limits.second) 
-              for (size_t ix = 0; ix < nxin; ix++)
-                for (size_t fl = 0; fl < 14; fl++)
-                  QCD::avals(ix,x1,fl,QF,fA1(ix,fl));
-            
             for (int b=limits.first; b<=limits.second; b++) // Loop over applgrid x2
             {
-              // Second x values
-              const double x2 = igrid->fx(igrid->gety2(b));
-              
               // fetch weight values
               bool nonzero=false;
               for (size_t ip=0; ip<nsubproc; ip++)
@@ -466,18 +472,10 @@ namespace APP
               if (nonzero)
               {
                 // Calculate normalisation factor
+                const double x1 = igrid->fx(igrid->gety1(a));           
+                const double x2 = igrid->fx(igrid->gety2(b));
                 const double pdfnrm =  par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
                 const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2);
-
-                // Compute evolution factors for second PDF
-                for (size_t ix = 0; ix < nxin; ix++)
-                  for (size_t fl = 0; fl < 14; fl++)
-                  {
-                    if (par.ppbar == true)
-                      QCD::avals_pbar(ix,x2,fl,QF,fA2(ix,fl));
-                    else
-                      QCD::avals(ix,x2,fl,QF,fA2(ix,fl));
-                  }
                 
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
                   for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
@@ -485,7 +483,7 @@ namespace APP
                       for (size_t l=0; l<14; l++)       // loop over flavour 2
                       {
                         // Rotate to subprocess basis
-                        genpdf->evaluate(fA1(i,k),fA2(j,l),H);
+                        genpdf->evaluate(fA1(a,i,k),fA2(b,j,l),H);
 
                         for (size_t ip=0; ip<nsubproc; ip++)
                           if (W[ip] != 0 and H[ip] != 0)
