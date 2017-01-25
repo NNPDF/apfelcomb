@@ -370,21 +370,17 @@ namespace APP
   class SplittingFactors
   {
   public:
-    SplittingFactors(const int _nxin):
+    SplittingFactors(int const& _nxin, int const& _nxout):
     nxin(_nxin),
-    data(new double[nxin*nxin*13*13]) 
-    {
-      for (int xi = 0; xi<nxin; xi++)
-      for (int xo = 0; xo<nxin; xo++)
-      for (int fo = 0; fo<13; fo++)
-      for (int fi = 0; fi<13; fi++)
-        (*this)(xo,xi,fo,fi) = QCD::bvals(xo, xi, fo, fi);
-    };
+    nxout(_nxout),
+    data(new double[nxin*nxout*13*13]) 
+    {};
     ~SplittingFactors() {delete[] data;};
 
     double& operator()(int const& xo, int const& xi, int const& fo, int const& fi ) {return data[nxin*13*13*xo + 13*13*xi + 13*fo + fi];};
   private:
     const int nxin;
+    const int nxout;
     double* data;
   };
 
@@ -401,11 +397,6 @@ namespace APP
     EvolutionFactors fA1(nxin);
     EvolutionFactors fA2(nxin);
 
-    // Evolution factor derivatives
-    SplittingFactors fB(nxin);
-    EvolutionFactors fdA1(nxin);
-    EvolutionFactors fdA2(nxin);
-
     // Begin progress timer
     timeval t1;
     gettimeofday(&t1, NULL);
@@ -413,7 +404,7 @@ namespace APP
     for (size_t d=0; d<fk->GetNData(); d++)
     {    
       // Fetch associated applgrid info
-      const size_t bin      = par.map[d];
+      const size_t bin = par.map[d];
       for (size_t pto=0; pto<((size_t) par.pto); pto++) // Loop over perturbative order
       {
         // Determine grid index, allocate subprocess arrays
@@ -425,6 +416,22 @@ namespace APP
         
         // Fetch grid pointer and loop over Q
         appl::igrid const *igrid = g->weightgrid(gidx, bin);
+
+        // Prepare splitting functions
+        // These functions take an input x-grid in the APFEL basis and output in the APPLgrid basis
+        // Input and output flavours are in the APFEL physical basis
+        SplittingFactors fB1(nxin, igrid->Ny1());
+        SplittingFactors fB2(nxin, igrid->Ny2());
+        for (int xi = 0; xi<nxin; xi++)
+        for (int fo = 0; fo<13; fo++)
+        for (int fi = 0; fi<13; fi++)
+        {
+          for (int xo = 0; xo<igrid->Ny1(); xo++)
+            fB1(xo,xi,fo,fi) = QCD::bvals(igrid->fx(igrid->gety1(xo)), xi, fo, fi);
+          for (int xo = 0; xo<igrid->Ny2(); xo++)
+            fB2(xo,xi,fo,fi) = QCD::bvals(igrid->fx(igrid->gety2(xo)), xi, fo, fi);
+        }
+
         for (int t=0; t<igrid->Ntau(); t++) 
         {
           const double Q2  = igrid->fQ2( igrid->gettau(t));

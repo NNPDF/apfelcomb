@@ -352,11 +352,11 @@ namespace QCD
     return;
   }
 
-  double bvals(int const& xo, int const& xi, int const& fo, int const& fi)
+  double bvals(double const& xo, int const& xi, int const& fo, int const& fi)
   {
     const int pt = 0;
     const int nf = 5;
-    return APFEL::ExternalSplittingFunctions(std::string("Ph2Ph"),pt,nf,fo-6,fi-6,APFEL::xGrid(xo),xi);
+    return APFEL::ExternalSplittingFunctions(std::string("Ph2Ph"),pt,nf,fo-6,fi-6,xo,xi);
   }
 
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta)
