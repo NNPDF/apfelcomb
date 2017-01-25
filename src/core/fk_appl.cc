@@ -254,23 +254,54 @@ namespace APP
     return appl::appl_pdf::getpdf( pdfvec[isubproc] );
   }
 
-  // Returns the minimum and maxiumum x-grid points for a specified subgrid slice.
+  // Returns the minimum and maximum x-grid points for a specified subgrid slice.
   // igrid is the requested subgrid, nsubproc the number of subprocesses held within igrid.
   // tau specified the bin in scale to be investigated, and alpha specifies the bin in x1.
-  // nxlow and nxhigh return the minumum and maxiumum bins in x2 respectively.
-  void get_igrid_limits(appl::igrid const* igrid, int const& nsubproc, int const& tau, int const& alpha, int& nxlow, int& nxhigh)
+  // return.first and return.second return the minumum and maxiumum bins in x2 respectively.
+  std::pair<int,int> get_slice_limits(appl::igrid const* igrid, int const& nsubproc, int const& tau, int const& alpha)
   {
+    std::pair<int,int> limits(igrid->Ny2(), 0);
+
     // Need to remove const due to APPLgrid non-const methods
     appl::igrid* igrid_nc = const_cast<appl::igrid*>(igrid);
-    nxlow=igrid->Ny2(); nxhigh=0;
     tsparse1d<double> *ts1;
     for (int tsp=0; tsp<nsubproc; tsp++)
       if ((*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))[tau] != NULL)
         if (( ts1 = (*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))[tau]->trimmed(alpha) ) != NULL)
         {                
-          nxlow  = std::min(ts1->lo(), nxlow);
-          nxhigh = std::max(ts1->hi(), nxhigh);
+          limits.first  = std::min(ts1->lo(), limits.first);
+          limits.second = std::max(ts1->hi(), limits.second);
         }
+    return limits;
+  }
+
+  // Returns the minimum and maximum used values of x1
+  std::pair<int,int> get_igrid_limits_x1(appl::igrid const* igrid, int const& nsubproc, int const& tau)
+  {
+    std::pair<int,int> limits(igrid->Ny1(), 0);
+    for (int alpha = 0; alpha < igrid->Ny1(); alpha++)
+    { 
+      const std::pair<int,int> sl = get_slice_limits(igrid, nsubproc, tau, alpha);  
+      if (sl.first <= sl.second) // This alpha is not trimmed  
+      {
+        limits.first  = std::min(alpha, limits.first);
+        limits.second = std::max(alpha, limits.second);
+      }
+    }
+    return limits;
+  }
+
+  // Returns the minimum and maximum used values of x2
+  std::pair<int,int> get_igrid_limits_x2(appl::igrid const* igrid, int const& nsubproc, int const& tau)
+  {
+    std::pair<int,int> limits(igrid->Ny2(), 0);
+    for (int alpha = 0; alpha < igrid->Ny1(); alpha++)
+    {
+      const std::pair<int,int> sl = get_slice_limits(igrid, nsubproc, tau, alpha);  
+      limits.first  = std::min(sl.first, limits.first);
+      limits.second = std::max(sl.second, limits.second);
+    }   
+    return limits;
   }
 
   // Computes the normalisation required for translating APPLgrid weights to FK ones
@@ -318,8 +349,8 @@ namespace APP
         for (int t=0; t<igrid->Ntau(); t++)     // Loop over scale bins
           for (int a=0; a<igrid->Ny1(); a++  )  // Loop over x1 bins
           {
-            int nxlow, nxhigh; get_igrid_limits(igrid, nsubproc, t, a, nxlow, nxhigh);
-            nElm += std::max(0,nxhigh - nxlow + 1);
+            const std::pair<int,int> sl = get_slice_limits(igrid, nsubproc, t, a);  
+            nElm += std::max(0, sl.second - sl.first + 1);
           }        
       }
     return nElm;
@@ -380,7 +411,6 @@ namespace APP
     EvolutionFactors fA2(nxin);
 
     // Evolution factor derivatives
-    const double xmin_total = getXmin(g, true);
     EvolutionFactors fdA1(nxin);
     EvolutionFactors fdA2(nxin);
 
@@ -413,18 +443,15 @@ namespace APP
           for (int a=0; a<igrid->Ny1(); a++  )
           {
             const double x1 = igrid->fx(igrid->gety1(a));           
-            int nxlow, nxhigh; get_igrid_limits(igrid, nsubproc, t, a, nxlow, nxhigh);
+            const std::pair<int,int> limits = get_slice_limits(igrid, nsubproc, t, a);  
 
             // Compute nonzero evolution factors
-            if (nxlow <= nxhigh) 
+            if (limits.first <= limits.second) 
               for (size_t ix = 0; ix < nxin; ix++)
                 for (size_t fl = 0; fl < 14; fl++)
-                {
                   QCD::avals(ix,x1,fl,QF,fA1(ix,fl));
-                  QCD::davals(ix,x1,fl,QF,fdA1(ix,fl));
-                }
             
-            for (int b=nxlow; b<=nxhigh; b++) // Loop over applgrid x2
+            for (int b=limits.first; b<=limits.second; b++) // Loop over applgrid x2
             {
               // Second x values
               const double x2 = igrid->fx(igrid->gety2(b));
@@ -449,10 +476,7 @@ namespace APP
                     if (par.ppbar == true)
                       QCD::avals_pbar(ix,x2,fl,QF,fA2(ix,fl));
                     else
-                    {
                       QCD::avals(ix,x2,fl,QF,fA2(ix,fl));
-                      QCD::davals(ix,x2,fl,QF,fdA2(ix,fl));
-                    }
                   }
                 
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
