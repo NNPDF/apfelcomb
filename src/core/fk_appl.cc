@@ -518,7 +518,7 @@ namespace APP
                             if (H[ip] != 0)
                               fk->Fill( d, i, j, k, l, norm*(1.0+renscale)*W[ip]*H[ip] );
                             if (vary_fac && ( H1[ip] != 0 || H2[ip] != 0 ))
-                              fk->Fill( d, i, j, k, l, norm*facscale*W[ip]*(H1[ip] + H2[ip]));
+                              fk->Fill( d, i, j, k, l, 0.5*norm*facscale*W[ip]*(H1[ip] + H2[ip])); // I DONT KNOW WHY WE NEED THE 0.5 HERE!
                           }
 
                       }
