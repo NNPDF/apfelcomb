@@ -206,7 +206,6 @@ namespace APP
                 {
                   // Associated weight
                   const bool zero_weight = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,ix1,ix2) == 0;
-
                   if (!zero_weight || !nonzero) 
                   {
                     xmin = min(xmin, igrid->fx(igrid->gety1(ix1)));
@@ -329,17 +328,7 @@ namespace APP
     return norm;
   }
 
-  // Computes the normalisation required in the case of varying renormalisation scales,
-  // This normalisation multiplies the leading-order weights, along with the overall
-  // normalisation described above
-  double compute_wgt_renscale(appl::grid *g, appl_param const& par, int const& d, double const& pto, double const& as, double const& x1, double const& x2)
-  {
-    const double LO = g->leadingOrder();
-    const double pas = as/(2.0*M_PI);
-    return pas*2.0*M_PI*QCD::beta0()*LO*log(par.xiR*par.xiR);
-  }
-
-  // Progress update ****************************************************
+   // Progress update ****************************************************
 
   int countElements(appl_param const& par, appl::grid* g)
   {
@@ -391,20 +380,23 @@ namespace APP
   class EvolutionFactors
   {
   public:
-    EvolutionFactors(const int _nxin, const int _nxout):
-    nxin(_nxin),
-    nxout(_nxout),
-    data(new double[nxout*nxin*13*14]) 
+    EvolutionFactors(const int nxin, const int nxout):
+    b1(13),
+    b2(13*14),
+    b3(13*14*nxin),
+    data(new double[nxout*b3]) 
     {
-      for (int i=0; i<nxout*nxin*13*14; i++)
+      for (int i=0; i<nxout*b3; i++)
         data[i] = 0;
     };
     ~EvolutionFactors() {delete[] data;};
 
-    double* operator()(int const& ox, int const& ix, int const& fi ) {return data+13*14*nxin*ox+13*14*ix+13*fi;};
+    double* operator()(int const& ox, int const& ix, int const& fi ) {return data+b3*ox+b2*ix+b1*fi;};
+    const double* operator()(int const& ox, int const& ix, int const& fi ) const {return data+b3*ox+b2*ix+b1*fi;};
   private:
-    const int nxin;
-    const int nxout;
+    const int b1;
+    const int b2;
+    const int b3;
     double* data;
   };
 
@@ -415,10 +407,7 @@ namespace APP
     // Progress monitoring
     int completedElements = 0;
     const int nXelements = countElements(par, g);
-
-    // Begin progress timer
-    timeval t1;
-    gettimeofday(&t1, NULL);
+    timeval t1; gettimeofday(&t1, NULL);
    
     for (size_t d=0; d<fk->GetNData(); d++)
     {    
@@ -432,28 +421,31 @@ namespace APP
         const size_t nsubproc = g->subProcesses(gidx);
         double *W = new double[nsubproc];   // Weight array
         double *H = new double[nsubproc];   // Evolution factor array
-        double *H1 = new double[nsubproc]; // Split evolution factor array 1
-        double *H2 = new double[nsubproc]; // Split evolution factor array 2
+        double *H1 = new double[nsubproc];  // Split evolution factor array 1
+        double *H2 = new double[nsubproc];  // Split evolution factor array 2
 
-        // Renormalisation and factorisation scale variation terms
-        const bool vary_ren = pto == 0 && par.evol_pto == 1 && par.xiR != 1.0;
-        const bool vary_fac = pto == 0 && par.evol_pto == 1 && par.xiF != 1.0;
-        
         // Fetch grid pointer and loop over Q
         appl::igrid const *igrid = g->weightgrid(gidx, bin);
         for (int t=0; t<igrid->Ntau(); t++) 
         {
+          // Scales and strong coupling
           const double Q2  = igrid->fQ2( igrid->gettau(t));
           const double QF  = sqrt(Q2)*par.xiF;
           const double QR  = sqrt(Q2)*par.xiR;
           const double as  = QCD::alphas(QR);
 
+          // Renormalisation and factorisation scale variation terms
+          const bool vary_ren = pto == 0 && par.evol_pto == 1 && par.xiR != 1.0;
+          const bool vary_fac = pto == 0 && par.evol_pto == 1 && par.xiF != 1.0;
+          const double renscale = (as/(2.0*M_PI))*2.0*M_PI*QCD::beta0()*g->leadingOrder()*log(par.xiR*par.xiR);
+          const double facscale = -(as/(2.0*M_PI))*log(par.xiF*par.xiF);
+
           // define evolution factor arrays
           const int nxin = fk->GetNx();
-          EvolutionFactors fA1(nxin, igrid->Ny1());
-          EvolutionFactors fA2(nxin, igrid->Ny2());
-          EvolutionFactors fdA1(nxin, igrid->Ny1());
-          EvolutionFactors fdA2(nxin, igrid->Ny2());   
+          EvolutionFactors fA1(nxin, igrid->Ny1());   // PDF 1 Evolution factors
+          EvolutionFactors fA2(nxin, igrid->Ny2());   // PDF 2 Evolution factors
+          EvolutionFactors fdA1(nxin, igrid->Ny1());  // PDF 1 Splitting function x Evolution factors
+          EvolutionFactors fdA2(nxin, igrid->Ny2());  // PDF 2 Splitting function x Evolution factors
 
           // Compute nonzero evolution factors
           const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
@@ -490,13 +482,11 @@ namespace APP
               // If nonzero, perform combination
               if (nonzero)
               {
-                // Calculate normalisation factor
+                // Calculate normalisation factors
                 const double x1 = igrid->fx(igrid->gety1(a));           
                 const double x2 = igrid->fx(igrid->gety2(b));
-                const double pdfnrm =  par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
+                const double pdfnrm = par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
                 const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2);
-                const double renscale = vary_ren ? compute_wgt_renscale(g, par, bin, pto+par.ptmin, as, x1, x2):0;
-                const double facscale = vary_fac ? -(as/(2.0*M_PI))*log(par.xiF*par.xiF):0;
 
                 for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
                   for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
@@ -515,10 +505,11 @@ namespace APP
                         for (size_t ip=0; ip<nsubproc; ip++)
                           if (W[ip] != 0)
                           {
-                            if (H[ip] != 0)
-                              fk->Fill( d, i, j, k, l, norm*(1.0+renscale)*W[ip]*H[ip] );
-                            if (vary_fac && ( H1[ip] != 0 || H2[ip] != 0 ))
-                              fk->Fill( d, i, j, k, l, 0.5*norm*facscale*W[ip]*(H1[ip] + H2[ip])); // I DONT KNOW WHY WE NEED THE 0.5 HERE!
+                            double fill = H[ip];                              // Basic fill
+                            if (vary_ren) fill += renscale*H[ip];             // Ren. scale variation
+                            if (vary_fac) fill += facscale*(H1[ip] + H2[ip]); // Fac. scale variation
+                            if ( fill != 0.0 )
+                              fk->Fill( d, i, j, k, l, norm*fill*W[ip]);
                           }
 
                       }

@@ -352,23 +352,23 @@ namespace QCD
     return;
   }
 
-  double bvals(double const& xo, int const& xi, int const& fo, int const& fi)
+  // Split A values
+  void davals(const int& beta, const double& alpha, const int& j, const double& Q, double* da)
   {
     const int pt = 0;
     const int nf = 5;
-    return APFEL::ExternalSplittingFunctions(std::string("Ev2Ph"),pt,nf,fo-6,fi,xo,xi);
-  }
-
-  // Split A values
-  void davals(const int& beta, const double& alpha, const int& j, const double& Q, double* a)
-  {
     updateEvol(Q);
+    
     for(int i=0; i<13; i++)
     {
-      a[i] = 0;
+      da[i] = 0;
       for(int k=0; k<13; k++)
         for(int g=0; g<APFEL::nIntervals(); g++)
-          a[i] += bvals(alpha, g, i, k)*APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,APFEL::xGrid(g),beta);
+        {
+          const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,APFEL::xGrid(g),beta);
+          const double B = 0.5*APFEL::ExternalSplittingFunctions(std::string("Ev2Ph"),pt,nf,i-6,k,alpha,g); // 0.5 for APFEL->APPLgrid alpha_S expansion
+          da[i] += B*A;
+        }
     }
   }
 
