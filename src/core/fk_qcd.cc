@@ -360,15 +360,18 @@ namespace QCD
     updateEvol(Q);
     
     for(int i=0; i<13; i++)
-    {
       da[i] = 0;
-      for(int k=0; k<13; k++)
-        for(int g=0; g<APFEL::nIntervals(); g++)
-        {
-          const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,APFEL::xGrid(g),beta);
-          const double B = 0.5*APFEL::ExternalSplittingFunctions(std::string("Ev2Ph"),pt,nf,i-6,k,alpha,g); // 0.5 for APFEL->APPLgrid alpha_S expansion
-          da[i] += B*A;
-        }
+
+    for(int g=0; g<APFEL::nIntervals(); g++)
+    {
+      APFEL::ComputeExternalSplittingFunctions("Ev2Ph", pt, nf, alpha, g);
+      for(int i=0; i<13; i++)
+        for(int k=0; k<13; k++)
+          {
+            const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,APFEL::xGrid(g),beta);
+            const double B = 0.5*APFEL::ExternalSplittingFunctions(i-6,k); // 0.5 for APFEL->APPLgrid alpha_S expansion
+            da[i] += B*A;
+          }
     }
   }
 
