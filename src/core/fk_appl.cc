@@ -437,7 +437,7 @@ namespace APP
           // Renormalisation and factorisation scale variation terms
           const bool vary_ren = pto == 0 && par.evol_pto == 1 && par.xiR != 1.0;
           const bool vary_fac = pto == 0 && par.evol_pto == 1 && par.xiF != 1.0;
-          const double renscale = (as/(2.0*M_PI))*2.0*M_PI*QCD::beta0()*g->leadingOrder()*log(par.xiR*par.xiR);
+          const double renscale =  (as/(2.0*M_PI))*2.0*M_PI*QCD::beta0()*g->leadingOrder()*log(par.xiR*par.xiR);
           const double facscale = -(as/(2.0*M_PI))*log(par.xiF*par.xiF);
 
           // define evolution factor arrays
@@ -450,23 +450,24 @@ namespace APP
           // Compute nonzero evolution factors
           const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
           const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
+          for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
           for (size_t ix = 0; ix < nxin; ix++)
-            for (size_t fl = 0; fl < 14; fl++)
-            {
-              for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
-              {
-                QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
-                if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
-              }
-              for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
-                if (par.ppbar == true)
-                  QCD::avals_pbar(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-                else
-                {
-                  QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-                  if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
-                }
-            }
+          for (size_t fl = 0; fl < 14; fl++)
+          {
+            QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+            if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+          }
+
+          for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
+          for (size_t ix = 0; ix < nxin; ix++)
+          for (size_t fl = 0; fl < 14; fl++)
+          if (par.ppbar == true)
+            QCD::avals_pbar(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+          else
+          {
+            QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+            if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
+          }
 
           for (int a=0; a<igrid->Ny1(); a++  )
           {

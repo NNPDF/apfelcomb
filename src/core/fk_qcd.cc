@@ -365,13 +365,13 @@ namespace QCD
     for(int g=0; g<APFEL::nIntervals(); g++)
     {
       APFEL::ComputeExternalSplittingFunctions("Ev2Ph", pt, nf, alpha, g);
-      for(int i=0; i<13; i++)
+      const double xdum = APFEL::xGrid(g);
         for(int k=0; k<13; k++)
-          {
-            const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,APFEL::xGrid(g),beta);
-            const double B = 0.5*APFEL::ExternalSplittingFunctions(i-6,k); // 0.5 for APFEL->APPLgrid alpha_S expansion
-            da[i] += B*A;
-          }
+        {
+          const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,xdum,beta);
+          for(int i=0; i<13; i++)
+            da[i] += 0.5*APFEL::ExternalSplittingFunctions(i-6,k)*A;  // 0.5 due to APFEL expansion parameter
+        }
     }
   }
 
