@@ -450,71 +450,65 @@ namespace APP
           // Compute nonzero evolution factors
           const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
           const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
-          for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
+
           for (size_t ix = 0; ix < nxin; ix++)
           for (size_t fl = 0; fl < 14; fl++)
           {
-            QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
-            if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+            for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
+            {
+              QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+              if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+            }
+            for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
+            if (par.ppbar == true)
+              QCD::avals_pbar(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+            else
+            {
+              QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+              if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
+            }
           }
 
-          for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
-          for (size_t ix = 0; ix < nxin; ix++)
-          for (size_t fl = 0; fl < 14; fl++)
-          if (par.ppbar == true)
-            QCD::avals_pbar(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-          else
+          for (int a=l1.first; a<l1.second; a++ )
           {
-            QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-            if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
-          }
-
-          for (int a=0; a<igrid->Ny1(); a++  )
-          {
+            const double x1 = igrid->fx(igrid->gety1(a));           
             const std::pair<int,int> limits = get_slice_limits(igrid, nsubproc, t, a);  
             for (int b=limits.first; b<=limits.second; b++) // Loop over applgrid x2
             {
               // fetch weight values
-              bool nonzero=false;
               for (size_t ip=0; ip<nsubproc; ip++)
-                if (( W[ip] = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,a,b) )!=0)
-                  nonzero=true;
+                W[ip] = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,a,b);
               
-              // If nonzero, perform combination
-              if (nonzero)
-              {
-                // Calculate normalisation factors
-                const double x1 = igrid->fx(igrid->gety1(a));           
-                const double x2 = igrid->fx(igrid->gety2(b));
-                const double pdfnrm = par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
-                const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2);
+              // Calculate normalisation factors
+              const double x2 = igrid->fx(igrid->gety2(b));
+              const double pdfnrm = par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
+              const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2);
 
-                for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
-                  for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
-                    for (size_t k=0; k<14; k++)         // loop over flavour 1
-                      for (size_t l=0; l<14; l++)       // loop over flavour 2
+              for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
+                for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
+                  for (size_t k=0; k<14; k++)         // loop over flavour 1
+                    for (size_t l=0; l<14; l++)       // loop over flavour 2
+                    {
+                      // Rotate to subprocess basis
+                      genpdf->evaluate(fA1(a,i,k),fA2(b,j,l),H);
+
+                      if (vary_fac)
                       {
-                        // Rotate to subprocess basis
-                        genpdf->evaluate(fA1(a,i,k),fA2(b,j,l),H);
+                        genpdf->evaluate(fdA1(a,i,k),fA2(b,j,l),H1);
+                        genpdf->evaluate(fA1(a,i,k),fdA2(b,j,l),H2);
+                      }
 
-                        if (vary_fac)
+                      for (size_t ip=0; ip<nsubproc; ip++)
+                        if (W[ip] != 0)
                         {
-                          genpdf->evaluate(fdA1(a,i,k),fA2(b,j,l),H1);
-                          genpdf->evaluate(fA1(a,i,k),fdA2(b,j,l),H2);
+                          double fill = H[ip];                              // Basic fill
+                          if (vary_ren) fill += renscale*H[ip];             // Ren. scale variation
+                          if (vary_fac) fill += facscale*(H1[ip] + H2[ip]); // Fac. scale variation
+                          if ( fill != 0.0 )
+                            fk->Fill( d, i, j, k, l, norm*fill*W[ip]);
                         }
 
-                        for (size_t ip=0; ip<nsubproc; ip++)
-                          if (W[ip] != 0)
-                          {
-                            double fill = H[ip];                              // Basic fill
-                            if (vary_ren) fill += renscale*H[ip];             // Ren. scale variation
-                            if (vary_fac) fill += facscale*(H1[ip] + H2[ip]); // Fac. scale variation
-                            if ( fill != 0.0 )
-                              fk->Fill( d, i, j, k, l, norm*fill*W[ip]);
-                          }
-
-                      }
-              }
+                    }
 
               // Update progress
               statusUpdate(t1, nXelements, completedElements);
