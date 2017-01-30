@@ -19,6 +19,7 @@
 #include "NNPDF/nnpdfdb.h"
 
 #include <limits>
+#include <string>
 
 using NNPDF::FKHeader;
 
@@ -63,6 +64,24 @@ namespace QCD
       for (int j=0; j<14; j++)
         EVLN[i] += RLHA2EVLN[i][j]*LHA[j];
     }
+  }
+
+
+  // Returns a list of active flavours in the APFEL evolution basis, for a given initial scale
+  //  γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
+  vector<size_t> active_flavours(qcd_param const& param)
+  {
+    vector<size_t> afl = {1,2,3,4,5,9,10};
+    if (stoi((*param.thMap.find("QED")).second) == 1) afl.push_back(0); // γ
+
+    if (param.Q0 > APFEL::GetThreshold(4)) afl.push_back(6); // V15
+    if (param.Q0 > APFEL::GetThreshold(5)) afl.push_back(7); // V24
+    if (param.Q0 > APFEL::GetThreshold(6)) afl.push_back(8); // V35
+
+    if (param.Q0 > APFEL::GetThreshold(4)) afl.push_back(11); // V15
+    if (param.Q0 > APFEL::GetThreshold(5)) afl.push_back(12); // V24
+    if (param.Q0 > APFEL::GetThreshold(6)) afl.push_back(13); // V35   
+    return afl;
   }
 
   // *********************** FKGenerator Parameters *************************

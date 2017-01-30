@@ -95,6 +95,7 @@ namespace QCD
   // Parse theory input
   void parse_input( int innum, qcd_param&  param);
   void set_params(qcd_param const& par, NNPDF::FKHeader& FK);
+  vector<size_t> active_flavours(qcd_param const& param);
 
   // ***************************************************************
   

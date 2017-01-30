@@ -408,6 +408,9 @@ namespace APP
     int completedElements = 0;
     const int nXelements = countElements(par, g);
     timeval t1; gettimeofday(&t1, NULL);
+
+    const vector<size_t> afl = QCD::active_flavours(par);
+    std::cout << "APFELcomb: "<<afl.size() <<" active flavours in evolution." <<std::endl;
    
     for (size_t d=0; d<fk->GetNData(); d++)
     {    
@@ -452,7 +455,7 @@ namespace APP
           const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
 
           for (size_t ix = 0; ix < nxin; ix++)
-          for (size_t fl = 0; fl < 14; fl++)
+          for (auto fl : afl)
           {
             for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
             {
@@ -486,8 +489,8 @@ namespace APP
 
               for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
                 for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
-                  for (size_t k=0; k<14; k++)         // loop over flavour 1
-                    for (size_t l=0; l<14; l++)       // loop over flavour 2
+                  for (auto k : afl)         // loop over flavour 1
+                    for (auto l : afl)       // loop over flavour 2
                     {
                       // Rotate to subprocess basis
                       genpdf->evaluate(fA1(a,i,k),fA2(b,j,l),H);
