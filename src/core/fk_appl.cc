@@ -6,13 +6,17 @@
 #include "apfelcomb/fk_qcd.h"
 #include "apfelcomb/fk_utils.h"
 
-#include <sys/time.h>
-
 #include <NNPDF/common.h>
 #include "NNPDF/nnpdfdb.h"
 
+#include <chrono>
+#include <ctime>
+
 using namespace std;
 using NNPDF::FKHeader;
+
+typedef std::chrono::time_point<std::chrono::system_clock> time_point;
+typedef std::chrono::system_clock::duration time_span;
 
 namespace APP
 {
@@ -350,7 +354,7 @@ namespace APP
     return nElm;
   } 
 
-  void statusUpdate(timeval const& t1, int const& totElements, int& compElements)
+  void statusUpdate( time_point const& t1, int const& totElements, int& compElements)
   {
     // Increment computed elements
     compElements++;
@@ -359,17 +363,14 @@ namespace APP
     if (compElements % interval == 0)
     {
       // Elapsed time update
-      timeval t2; gettimeofday(&t2, NULL);
-      double elapsedTime = (t2.tv_sec - t1.tv_sec); 
-      elapsedTime += (t2.tv_usec - t1.tv_usec) / 1E6f; 
-
-      // Percentage complete, ETA
+      const time_point t2 = std::chrono::system_clock::now();
       const double percomp= 100.0*((double)compElements/(double)totElements);
-      const double eta = ( elapsedTime / percomp ) * ( 100.0 - percomp );
+      const time_point t3 = t1 + std::chrono::duration_cast<time_span>( (t2-t1) * ( 100.0 / percomp - 1.0 ));
+      const std::time_t end_time = std::chrono::system_clock::to_time_t(t3);
 
-      cout << "-- "<< setw(6) << setprecision(4)  << percomp << "\% complete."
-           << " T Elapsed: "  << setw(6)<<setprecision(4) << elapsedTime/60.0 
-           << " min. ETA: "   << setw(6)<<setprecision(4) << eta/60.0<<" min.\r";
+      char eta[80]; strftime (eta,80,"ETA: %R %x.", localtime(&end_time));
+      cout << "-- "<< setw(6) << setprecision(4)  << percomp << "\% complete. "
+           << eta <<"\r";
       cout.flush();
     }
   }
@@ -407,7 +408,7 @@ namespace APP
     // Progress monitoring
     int completedElements = 0;
     const int nXelements = countElements(par, g);
-    timeval t1; gettimeofday(&t1, NULL);
+    const time_point t1 = std::chrono::system_clock::now();
 
     const vector<size_t> afl = QCD::active_flavours(par);
     std::cout << "APFELcomb: "<<afl.size() <<" active flavours in evolution." <<std::endl;

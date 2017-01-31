@@ -367,7 +367,7 @@ namespace QCD
   {
     updateEvol(Q);
     for(int i=0; i<13; i++)
-      a[-1*(i-6) + 6] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
+      a[12-i] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
     return;
   }
 
