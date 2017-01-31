@@ -15,9 +15,6 @@
 using namespace std;
 using NNPDF::FKHeader;
 
-typedef std::chrono::time_point<std::chrono::system_clock> time_point;
-typedef std::chrono::system_clock::duration time_span;
-
 namespace APP
 {
 
@@ -171,6 +168,7 @@ namespace APP
       FK.AddTag(FKHeader::GRIDINFO, "SETNAME", par.setname);
       FK.AddTag(FKHeader::GRIDINFO, "NDATA", par.ndata);
       FK.AddTag(FKHeader::GRIDINFO, "HADRONIC", true);
+      FK.AddTag(FKHeader::VERSIONS, "APPLrepo", applCommit() );
 
       // Full flavourmap
       stringstream fMapHeader;
@@ -358,14 +356,13 @@ namespace APP
   {
     // Increment computed elements
     compElements++;
-
     const int interval = compElements< 100 ? 5:10;
     if (compElements % interval == 0)
     {
       // Elapsed time update
       const time_point t2 = std::chrono::system_clock::now();
       const double percomp= 100.0*((double)compElements/(double)totElements);
-      const time_point t3 = t1 + std::chrono::duration_cast<time_span>( (t2-t1) * ( 100.0 / percomp - 1.0 ));
+      const time_point t3 = t2 + std::chrono::duration_cast<time_span>( (t2-t1) * ( 100.0 / percomp - 1.0 ));
       const std::time_t end_time = std::chrono::system_clock::to_time_t(t3);
 
       char eta[80]; strftime (eta,80,"ETA: %R %x.", localtime(&end_time));
@@ -456,20 +453,17 @@ namespace APP
           const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
 
           for (size_t ix = 0; ix < nxin; ix++)
-          for (auto fl : afl)
+          for (size_t fl : afl)
           {
             for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
             {
-              QCD::avals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
-              if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+              QCD::avals(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+              if (vary_fac) QCD::davals(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
             }
             for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
-            if (par.ppbar == true)
-              QCD::avals_pbar(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-            else
             {
-              QCD::avals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-              if (vary_fac) QCD::davals(ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
+              QCD::avals(par.ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+              if (vary_fac) QCD::davals(par.ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
             }
           }
 
@@ -490,8 +484,8 @@ namespace APP
 
               for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
                 for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
-                  for (auto k : afl)         // loop over flavour 1
-                    for (auto l : afl)       // loop over flavour 2
+                  for (size_t k : afl)         // loop over flavour 1
+                    for (size_t l : afl)       // loop over flavour 2
                     {
                       // Rotate to subprocess basis
                       genpdf->evaluate(fA1(a,i,k),fA2(b,j,l),H);
@@ -511,7 +505,6 @@ namespace APP
                           if ( fill != 0.0 )
                             fk->Fill( d, i, j, k, l, norm*fill*W[ip]);
                         }
-
                     }
 
               // Update progress

@@ -114,10 +114,8 @@ namespace QCD
   double beta0();
   
   // APFEL FK functions
-  void avals(const int& xi, const double& xo, const int& fi, const double& Q, double*);
-  void avals_pbar(const int& xi, const double& xo, const int& fi, const double& Q, double*);
-
-  void davals(const int& beta, const double& alpha, const int& j, const double& Q, double* a);
+  void avals(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double*);
+  void davals(const bool& ppbar, const int& beta, const double& alpha, const int& j, const double& Q, double* a);
 
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta);
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y);

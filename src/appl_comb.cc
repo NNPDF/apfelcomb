@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
   APP::appl_param par;
   QCD::parse_input(iTh, par);
   APP::parse_input(iDB, par);
+  std::cout << "APPLgrid repository version: "<< applCommit() <<std::endl;
 
   // Setup directory
   setupDir(iTh, par.setname, par.inventory);
@@ -74,10 +75,13 @@ int main(int argc, char* argv[]) {
   DisplayHR();
   cout << "  --  High accuracy APPLgrid Result "<<endl;
   
+  if (par.ppbar == true && par.xiF != 1)
+    std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
+
   // Compute with applgrid interface
   const int pto = (par.ptmin == 1) ? -1:(par.pto-1);
   vector<double> xsec;
-  if (par.ppbar == true)
+  if (par.ppbar == true && par.xiF == 1)
     xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
   else
     xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
@@ -121,7 +125,8 @@ int main(int argc, char* argv[]) {
     if (rel_err > par.maxprec)
     {
       cerr << "Error: FK Table Verification failed, maxPrec: "<<par.maxprec<<endl;
-      exit(1);
+      if (par.ppbar != true || par.xiF == 1)
+        exit(1);  // Sidestep verification when you can't check against APPLgrid
     }
   }
 

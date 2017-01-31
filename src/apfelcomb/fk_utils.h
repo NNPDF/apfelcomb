@@ -14,6 +14,8 @@
 #include <string>
 #include <cstdlib>
 
+typedef std::chrono::time_point<std::chrono::system_clock> time_point;
+typedef std::chrono::system_clock::duration time_span;
 
 #ifndef RESULTS_PATH
 #define RESULTS_PATH run/
@@ -65,6 +67,8 @@ std::string applPath();
 std::string dataPath();
 std::string resultsPath();
 std::string databasePath();
+
+std::string applCommit();
 
 vector<double> dsplit(string input);
 vector<string> ssplit(string input);

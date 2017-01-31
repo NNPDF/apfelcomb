@@ -161,6 +161,10 @@ namespace QCD
     std::map<std::string, std::string>::const_iterator imap;
     for (imap = par.thMap.begin(); imap != par.thMap.end(); imap++)
       FK.AddTag(FKHeader::THEORYINFO, imap->first, imap->second);
+
+    const time_point st = std::chrono::system_clock::now();
+    const std::time_t start_time = std::chrono::system_clock::to_time_t(st);
+    FK.AddTag(FKHeader::VERSIONS, "GenTime", ctime(&start_time));
   }
   
   // *********************** EVOLUTON FUNCTIONS *****************************
@@ -355,24 +359,16 @@ namespace QCD
   }
   
   // Evaluate A values
-  void avals(const int& xi, const double& xo, const int& fi, const double& Q, double* a)
+  void avals(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* a)
   {
     updateEvol(Q);
     for(int i=0; i<13; i++)
-      a[i] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
-    return;
-  }
-  // Evaluate A values -ppbar
-  void avals_pbar(const int& xi, const double& xo, const int& fi, const double& Q, double* a)
-  {
-    updateEvol(Q);
-    for(int i=0; i<13; i++)
-      a[12-i] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
+      a[ppbar ? 12-i:i] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
     return;
   }
 
   // Split A values
-  void davals(const int& beta, const double& alpha, const int& j, const double& Q, double* da)
+  void davals(const bool& ppbar, const int& beta, const double& alpha, const int& j, const double& Q, double* da)
   {
     const int pt = 0;
     const int nf = 5;
@@ -389,7 +385,7 @@ namespace QCD
         {
           const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,xdum,beta);
           for(int i=0; i<13; i++)
-            da[i] += 0.5*APFEL::ExternalSplittingFunctions(i-6,k)*A;  // 0.5 due to APFEL expansion parameter
+            da[ppbar ? 12-i:i] += 0.5*APFEL::ExternalSplittingFunctions(i-6,k)*A;  // 0.5 due to APFEL expansion parameter
         }
     }
   }
