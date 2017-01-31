@@ -74,13 +74,13 @@ namespace QCD
     vector<size_t> afl = {1,2,3,4,5,9,10};
     if (stoi((*param.thMap.find("QED")).second) == 1) afl.push_back(0); // γ
 
-    if (param.Q0 > APFEL::GetThreshold(4)) afl.push_back(6); // V15
-    if (param.Q0 > APFEL::GetThreshold(5)) afl.push_back(7); // V24
-    if (param.Q0 > APFEL::GetThreshold(6)) afl.push_back(8); // V35
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(4)) afl.push_back(6); // V15
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(5)) afl.push_back(7); // V24
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(6)) afl.push_back(8); // V35
 
-    if (param.Q0 > APFEL::GetThreshold(4)) afl.push_back(11); // V15
-    if (param.Q0 > APFEL::GetThreshold(5)) afl.push_back(12); // V24
-    if (param.Q0 > APFEL::GetThreshold(6)) afl.push_back(13); // V35   
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(4)) afl.push_back(11); // V15
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(5)) afl.push_back(12); // V24
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(6)) afl.push_back(13); // V35   
     return afl;
   }
 
