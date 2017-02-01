@@ -124,9 +124,6 @@ void setupDir(int const& theoryID, std::string const& setname, vector<std::strin
     std::ifstream  src(source.c_str(), std::ios::binary);
     std::ofstream  dst(dest.c_str(),   std::ios::binary);
     dst << src.rdbuf(); chmod( dest.c_str() , imode);
-  } else
-  {
-    std::cout <<  "Warning: no genFK script found at " <<source.c_str()<<std::endl;
   }
 
   // Write set inventory to file
