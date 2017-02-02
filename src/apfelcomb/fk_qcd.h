@@ -25,14 +25,17 @@ namespace QCD
   // ***************************************************************
   // ********************* BASIS ROTATION **************************
 
-   // APFELCOMB basis is the same as the APFEL basis
+  // APFELCOMB basis is the same as the APFEL basis
 
-     // Evolution basis
+  // Evolution basis
   //  γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
 
-     // Flavour basis
-  //  γ, TB, BB, CB, UB, DB, G, D, U, C, B, T
-  
+  // Flavour basis (-7 to 6)
+  //  γ, TB, BB, CB, SB, UB, DB, G, D, U, S, C, B, T
+
+  // APPLgrid basis (0 to 12)
+  //  TB, BB, CB, SB, UB, DB, G, D, U, S, C, B, T
+
   // Rotation matrix from LHA to EVLN
   static const double REVLN2LHA[14][14] = {
     { 1,  0,       0,        0,       0,        0,          0,         0,         0,       0,       0,         0,         0, 0       },
@@ -113,9 +116,9 @@ namespace QCD
   double alphas(const double& Q);
   double beta0();
   
-  // APFEL FK functions
-  void avals(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double*);
-  void davals(const bool& ppbar, const int& beta, const double& alpha, const int& j, const double& Q, double* a);
+  // PDF Operators
+  void EvolutionOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double*);
+  void DerivativeOperator(const bool& ppbar, const int& beta, const double& alpha, const int& j, const double& Q, double* a);
 
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta);
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y);

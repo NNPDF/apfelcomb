@@ -265,7 +265,7 @@ namespace QCD
     APFEL::EnableEvolutionOperator(true); // Enable the computation of the Evolution Operator
     APFEL::SetNumberOfGrids(1);           // The evolution will be done on a number of subgrids defined here
     APFEL::SetExternalGrid(1,nx,5,xg);    // Set the grid as external (np: number of intervals, 3: interpolation degree, xg: defined above)
-    
+
     // Initialise
     APFEL::EnableWelcomeMessage(false);
 
@@ -358,8 +358,18 @@ namespace QCD
     return beta0;
   }
   
-  // Evaluate A values
-  void avals(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* a)
+  // PDF evolution+rotation operator
+  // This functions computes the operators A such that
+  // PDF(fo,xo,Q) = \sum_xi,fi A(fo,fi,xo,xi)*N(fi,xi,Q_0)
+  // where N is the initial scale APFEL evolution basis PDF and PDF is in the APPLgrid physical basis.
+  // inputs:
+  // ppbar - bool to switch flavours for the case of incoming antiproton beam
+  // xi    - index in APFEL x-grid corresponding to the input PDF
+  // xo    - value of x for the evolved PDF
+  // fi    - input flavour (in APFEL evolution basis)
+  // Q     - scale of the final evolved PDF
+  // a     - array in output flavour fo (APPLgrid flavour basis) of evolution operators
+  void EvolutionOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* a)
   {
     updateEvol(Q);
     for(int i=0; i<13; i++)
@@ -367,28 +377,41 @@ namespace QCD
     return;
   }
 
-  // Split A values
-  void davals(const bool& ppbar, const int& beta, const double& alpha, const int& j, const double& Q, double* da)
+  // LO Evolved PDF derivative operator
+  // This function computes the operators D such that
+  // dPDF(fo,xo,Q)/dQ = \sum_xi,fi D(fo,fi,xo,xi,Q)*N(fi,xi,Q_0)
+  // where N is the initial scale APFEL evolution basis PDF and the derivatives are evaluated in the APPLgrid physical basis.
+  // inputs:
+  // ppbar - bool to switch flavours for the case of incoming antiproton beam
+  // xi    - index in APFEL x-grid corresponding to the input PDF
+  // xo    - value of x for which the derivative is evaluated
+  // fi    - input flavour (in APFEL evolution basis)
+  // Q     - scale at which the derivative is evaluated
+  // da    - array in output flavour fo (APPLgrid flavour basis) of derivative operators
+  void DerivativeOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* da)
   {
     const int pt = 0;
     const int nf = 5;
     updateEvol(Q);
     
-    for(int i=0; i<13; i++)
-      da[i] = 0;
+    for(int fo=0; fo<13; fo++)
+      da[fo] = 0;
 
-    for(int g=0; g<APFEL::nIntervals(); g++)
+    for(int ixd=0; ixd<APFEL::nIntervals(); ixd++)
     {
-      APFEL::ComputeExternalSplittingFunctions("Ev2Ph", pt, nf, alpha, g);
-      const double xdum = APFEL::xGrid(g);
-        for(int k=0; k<13; k++)
+      APFEL::ComputeExternalSplittingFunctions("Ev2Ph", pt, nf, xo, ixd);
+      const double xd = APFEL::xGrid(ixd);
+        for(int fd=0; fd<14; fd++)
         {
-          const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"),k,j,xdum,beta);
-          for(int i=0; i<13; i++)
-            da[ppbar ? 12-i:i] += 0.5*APFEL::ExternalSplittingFunctions(i-6,k)*A;  // 0.5 due to APFEL expansion parameter
+          const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"), fd, fi, xd, xi);
+          for(int fo=0; fo<13; fo++)
+            da[ppbar ? 12-fo:fo] += 0.5*APFEL::ExternalSplittingFunctions(fo-6,fd)*A;  // 0.5 due to APFEL expansion parameter
         }
     }
   }
+
+
+  // *********************************************** DIS functions ***********************************************
 
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta)
   {

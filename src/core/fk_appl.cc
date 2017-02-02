@@ -457,13 +457,13 @@ namespace APP
           {
             for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
             {
-              QCD::avals(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
-              if (vary_fac) QCD::davals(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+              QCD::EvolutionOperator(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+              if (vary_fac) QCD::DerivativeOperator(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
             }
             for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
             {
-              QCD::avals(par.ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-              if (vary_fac) QCD::davals(par.ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
+              QCD::EvolutionOperator(par.ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+              if (vary_fac) QCD::DerivativeOperator(par.ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
             }
           }
 
