@@ -56,7 +56,7 @@ namespace DIS
     }
 
     param.commonfile = dataPath() + "commondata/DATA_" + param.setname + ".dat"; //!< Path for the commondata file
-    param.sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + param.setname + "_0.dat";    //!< Path for the SYSTYPE file
+    param.sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + param.setname + "_DEFAULT.dat";    //!< Path for the SYSTYPE file
     
     stringstream desc;
     desc << "-------------------------------" <<std::endl

@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
   setupDir(iTh, setname, inventory);
 
   const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; //!< Path for the commondata file
-  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_0.dat"; //!< Path for the SYSTYPE file
+  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat"; //!< Path for the SYSTYPE file
    
   // Read CommonData
   NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
