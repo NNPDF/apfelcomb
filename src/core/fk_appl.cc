@@ -188,37 +188,6 @@ namespace APP
 
   // *********************** APPLgrid helpers ****************************
 
-  // If nonzero is true, get the smallest x-value regardless of weight
-  // if false, get the smallest x-value associated with a non-zero weight
-  double getXmin(const appl::grid* g, const bool& nonzero)
-  {
-    // Run over all grids to verify kinematic limits
-    double xmin = 1.0;
-    
-    for(int i=0; i<2; i++)  // pto
-      for (int j=0; j<g->Nobs(); j++)
-      {
-        appl::igrid const *igrid = g->weightgrid(i, j);
-        const size_t nsubproc = g->subProcesses(0);
-
-        for (int ix1=0; ix1<igrid->Ny1(); ix1++)
-          for (int ix2=0; ix2<igrid->Ny2(); ix2++)
-            for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
-              for (size_t ip=0; ip<nsubproc; ip++)
-                {
-                  // Associated weight
-                  const bool zero_weight = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,ix1,ix2) == 0;
-                  if (!zero_weight || !nonzero) 
-                  {
-                    xmin = min(xmin, igrid->fx(igrid->gety1(ix1)));
-                    xmin = min(xmin, igrid->fx(igrid->gety2(ix2)));
-                  }
-                }
-      }
-    
-    return xmin;
-  }
-
   // Get the maximum scale of an applgrid
   double getQ2max(const appl::grid* g)
   {
@@ -262,17 +231,15 @@ namespace APP
   std::pair<int,int> get_slice_limits(appl::igrid const* igrid, int const& nsubproc, int const& tau, int const& alpha)
   {
     std::pair<int,int> limits(igrid->Ny2(), 0);
-
-    // Need to remove const due to APPLgrid non-const methods
     appl::igrid* igrid_nc = const_cast<appl::igrid*>(igrid);
-    tsparse1d<double> *ts1;
     for (int tsp=0; tsp<nsubproc; tsp++)
       if ((*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))[tau] != NULL)
-        if (( ts1 = (*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))[tau]->trimmed(alpha) ) != NULL)
-        {                
-          limits.first  = std::min(ts1->lo(), limits.first);
-          limits.second = std::max(ts1->hi(), limits.second);
-        }
+        for (int ix2=0; ix2<igrid->Ny2(); ix2++)
+          if ( (*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))(tau,alpha,ix2) != 0 )
+          {                
+            limits.first  = std::min(ix2, limits.first);
+            limits.second = std::max(ix2, limits.second);
+          }
     return limits;
   }
 
@@ -303,6 +270,48 @@ namespace APP
       limits.second = std::max(sl.second, limits.second);
     }   
     return limits;
+  }
+
+  // If nonzero is true, get the smallest x-value regardless of weight
+  // if false, get the smallest x-value associated with a non-zero weight
+  double getXmin(const appl::grid* g, const bool& nonzero)
+  {
+    // Run over all grids to verify kinematic limits
+    double xmin = 1.0;
+    for(int i=0; i<=g->nloops(); i++) 
+      for (int j=0; j<g->Nobs(); j++)
+      {
+        appl::igrid const *igrid = g->weightgrid(i, j);
+        const size_t nsubproc = g->subProcesses(i);
+
+        if (!nonzero)
+        {
+          xmin = min(xmin, igrid->fx(igrid->gety1(0)));
+          xmin = min(xmin, igrid->fx(igrid->gety1(igrid->Ny1()-1)));
+          xmin = min(xmin, igrid->fx(igrid->gety2(0)));
+          xmin = min(xmin, igrid->fx(igrid->gety2(igrid->Ny2()-1)));
+        }
+        else
+        {
+          for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
+          {
+            const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
+            if (l1.first <= l1.second)
+            {
+              xmin = min(xmin, igrid->fx(igrid->gety1(l1.first)));
+              xmin = min(xmin, igrid->fx(igrid->gety1(l1.second)));
+            }
+            const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
+            if (l2.first <= l2.second)
+            {
+              xmin = min(xmin, igrid->fx(igrid->gety2(l2.first)));
+              xmin = min(xmin, igrid->fx(igrid->gety2(l2.second)));
+            }
+          }
+        }
+      }
+    
+    return xmin;
   }
 
   // Computes the normalisation required for translating APPLgrid weights to FK ones
