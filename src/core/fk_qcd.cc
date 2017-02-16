@@ -177,6 +177,7 @@ namespace QCD
     // Init Q0
     QCD::Q0 = par.Q0;
     QCD::QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
+    APFEL::SetQLimits( Q0, QM );
 
     // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);
