@@ -238,7 +238,7 @@ namespace APP
           if ( (*(const SparseMatrix3d*) igrid_nc->weightgrid(tsp))(tau,alpha,ix2) != 0 )
           {                
             limits.first  = std::min(ix2, limits.first);
-            limits.second = std::max(ix2+1, limits.second);
+            limits.second = std::max(ix2, limits.second);
           }
 
     return limits;
@@ -254,7 +254,7 @@ namespace APP
       if (sl.first <= sl.second) // This alpha is not trimmed  
       {
         limits.first  = std::min(alpha, limits.first);
-        limits.second = std::max(alpha+1, limits.second);
+        limits.second = std::max(alpha, limits.second);
       }
     }
     return limits;
@@ -477,7 +477,7 @@ namespace APP
             }
           }
 
-          for (int a=l1.first; a<l1.second; a++ )
+          for (int a=l1.first; a<=l1.second; a++ )
           {
             const double x1 = igrid->fx(igrid->gety1(a));           
             const std::pair<int,int> limits = get_slice_limits(igrid, nsubproc, t, a);  
