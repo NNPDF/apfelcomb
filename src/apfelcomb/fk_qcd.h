@@ -107,7 +107,7 @@ namespace QCD
   void initEvolgrid(const int& nx, const double& xmin);
   
   void initNNPDF30Grid(); // Initialise NNPDF30 style x-grid for test purposes
-  void initTruthGrid(const double& xmin); // Initialise very large evolution grid for test purposes
+  void initTruthGrid(qcd_param const& par, const double& xmin); // Initialise very large evolution grid for test purposes
 
   // APFEL PDF access functions
   void evolpdf(const double& x, const double& Q, double* pdf);

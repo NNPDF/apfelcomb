@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 
   // Initialise QCD
   QCD::initQCD(par, APP::getQ2max(g));
-  QCD::initTruthGrid(APP::getXmin(g,false)); 
+  QCD::initTruthGrid(par, APP::getXmin(g,false)); 
   
   cout <<endl<< "--  Calculating truth values *************************************"<<endl;
   

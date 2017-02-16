@@ -176,15 +176,10 @@ namespace QCD
 
     // Init Q0
     QCD::Q0 = par.Q0;
+    QCD::QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
 
     // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);
-
-    // Set maximum scale
-    QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
-    if ( fabs(par.xiF - 1.0) > 1E-5)
-      QM = std::max(15000., QM); // HOPPET max scale in APPLgrid
-    APFEL::SetQLimits( Q0, QM );
 
     if (SIA_mode) 
     {
@@ -202,7 +197,7 @@ namespace QCD
   }
 
  // Initialise APFEL for evolution factors
-  void initTruthGrid(const double& xmin)
+  void initTruthGrid(qcd_param const& par, const double& xmin)
   {
     // Set truth grid
     APFEL::SetNumberOfGrids(2);
@@ -212,6 +207,11 @@ namespace QCD
     // Initialise
     APFEL::LockGrids(true);
     APFEL::EnableWelcomeMessage(false);
+
+    if ( fabs(par.xiF - 1.0) > 1E-5)
+      APFEL::SetQLimits( 1.0, std::max(15000., QM) );
+    else
+      APFEL::SetQLimits( Q0, QM );
 
     // Start APFEL
     if (DIS_mode)
@@ -259,7 +259,9 @@ namespace QCD
     // Just in case of numerical trouble
     xg[nx] = 1;
     
-  
+    // Set scale limits
+    APFEL::SetQLimits( Q0, QM );
+
     // Set evolution operator parameters
     APFEL::SetFastEvolution(false);
     APFEL::EnableEvolutionOperator(true); // Enable the computation of the Evolution Operator

@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
   // Initialise truth x-grid
   // Need to get the absolute smallest x-grid value in APPLgrid here, not the value in par, hence the false
   // This is due to APPLgrids convolution routine requesting the smallest x-grid value from the PDF
-  QCD::initTruthGrid(APP::getXmin(g,false)); 
+  QCD::initTruthGrid(par, APP::getXmin(g,false)); 
   DisplayHR();
   cout << "  --  High accuracy APPLgrid Result "<<endl;
   
