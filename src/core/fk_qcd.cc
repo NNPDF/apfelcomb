@@ -201,9 +201,13 @@ namespace QCD
   void initTruthGrid(qcd_param const& par, const double& xmin)
   {
     // Set truth grid
-    APFEL::SetNumberOfGrids(2);
-    APFEL::SetGridParameters(1,60,5,xmin);
-    APFEL::SetGridParameters(2,60,5,1e-1);
+    APFEL::SetNumberOfGrids(3);
+    APFEL::SetGridParameters(1,95,3,xmin);
+    APFEL::SetGridParameters(2,70,5,0.1);
+    APFEL::SetGridParameters(3,50,5,0.65);
+
+    // APFEL::SetPDFSet("NNPDF30_nlo_as_0118.LHgrid");
+    // APFEL::SetReplica(1);
     
     // Initialise
     APFEL::LockGrids(true);
