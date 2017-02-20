@@ -182,6 +182,9 @@ namespace QCD
     // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);
 
+    APFEL::SetPDFSet("NNPDF30_nlo_as_0118");
+    APFEL::SetReplica(1);
+
     if (SIA_mode) 
     {
       APFEL::SetPDFSet("kretzer");
