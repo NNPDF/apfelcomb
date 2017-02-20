@@ -60,15 +60,13 @@ int main(int argc, char* argv[]) {
   if (par.ptmin == 1)
     pto = -1;
   
-  vector<double> truth  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
-  
-  size_t ibin=0;
-  for (size_t o=0; o<par.nbins; o++)
-    if (par.mask[o])
-    {
-      cout << "Truth result, bin: "<<o<<"  = "<<truth[ibin]<<endl;
-      ibin++;
-    }
+  vector< const vector<double >> truth;
+  for (size_t n=0; n<100; n++)
+  {
+    QCD::initMember(n+1);
+    const vector<double> itruth  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
+    truth.push_back(itruth);
+  }
   
   cout <<endl<< "--  Calculating minimum grid size *************************************"<<endl;
 
@@ -92,23 +90,35 @@ int main(int argc, char* argv[]) {
   int n;
   double max, avg;
   cout << "Target precision: "<<target<<endl;
-  for (n=10; n<200; n+=5)
+  for (n=15; n<200; n+=5)
   {
     QCD::initEvolgrid(n,xmin);
-    vector<double> xsec  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
-    vector<double> diff;
-    
-    size_t ibin=0;
-    for (size_t o=0; o<par.nbins; o++)
-      if (par.mask[o])
-      {
-        diff.push_back(abs((truth[o] - xsec[o])/truth[o]));
-        ibin++;
-      }
-    
-    avg = std::accumulate(diff.begin(),diff.end(),0.0)/diff.size();
-    max = *std::max_element(diff.begin(), diff.end());
-    
+
+    avg = 0.0;
+    max = 0.0;
+
+    for (int imem=0; imem<100; imem++)
+    {
+      QCD::initMember(imem+1);
+      vector<double> xsec  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
+      vector<double> diff;
+      
+      size_t ibin=0;
+      for (size_t o=0; o<par.nbins; o++)
+        if (par.mask[o])
+        {
+          diff.push_back(abs((truth[imem][o] - xsec[o])/truth[imem][o]));
+          ibin++;
+        }
+      
+      avg += std::accumulate(diff.begin(),diff.end(),0.0);
+      max = std::max(max,*std::max_element(diff.begin(), diff.end()));
+
+      if ( max > target) // Threshold already breached
+        break;
+    }
+    avg /= 100*par.nbins;
+
     cout << "NX: "<<n<<"  AVGERR: "<<avg<<"  MAXERR: "<<max<<endl;
     histout<< n<<" \t "<<avg<<" \t "<<max<<endl;
     

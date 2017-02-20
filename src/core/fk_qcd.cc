@@ -182,8 +182,7 @@ namespace QCD
     // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);
 
-    APFEL::SetPDFSet("NNPDF30_nlo_as_0118");
-    APFEL::SetReplica(1);
+    APFEL::SetPDFSet("NNPDF30_nlo_as_0118.LHgrid");
 
     if (SIA_mode) 
     {
@@ -208,13 +207,11 @@ namespace QCD
     APFEL::SetGridParameters(1,95,3,xmin);
     APFEL::SetGridParameters(2,70,5,0.1);
     APFEL::SetGridParameters(3,50,5,0.65);
-
-    // APFEL::SetPDFSet("NNPDF30_nlo_as_0118.LHgrid");
-    // APFEL::SetReplica(1);
     
     // Initialise
     APFEL::LockGrids(true);
     APFEL::EnableWelcomeMessage(false);
+    APFEL::SetFastEvolution(false);
 
     if ( fabs(par.xiF - 1.0) > 1E-5)
       APFEL::SetQLimits( 1.0, std::max(15000., QM) );
@@ -291,6 +288,12 @@ namespace QCD
     delete[] xg;
     return;
   }
+
+  void initMember(int const& i) 
+  {
+    APFEL::SetReplica(i);
+  };
+
 
   // Recalculate evolution if not cached
   static void updateEvol(const double& Q){

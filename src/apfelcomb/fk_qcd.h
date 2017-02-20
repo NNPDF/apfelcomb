@@ -105,7 +105,8 @@ namespace QCD
   // Initialise the APFEL interface
   void initQCD(qcd_param const& par, const double& Q2max);
   void initEvolgrid(const int& nx, const double& xmin);
-  
+  void initMember(int const& i);
+
   void initNNPDF30Grid(); // Initialise NNPDF30 style x-grid for test purposes
   void initTruthGrid(qcd_param const& par, const double& xmin); // Initialise very large evolution grid for test purposes
 
