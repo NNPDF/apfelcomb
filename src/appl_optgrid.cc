@@ -17,6 +17,8 @@
 #include "apfelcomb/fk_appl.h"
 #include "apfelcomb/fk_qcd.h"
 
+#include "NNPDF/commondata.h"
+
 using namespace std;
 
 double computeTargetPrecision(std::string const& setname)
@@ -95,7 +97,7 @@ int main(int argc, char* argv[]) {
   cout <<endl<< "--  Calculating minimum grid size *************************************"<<endl;
 
   // Targets and xmin
-  const double target = computeTargetPrecision(param.setname);
+  const double target = computeTargetPrecision(par.setname);
   const double xmin = par.xmin;
   const double xtest = APP::getXmin(g,true);
 

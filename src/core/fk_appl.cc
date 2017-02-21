@@ -8,7 +8,6 @@
 
 #include <NNPDF/common.h>
 #include "NNPDF/nnpdfdb.h"
-#include "NNPDF/commondata.h"
 
 #include <chrono>
 #include <ctime>
