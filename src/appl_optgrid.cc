@@ -84,11 +84,11 @@ int main(int argc, char* argv[]) {
     pto = -1;
   
   const int iCheck = 100;
-  vector< const vector<double >> truth;
+  vector< vector<double > > truth;
   for (size_t n=0; n<iCheck; n++)
   {
     QCD::initMember(n+1);
-    const vector<double> itruth  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
+    vector<double> itruth  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
     truth.push_back(itruth);
   }
   
