@@ -19,6 +19,29 @@
 
 using namespace std;
 
+double computeTargetPrecision(std::string const& setname)
+{
+  // Compute target interpolation accuracy
+  const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; 
+  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat";  
+  NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
+  std::vector<double> statErr; 
+  for(int i=0; i<cd.GetNData(); i++) 
+  {
+    // Get statistical error
+    statErr.push_back(pow(cd.GetStat(i),2));
+
+    // If no statistical error is available, go for 25* smaller than total systematic
+    if (statErr[i] < 1E-10)
+      for (int l=0; l<cd.GetNSys(); l++)
+        statErr[i] += pow(cd.GetSys(i,l).add/5.0,2);
+
+    statErr[i] = abs(sqrt(statErr[i])/cd.GetData(i));
+  }
+  const double target = (*std::min_element(statErr.begin(), statErr.end()))/5.0;
+  return target;
+}
+
 int main(int argc, char* argv[]) {
   
   if (argc!=3)
@@ -60,8 +83,9 @@ int main(int argc, char* argv[]) {
   if (par.ptmin == 1)
     pto = -1;
   
+  const int iCheck = 100;
   vector< const vector<double >> truth;
-  for (size_t n=0; n<100; n++)
+  for (size_t n=0; n<iCheck; n++)
   {
     QCD::initMember(n+1);
     const vector<double> itruth  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
@@ -71,7 +95,7 @@ int main(int argc, char* argv[]) {
   cout <<endl<< "--  Calculating minimum grid size *************************************"<<endl;
 
   // Targets and xmin
-  const double target = par.maxprec/10.0;
+  const double target = computeTargetPrecision(param.setname);
   const double xmin = par.xmin;
   const double xtest = APP::getXmin(g,true);
 
@@ -80,7 +104,7 @@ int main(int argc, char* argv[]) {
     cerr << "Error: minimum x value incorrectly set in database: should be "<<xtest<<endl;
     exit(-1);
   }
-  
+
   // Output to file
   stringstream historyfile;
   historyfile << "./res/opt/ID_"<<iDB<<".hist";
@@ -97,7 +121,7 @@ int main(int argc, char* argv[]) {
     avg = 0.0;
     max = 0.0;
 
-    for (int imem=0; imem<100; imem++)
+    for (int imem=0; imem<truth.size(); imem++)
     {
       QCD::initMember(imem+1);
       vector<double> xsec  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );

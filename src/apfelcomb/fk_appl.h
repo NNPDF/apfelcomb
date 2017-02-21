@@ -52,7 +52,6 @@ namespace APP
 	  
 	  int nx;           //!< Number of interpolation grid x-points to be used
 	  double xmin;      //!< Minimum x-value to be used in interpolation
-	  double maxprec;   //!< Highest experimental precision reached in dataset
 
 	  vector<string> inventory; //!< List of common grids required for set
 	};

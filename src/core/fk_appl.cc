@@ -56,9 +56,7 @@ namespace APP
     param.nbins   =  NNPDF::dbquery<int>(db,innum,"nbins");
     param.fnlobin =  NNPDF::dbquery<int>(db,innum,"fnlobin");
     param.ptmin   =  NNPDF::dbquery<int>(db,innum,"ptmin");
-
     param.xmin    =  NNPDF::dbquery<double>(db,innum,"xmin");
-    param.maxprec =  NNPDF::dbquery<double>(db,innum,"maxprec");
 
     param.setname   = NNPDF::dbquery<string>(db,innum,"setname");
     param.desc      = NNPDF::dbquery<string>(db,innum,"description");
@@ -138,26 +136,6 @@ namespace APP
     
     if (param.ptmin >= param.pto)
       cout << "Warning: minimum perturbative order is greater than the maximum perturbative order!"<<endl;
-
-    // Check statistical precision
-    const std::string commonfile = dataPath() + "commondata/DATA_" + param.setname + ".dat"; 
-    const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + param.setname + "_DEFAULT.dat";  
-    NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
-    std::vector<double> statErr; 
-    for(int i=0; i<cd.GetNData(); i++) 
-    {
-      statErr.push_back(pow(cd.GetStat(i),2));
-      for (int l=0; l<cd.GetNSys(); l++)
-        if (cd.GetSys(i,l).name == "UNCORR")
-          statErr[i] += pow(cd.GetSys(i,l).add,2);
-      statErr[i] = abs(sqrt(statErr[i])/cd.GetData(i));
-    }
-    const double minErr = *std::min_element(statErr.begin(), statErr.end());
-    if (minErr < param.maxprec - 1E-6 && minErr > 1E-10 ) 
-    {
-      std::cout << "Warning: target error threshold looks a bit high ("<<param.maxprec <<") minimum stat. error is " << minErr <<std::endl;
-      std::cout << "Suggested "<<innum<<"  "<<param.setname<<" error: " << minErr / 5.0 <<std::endl; 
-    }
 
     // Set number of active ptords
     param.pto -= param.ptmin;
