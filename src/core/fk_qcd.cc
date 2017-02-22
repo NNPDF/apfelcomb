@@ -182,8 +182,6 @@ namespace QCD
     // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);
 
-    APFEL::SetPDFSet("NNPDF30_nlo_as_0118.LHgrid");
-
     if (SIA_mode) 
     {
       APFEL::SetPDFSet("kretzer");
@@ -202,16 +200,10 @@ namespace QCD
  // Initialise APFEL for evolution factors
   void initTruthGrid(qcd_param const& par, const double& xmin)
   {
-    // Set truth grid
-    APFEL::SetNumberOfGrids(3);
-    APFEL::SetGridParameters(1,95,3,xmin);
-    APFEL::SetGridParameters(2,70,5,0.1);
-    APFEL::SetGridParameters(3,50,5,0.65);
-    
     // Initialise
     APFEL::LockGrids(true);
     APFEL::EnableWelcomeMessage(false);
-    APFEL::SetFastEvolution(false);
+    APFEL::SetFastEvolution(true);
 
     if ( fabs(par.xiF - 1.0) > 1E-5)
       APFEL::SetQLimits( 1.0, std::max(15000., QM) );
@@ -289,8 +281,9 @@ namespace QCD
     return;
   }
 
-  void initMember(int const& i) 
+  void initPDF(std::string const& PDFSet, int const& i) 
   {
+    APFEL::SetPDFSet(PDFSet);
     APFEL::SetReplica(i);
   };
 

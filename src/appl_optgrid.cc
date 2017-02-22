@@ -17,32 +17,7 @@
 #include "apfelcomb/fk_appl.h"
 #include "apfelcomb/fk_qcd.h"
 
-#include "NNPDF/commondata.h"
-
 using namespace std;
-
-double computeTargetPrecision(std::string const& setname)
-{
-  // Compute target interpolation accuracy
-  const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; 
-  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat";  
-  NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
-  std::vector<double> statErr; 
-  for(int i=0; i<cd.GetNData(); i++) 
-  {
-    // Get statistical error
-    statErr.push_back(pow(cd.GetStat(i),2));
-
-    // If no statistical error is available, go for 25* smaller than total systematic
-    if (statErr[i] < 1E-10)
-      for (int l=0; l<cd.GetNSys(); l++)
-        statErr[i] += pow(cd.GetSys(i,l).add/5.0,2);
-
-    statErr[i] = abs(sqrt(statErr[i])/cd.GetData(i));
-  }
-  const double target = (*std::min_element(statErr.begin(), statErr.end()))/5.0;
-  return target;
-}
 
 int main(int argc, char* argv[]) {
   
@@ -77,7 +52,7 @@ int main(int argc, char* argv[]) {
   // Initialise QCD
   QCD::initQCD(par, APP::getQ2max(g));
   QCD::initTruthGrid(par, APP::getXmin(g,false)); 
-  
+  const std::string testPDF = "NNPDF30_nlo_as_0118.LHgrid";
   cout <<endl<< "--  Calculating truth values *************************************"<<endl;
   
   // Compute with applgrid interface (at NLO)
@@ -85,11 +60,11 @@ int main(int argc, char* argv[]) {
   if (par.ptmin == 1)
     pto = -1;
   
-  const int iCheck = 100;
+  const int iCheck = 11;
   vector< vector<double > > truth;
   for (size_t n=0; n<iCheck; n++)
   {
-    QCD::initMember(n+1);
+    QCD::initPDF(testPDF, n);
     vector<double> itruth  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
     truth.push_back(itruth);
   }
@@ -97,7 +72,7 @@ int main(int argc, char* argv[]) {
   cout <<endl<< "--  Calculating minimum grid size *************************************"<<endl;
 
   // Targets and xmin
-  const double target = computeTargetPrecision(par.setname);
+  const double target = par.tgtprec;
   const double xmin = par.xmin;
   const double xtest = APP::getXmin(g,true);
 
@@ -116,7 +91,7 @@ int main(int argc, char* argv[]) {
   int n;
   double max, avg;
   cout << "Target precision: "<<target<<endl;
-  for (n=15; n<200; n+=5)
+  for (n=15; n<100; n+=5)
   {
     QCD::initEvolgrid(n,xmin);
 
@@ -125,7 +100,7 @@ int main(int argc, char* argv[]) {
 
     for (int imem=0; imem<truth.size(); imem++)
     {
-      QCD::initMember(imem+1);
+      QCD::initPDF(testPDF, imem);
       vector<double> xsec  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
       vector<double> diff;
       

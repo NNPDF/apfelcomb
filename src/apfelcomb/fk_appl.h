@@ -52,6 +52,7 @@ namespace APP
 	  
 	  int nx;           //!< Number of interpolation grid x-points to be used
 	  double xmin;      //!< Minimum x-value to be used in interpolation
+	  double tgtprec;	//!< Target precision for interpolation accuracy
 
 	  vector<string> inventory; //!< List of common grids required for set
 	};
@@ -59,6 +60,7 @@ namespace APP
 	// Parse APPLgrid data into FKHeader form
 	void parse_input(int innum, appl_param& param);
   	void set_params(appl_param const& par, NNPDF::FKHeader& FK);
+  	double computeTargetPrecision(std::string const& setname);
 
 	// Populate FK table
 	void computeFK(appl_param const&, appl::grid*, NNPDF::FKGenerator*);

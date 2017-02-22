@@ -122,9 +122,9 @@ int main(int argc, char* argv[]) {
     const double rel_err = abs((theory.GetObsCV(i)-xsec[par.map[i]])/xsec[par.map[i]]);
     cout << setw(5) << left <<i<< setw(15) << left<<theory.GetObsCV(i)<< setw(15) << left<<xsec[par.map[i]]<< setw(15) << left<<rel_err<<endl;
 
-    if (rel_err > par.maxprec)
+    if (rel_err > par.tgtprec)
     {
-      cerr << "Error: FK Table Verification failed, maxPrec: "<<par.maxprec<<endl;
+      cerr << "Error: FK Table Verification failed, maxPrec: "<<par.tgtprec<<endl;
       if (par.ppbar != true || par.xiF == 1)
         exit(1);  // Sidestep verification when you can't check against APPLgrid
     }

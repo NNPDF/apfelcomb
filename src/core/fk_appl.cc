@@ -6,8 +6,9 @@
 #include "apfelcomb/fk_qcd.h"
 #include "apfelcomb/fk_utils.h"
 
-#include <NNPDF/common.h>
+#include "NNPDF/common.h"
 #include "NNPDF/nnpdfdb.h"
+#include "NNPDF/commondata.h"
 
 #include <chrono>
 #include <ctime>
@@ -62,7 +63,9 @@ namespace APP
 
     param.fnlo      = NNPDF::dbquery<bool>(db,innum,"fnlo");
     param.pdfwgt    = NNPDF::dbquery<bool>(db,innum,"pdfwgt");
-    param.ppbar    = NNPDF::dbquery<bool>(db,innum,"ppbar");
+    param.ppbar     = NNPDF::dbquery<bool>(db,innum,"ppbar");
+
+    param.tgtprec = computeTargetPrecision( param.setname );
 
     // Fetch datapoint mask
     string mask = NNPDF::dbquery<string>(db,innum,"mask");
@@ -182,6 +185,33 @@ namespace APP
       QCD::set_params(par, FK);
   }
 
+
+  double computeTargetPrecision(std::string const& setname)
+  {
+    // Compute target interpolation accuracy
+    const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; 
+    const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat";  
+    NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
+    std::vector<double> accuracy; 
+    for(int i=0; i<cd.GetNData(); i++) 
+    {
+      // Get statistical error
+      const double statErr = abs(cd.GetStat(i)/cd.GetData(i));
+
+      if (statErr > 1E-10)
+        accuracy.push_back(statErr/3.0);
+      else // If no statistical error is available, go for 10* smaller than total systematic
+      {
+        double sysErr = 0.0;
+        for (int l=0; l<cd.GetNSys(); l++)
+          sysErr += pow(cd.GetSys(i,l).add,2);
+        sysErr = sqrt(sysErr)/cd.GetData(i);
+        accuracy.push_back(abs(sysErr)/10.0);
+      }
+    }
+    const double target = (*std::min_element(accuracy.begin(), accuracy.end()))/5.0;
+    return target;
+  }
 
 
   // *********************** APPLgrid helpers ****************************
