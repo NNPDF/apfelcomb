@@ -16,9 +16,10 @@
 using namespace std;
 using NNPDF::FKHeader;
 
+bool NNPDF::CommonData::Verbose = false;
+
 namespace APP
 {
-
   vector<std::string> splitpdf ( std::string const& str )
   {
     vector<std::string> outvec;
@@ -149,6 +150,7 @@ namespace APP
     cout << "    - PTMin: "<<param.ptmin<<endl;
     cout << "    - NBins: "<<param.nbins<<endl;
     cout << "    - NData: "<<param.ndata<<endl;
+    cout << "    - TrgPr: "<<param.tgtprec<<endl;
     cout <<endl;
     cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
     cout << "    - ppbar transform: "<<param.ppbar<<endl;
@@ -195,11 +197,15 @@ namespace APP
     std::vector<double> accuracy; 
     for(int i=0; i<cd.GetNData(); i++) 
     {
-      // Get statistical error
-      const double statErr = abs(cd.GetStat(i)/cd.GetData(i));
+      // Get uncorrelated error
+      double uncorrErr = pow(cd.GetStat(i),2);
+      for (int l=0; l<cd.GetNSys(); l++)
+        if (cd.GetSys(i,l).name == "UNCORR")
+          uncorrErr += pow(cd.GetSys(i,l).add,2);
+      uncorrErr = abs(sqrt(uncorrErr)/cd.GetData(i));
 
-      if (statErr > 1E-10)
-        accuracy.push_back(statErr/3.0);
+      if (uncorrErr > 1E-10)
+        accuracy.push_back(uncorrErr/3.0);
       else // If no statistical error is available, go for 10* smaller than total systematic
       {
         double sysErr = 0.0;
