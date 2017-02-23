@@ -88,16 +88,16 @@ int main(int argc, char* argv[]) {
   ofstream histout(historyfile.str().c_str());
   histout << par.setname <<"\t XMIN: "<<xmin<<endl;
   
-  int n;
-  double max, avg;
+  int n, maxn;
+  double max, max0;
   cout << "Target precision: "<<target<<endl;
   for (n=15; n<100; n+=5)
   {
     QCD::initEvolgrid(n,xmin);
 
-    avg = 0.0;
+    max0 = 0.0;
     max = 0.0;
-
+    maxn = 0;
     for (int imem=0; imem<truth.size(); imem++)
     {
       QCD::initPDF(testPDF, imem);
@@ -112,16 +112,19 @@ int main(int argc, char* argv[]) {
           ibin++;
         }
       
-      avg += std::accumulate(diff.begin(),diff.end(),0.0);
+      if (imem == 0)
+        max0 = *std::max_element(diff.begin(), diff.end());
       max = std::max(max,*std::max_element(diff.begin(), diff.end()));
 
       if ( max > target) // Threshold already breached
+      {
+        maxn = imem;
         break;
+      }
     }
-    avg /= 100*par.nbins;
 
-    cout << "NX: "<<n<<"  AVGERR: "<<avg<<"  MAXERR: "<<max<<endl;
-    histout<< n<<" \t "<<avg<<" \t "<<max<<endl;
+    cout << "NX: "<<n<<"  MAX_0: "<<max0<<"  MAXERR: "<<max<< " ("<<maxn<<")"<<endl;
+    histout<< n<<" \t "<<max0<<" \t "<<max<< " ("<<maxn<<")"<<endl;
     
     if (max < target)
       break;
@@ -133,7 +136,7 @@ int main(int argc, char* argv[]) {
   stringstream targetfile;
   targetfile << "./res/opt/ID_"<<iDB<<".dat";
   ofstream datout(targetfile.str().c_str());
-  datout << par.setname <<"\t\t XMIN: "<<xmin<<"\t\t NX: "<< n << "\t\t AVGERR: "<<avg<<"\t\t MAXERR: "<<max<<endl;
+  datout << par.setname <<"\t\t XMIN: "<<xmin<<"\t\t NX: "<< n << "\t\t MAX_0: "<<max0<<"\t\t MAXERR: "<<max<<endl;
   datout.close();
   
   if (par.fnlo)

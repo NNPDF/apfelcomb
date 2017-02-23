@@ -263,7 +263,7 @@ namespace QCD
     APFEL::SetFastEvolution(false);
     APFEL::EnableEvolutionOperator(true); // Enable the computation of the Evolution Operator
     APFEL::SetNumberOfGrids(1);           // The evolution will be done on a number of subgrids defined here
-    APFEL::SetExternalGrid(1,nx,5,xg);    // Set the grid as external (np: number of intervals, 3: interpolation degree, xg: defined above)
+    APFEL::SetExternalGrid(1,nx,3,xg);    // Set the grid as external (np: number of intervals, 3: interpolation degree, xg: defined above)
 
     // Initialise
     APFEL::EnableWelcomeMessage(false);
