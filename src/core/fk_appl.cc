@@ -66,7 +66,7 @@ namespace APP
     param.pdfwgt    = NNPDF::dbquery<bool>(db,innum,"pdfwgt");
     param.ppbar     = NNPDF::dbquery<bool>(db,innum,"ppbar");
 
-    param.tgtprec = computeTargetPrecision( param.setname );
+    param.tgtprec = 0.01;//computeTargetPrecision( param.setname );
 
     // Fetch datapoint mask
     string mask = NNPDF::dbquery<string>(db,innum,"mask");
