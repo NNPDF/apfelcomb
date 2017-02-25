@@ -39,5 +39,7 @@ GENFK SCRIPTS
 RUNNING APFELcomb
 * Once the applgrid.db is all set, run 
 ./appl_comb <entry number in the database> <entry number in the theory database>
-* In a short time you should get your FK tables
+* In a short time you should get your FK tables, written to a folder
+  theory_<id>/apfelcomb located in the results directory (e.g
+  nnpdfcpp/data).
 
