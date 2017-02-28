@@ -128,9 +128,10 @@ int main(int argc, char* argv[]) {
   for (int i=0; i<theory.GetNData(); i++)
   {
     const double rel_err = abs((theory.GetObsCV(i)-xsec[i])/xsec[i]);
+    const double abs_err = abs((theory.GetObsCV(i)-xsec[i]));
     cout << setw(5) << left <<i<< setw(15) << left<<theory.GetObsCV(i)<< setw(15) << left<< xsec[i]<< setw(15) << left<<rel_err<<setw(15) << left<< cd.GetData()[i]<<endl;
 
-    if (rel_err > 1E-2)
+    if (rel_err > 1E-2 && abs_err > 1E-10)
     {
       cerr << "Error: FK Table Verification failed"<<endl;
       exit(1);
