@@ -29,6 +29,23 @@
 
 using namespace std;
 
+bool verifyGrid(APP::appl_param const& param, const appl::grid * g )
+{
+  if (param.ndata>g->Nobs())
+  {
+    cerr <<"Error: number of datapoints in settings: "<<param.ndata<<" > appl grid Nobs: "<<g->Nobs()<<endl;
+    return false;
+  }
+  
+  if (param.mask.size()!=g->Nobs())
+  {
+    cerr << "Error: mask size: "<<param.mask.size()<<" does not match number of bins in APPLgrid: "<<g->Nobs()<<endl;
+    return false;
+  }
+
+  return true;
+}
+
 int main(int argc, char* argv[]) {
   
   if (argc!=3)
@@ -63,6 +80,8 @@ int main(int argc, char* argv[]) {
     
   } else{ g = new appl::grid(par.gridfile); }
   
+
+  if (!verifyGrid(par, g)) exit(-1);
   DisplayHR();
 
   // Initialise QCD
@@ -87,7 +106,7 @@ int main(int argc, char* argv[]) {
     xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
 
   size_t ibin=0;
-  for (size_t o=0; o<par.nbins; o++)
+  for (size_t o=0; o<g->Nobs(); o++)
     if (par.mask[o])
     {
       cout << "  APPLGRID result, bin: "<<ibin<<"  = "<<xsec[o]<<endl;

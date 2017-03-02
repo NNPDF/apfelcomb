@@ -53,8 +53,6 @@ namespace APP
 
     // Set up values
     param.nx      =  NNPDF::dbquery<int>(db,innum,"nxpt");
-    param.ndata   =  NNPDF::dbquery<int>(db,innum,"ndata");
-    param.nbins   =  NNPDF::dbquery<int>(db,innum,"nbins");
     param.fnlobin =  NNPDF::dbquery<int>(db,innum,"fnlobin");
     param.ptmin   =  NNPDF::dbquery<int>(db,innum,"ptmin");
     param.xmin    =  NNPDF::dbquery<double>(db,innum,"xmin");
@@ -73,7 +71,8 @@ namespace APP
     vector<string> masksplit = ssplit(mask);
     for (size_t i=0; i<masksplit.size(); i++)
       param.mask.push_back((bool) atoi(masksplit[i].c_str()));
-    
+    param.ndata   =   std::count(param.mask.begin(), param.mask.end(), 1);
+
     // Fill map
     param.map.clear();
     for (size_t i=0; i<param.mask.size(); i++)
@@ -108,34 +107,6 @@ namespace APP
       exit(-1);
     }
     
-    if (param.nbins<1)
-    {
-      cerr <<"Error: invalid nbins: "<<param.nbins<<endl;
-      exit(-1);
-    }
-    
-    if (param.ndata>param.nbins)
-    {
-      cerr <<"Error: ndata: "<<param.ndata<<" > nbins: "<<param.nbins<<endl;
-      exit(-1);
-    }
-    
-    if (param.mask.size()!=param.nbins)
-    {
-      cerr << "Error: mask size: "<<param.mask.size()<<" does not match nbins: "<<param.nbins<<endl;
-      exit(-1);
-    }
-    
-    size_t count=0;
-    for (size_t i=0; i<param.mask.size(); i++)
-      if (param.mask[i])
-        count++;
-    
-    if (count!=param.ndata)
-    {
-      cerr << "Error: mask does not match ndata: "<<param.ndata<<endl;
-      exit(-1);
-    }
     
     if (param.ptmin >= param.pto)
       cout << "Warning: minimum perturbative order is greater than the maximum perturbative order!"<<endl;
@@ -148,7 +119,6 @@ namespace APP
     cout << "    - SetName: "<<param.setname<<endl;
     cout <<endl;
     cout << "    - PTMin: "<<param.ptmin<<endl;
-    cout << "    - NBins: "<<param.nbins<<endl;
     cout << "    - NData: "<<param.ndata<<endl;
     cout << "    - TrgPr: "<<param.tgtprec<<endl;
     cout <<endl;
