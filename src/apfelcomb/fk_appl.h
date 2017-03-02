@@ -39,7 +39,6 @@ namespace APP
 	  string desc;      //!< FKTable description
 	  string readme;	//!< APPLgrid README
 	  
-	  size_t nbins;     //!< Number of bins in the grid
 	  size_t ndata;     //!< Number of selected datapoints
 	  size_t ptmin;     //!< Minimum perturbative order to contribute
 	  
