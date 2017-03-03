@@ -41,14 +41,13 @@ int main(int argc, char* argv[]) {
   appl::grid *g = NULL;
   fastnlo *fg   = NULL;
   
-  if (par.fnlo)
+  if (par.fnlobin >= 0 )
   {
     fg = new fastnlo(par.gridfile);
     g = fg->grids()[par.fnlobin];
     
   } else{ g = new appl::grid(par.gridfile); }
   
-
   // Initialise QCD
   QCD::initQCD(par, APP::getQ2max(g));
   QCD::initTruthGrid(par, APP::getXmin(g,false)); 
@@ -105,7 +104,7 @@ int main(int argc, char* argv[]) {
       vector<double> diff;
       
       size_t ibin=0;
-      for (size_t o=0; o<par.nbins; o++)
+      for (size_t o=0; o<g->Nobs(); o++)
         if (par.mask[o])
         {
           diff.push_back(abs((truth[imem][o] - xsec[o])/truth[imem][o]));
@@ -139,7 +138,7 @@ int main(int argc, char* argv[]) {
   datout << par.setname <<"\t\t XMIN: "<<xmin<<"\t\t NX: "<< n << "\t\t MAX_0: "<<max0<<"\t\t MAXERR: "<<max<<endl;
   datout.close();
   
-  if (par.fnlo)
+  if (fg)
     delete fg;
   else
     delete g;
