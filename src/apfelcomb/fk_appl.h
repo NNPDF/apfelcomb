@@ -42,8 +42,7 @@ namespace APP
 	  size_t ndata;     //!< Number of selected datapoints
 	  size_t ptmin;     //!< Minimum perturbative order to contribute
 	  
-	  bool   fnlo;      //!< Using fastNLO grids
-	  size_t fnlobin;   //!< Which bin in the fastNLO grid?
+	  int    fnlobin;   //!< Which bin in the fastNLO grid?
 	  bool pdfwgt;      //!< Using a PDF weight? Typically used for fastNLO grids
 	  bool ppbar;		//!< Does the grid need a pp -> ppbar transform?
 	  vector<bool> mask;//!< Mask for which bins to pick out as datapoints

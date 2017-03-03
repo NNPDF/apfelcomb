@@ -60,7 +60,6 @@ namespace APP
     param.setname   = NNPDF::dbquery<string>(db,innum,"setname");
     param.desc      = NNPDF::dbquery<string>(db,innum,"description");
 
-    param.fnlo      = NNPDF::dbquery<bool>(db,innum,"fnlo");
     param.pdfwgt    = NNPDF::dbquery<bool>(db,innum,"pdfwgt");
     param.ppbar     = NNPDF::dbquery<bool>(db,innum,"ppbar");
 
@@ -121,6 +120,7 @@ namespace APP
     cout << "    - PTMin: "<<param.ptmin<<endl;
     cout << "    - NData: "<<param.ndata<<endl;
     cout << "    - TrgPr: "<<param.tgtprec<<endl;
+    cout << "    - fnlobin: " <<param.fnlobin <<endl;
     cout <<endl;
     cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
     cout << "    - ppbar transform: "<<param.ppbar<<endl;

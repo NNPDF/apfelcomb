@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
   appl::grid *g = NULL;
   fastnlo *fg   = NULL;
   
-  if (par.fnlo)
+  if ( par.fnlobin >= 0 )
   {
     cout << "USING FASTNLO BIN "<<par.fnlobin<<endl;
     fg = new fastnlo(par.gridfile);
@@ -180,7 +180,7 @@ int main(int argc, char* argv[]) {
 
   delete FK;
   
-  if (par.fnlo)
+  if (fg)
     delete fg;
   else
     delete g;
