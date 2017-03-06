@@ -68,29 +68,18 @@ int main(int argc, char* argv[]) {
 
   // Setup directory
   setupDir(iTh, par.setname, par.inventory);
+  APP::grid sourceGrid(par);
 
-  appl::grid *g = NULL;
-  fastnlo *fg   = NULL;
-  
-  if ( par.fnlobin >= 0 )
-  {
-    cout << "USING FASTNLO BIN "<<par.fnlobin<<endl;
-    fg = new fastnlo(par.gridfile);
-    g = fg->grids()[par.fnlobin];
-    
-  } else{ g = new appl::grid(par.gridfile); }
-  
-
-  if (!verifyGrid(par, g)) exit(-1);
+  if (!verifyGrid(par, sourceGrid.g)) exit(-1);
   DisplayHR();
 
   // Initialise QCD
-  QCD::initQCD(par, APP::getQ2max(g));
+  QCD::initQCD(par, APP::getQ2max(sourceGrid.g));
 
   // Initialise truth x-grid
   // Need to get the absolute smallest x-grid value in APPLgrid here, not the value in par, hence the false
   // This is due to APPLgrids convolution routine requesting the smallest x-grid value from the PDF
-  QCD::initTruthGrid(par, APP::getXmin(g,false)); 
+  QCD::initTruthGrid(par, APP::getXmin(sourceGrid.g,false)); 
   DisplayHR();
   cout << "  --  High accuracy APPLgrid Result "<<endl;
   
@@ -101,12 +90,12 @@ int main(int argc, char* argv[]) {
   const int pto = (par.ptmin == 1) ? -1:(par.pto-1);
   vector<double> xsec;
   if (par.ppbar == true && par.xiF == 1)
-    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
+    xsec = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
   else
-    xsec = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
+    xsec = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
 
   size_t ibin=0;
-  for (size_t o=0; o<g->Nobs(); o++)
+  for (size_t o=0; o<sourceGrid.g->Nobs(); o++)
     if (par.mask[o])
     {
       cout << "  APPLGRID result, bin: "<<ibin<<"  = "<<xsec[o]<<endl;
@@ -127,7 +116,7 @@ int main(int argc, char* argv[]) {
   // Generate FK table
   std::stringstream IO; FKhead.Print(IO);
   NNPDF::FKGenerator* FK = new NNPDF::FKGenerator( IO );
-  APP::computeFK(par,g,FK);
+  APP::computeFK(par,sourceGrid.g,FK);
 
   DisplayHR();
   cout << "  --  Verify FKTABLE"<<endl;
@@ -179,11 +168,6 @@ int main(int argc, char* argv[]) {
    // --  Cleanup ************************************************************
 
   delete FK;
-  
-  if (fg)
-    delete fg;
-  else
-    delete g;
   
   cout <<endl<< "--  APPLComb Complete "<<endl;
   DisplayHR();

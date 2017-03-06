@@ -55,6 +55,19 @@ namespace APP
 	  vector<string> inventory; //!< List of common grids required for set
 	};
 
+	// Wrapper for appl::grids (handles fastNLO based grids)
+	class grid
+	{
+	public:
+		grid(appl_param const& par):
+		fg(par.fnlobin >= 0 ? new fastnlo(par.gridfile):0),
+		g(fg ? fg->grids()[par.fnlobin]:new appl::grid(par.gridfile)){};
+		~grid() {fg ? delete fg : delete g;};
+
+		fastnlo* 	fg;
+		appl::grid* g;
+	};
+
 	// Parse APPLgrid data into FKHeader form
 	void parse_input(int innum, appl_param& param);
   	void set_params(appl_param const& par, NNPDF::FKHeader& FK);

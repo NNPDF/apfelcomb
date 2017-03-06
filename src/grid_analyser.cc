@@ -43,7 +43,6 @@ int main(int argc, char* argv[]) {
     exit(-1);
   }
 
-  const int id =  NNPDF::dbquery<int>(grid_db,iDB,"id");
   const string name =  NNPDF::dbquery<string>(grid_db,iDB,"name");
   const string desc =  NNPDF::dbquery<string>(grid_db,iDB,"description");
   const int    nx   =  NNPDF::dbquery<int>(grid_db,iDB,"nx");
@@ -54,17 +53,18 @@ int main(int argc, char* argv[]) {
   std::cout << "Target nx: " << nx <<"  xmin: " << xmin <<std::endl;
 
   // Fetch matching subgrids
-  const std::vector<int> subgrids = NNPDF::dbmatch(subgrid_db, "fktarget", name);
-  std::cout << "Found " << subgrids.size() << " subgrids" <<std::endl;
+  const std::vector<int> subgridIDs = NNPDF::dbmatch(subgrid_db, "fktarget", name);
+  std::cout << "Found " << subgridIDs.size() << " subgrids" <<std::endl;
   DisplayHR();
 
+  std::vector<APP::grid> subgrids;
   std::vector<APP::appl_param> subgrid_parameters;
-  std::vector<appl::grid*> subgrid_appl;
-  for (int i: subgrids)
+  for (int i: subgridIDs)
   {
     APP::appl_param par;
     APP::parse_input(i, par);
     subgrid_parameters.push_back(par);
+    // subgrids.emplace_back(par);
   }
 
   exit(0);

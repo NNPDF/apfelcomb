@@ -37,20 +37,12 @@ int main(int argc, char* argv[]) {
   APP::appl_param par;
   QCD::parse_input(iTh, par);
   APP::parse_input(iDB, par);
+  APP::grid sourceGrid(par);
 
-  appl::grid *g = NULL;
-  fastnlo *fg   = NULL;
-  
-  if (par.fnlobin >= 0 )
-  {
-    fg = new fastnlo(par.gridfile);
-    g = fg->grids()[par.fnlobin];
-    
-  } else{ g = new appl::grid(par.gridfile); }
   
   // Initialise QCD
-  QCD::initQCD(par, APP::getQ2max(g));
-  QCD::initTruthGrid(par, APP::getXmin(g,false)); 
+  QCD::initQCD(par, APP::getQ2max(sourceGrid.g));
+  QCD::initTruthGrid(par, APP::getXmin(sourceGrid.g,false)); 
   const std::string testPDF = "NNPDF30_nlo_as_0118.LHgrid";
   cout <<endl<< "--  Calculating truth values *************************************"<<endl;
   
@@ -64,7 +56,7 @@ int main(int argc, char* argv[]) {
   for (size_t n=0; n<iCheck; n++)
   {
     QCD::initPDF(testPDF, n);
-    vector<double> itruth  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
+    vector<double> itruth  = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
     truth.push_back(itruth);
   }
   
@@ -73,7 +65,7 @@ int main(int argc, char* argv[]) {
   // Targets and xmin
   const double target = par.tgtprec;
   const double xmin = par.xmin;
-  const double xtest = APP::getXmin(g,true);
+  const double xtest = APP::getXmin(sourceGrid.g,true);
 
   if ( xtest < 0.99*xmin || xmin > 1)
   {
@@ -100,11 +92,11 @@ int main(int argc, char* argv[]) {
     for (int imem=0; imem<truth.size(); imem++)
     {
       QCD::initPDF(testPDF, imem);
-      vector<double> xsec  = g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
+      vector<double> xsec  = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
       vector<double> diff;
       
       size_t ibin=0;
-      for (size_t o=0; o<g->Nobs(); o++)
+      for (size_t o=0; o<sourceGrid.g->Nobs(); o++)
         if (par.mask[o])
         {
           diff.push_back(abs((truth[imem][o] - xsec[o])/truth[imem][o]));
@@ -137,11 +129,6 @@ int main(int argc, char* argv[]) {
   ofstream datout(targetfile.str().c_str());
   datout << par.setname <<"\t\t XMIN: "<<xmin<<"\t\t NX: "<< n << "\t\t MAX_0: "<<max0<<"\t\t MAXERR: "<<max<<endl;
   datout.close();
-  
-  if (fg)
-    delete fg;
-  else
-    delete g;
   
   cout <<endl<< "--  OptGrid Complete **********************************"<<endl;
   
