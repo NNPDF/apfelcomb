@@ -16,8 +16,6 @@
 using namespace std;
 using NNPDF::FKHeader;
 
-bool NNPDF::CommonData::Verbose = false;
-
 namespace APP
 {
   vector<std::string> splitpdf ( std::string const& str )
@@ -33,7 +31,7 @@ namespace APP
 
   // ******************* APPLGrid parsing ******************************
 
-  void parse_input(int innum, appl_param& param)
+  void parse_input(int innum, appl_param& param, bool silent)
   {
     // Setup db connection
     NNPDF::IndexDB grid_db(databasePath()+"applgrid.db", "grids");
@@ -82,10 +80,8 @@ namespace APP
     if (activeOperator)
     {
       const vector<string> tokens = gsplit(operators, ",");
-      std::cout << tokens.size() << " operators found" <<std::endl;
       for (auto s:tokens) 
       {
-        std::cout <<"Operator: " << s <<std::endl;
         const vector<string> subtoken = gsplit(s, ":");
         if (subtoken.size() != 2)
         {
@@ -138,39 +134,43 @@ namespace APP
       exit(-1);
     }
     
-    if (param.ptmin >= param.pto)
-      cout << "Warning: minimum perturbative order is greater than the maximum perturbative order!"<<endl;
-
     if (param.muldat != 1 && param.ndata != 1)
     {
       cerr << "Error: cannot use multiplicative operator unless there is only one datapoint" <<endl;
       exit(-1);
     }
+    
+    if (param.ptmin >= param.pto)
+      cout << "Warning: minimum perturbative order is greater than the maximum perturbative order!"<<endl;
 
     // Set number of active ptords
     param.pto -= param.ptmin;
     param.pto = std::max(param.pto, (size_t) 1);
-    cout <<endl;
-    cout << "    - Gridname: "<<param.gridname<<endl;
-    cout << "    - SetName: "<<param.setname<<endl;
-    cout <<endl;
-    cout << "    - PTMin: "<<param.ptmin<<endl;
-    cout << "    - NData: "<<param.ndata<<endl;
-    cout << "    - TrgPr: "<<param.tgtprec<<endl;
-    cout << "    - fnlobin: " <<param.fnlobin <<endl;
-    cout <<endl;
-    cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
-    cout << "    - ppbar transform: "<<param.ppbar<<endl;
-    cout <<endl;
-    if (activeOperator)
+
+    if (!silent)
     {
-      cout << "    - data increment: "<<param.incdat<<endl;
-      cout << "    - data multiplier: "<<param.muldat<<endl;
-      cout <<endl; 
+      cout <<endl;
+      cout << "    - Gridname: "<<param.gridname<<endl;
+      cout << "    - SetName: "<<param.setname<<endl;
+      cout <<endl;
+      cout << "    - PTMin: "<<param.ptmin<<endl;
+      cout << "    - NData: "<<param.ndata<<endl;
+      cout << "    - TrgPr: "<<param.tgtprec<<endl;
+      cout << "    - fnlobin: " <<param.fnlobin <<endl;
+      cout <<endl;
+      cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
+      cout << "    - ppbar transform: "<<param.ppbar<<endl;
+      cout <<endl;
+      if (activeOperator)
+      {
+        cout << "    - data increment: "<<param.incdat<<endl;
+        cout << "    - data multiplier: "<<param.muldat<<endl;
+        cout <<endl; 
+      }
+      cout << "    - Common grids: "<<param.inventory.size()<<endl;
+      cout <<endl;
+      DisplayHR();
     }
-    cout << "    - Common grids: "<<param.inventory.size()<<endl;
-    cout <<endl;
-    DisplayHR();
     
     return;
   }

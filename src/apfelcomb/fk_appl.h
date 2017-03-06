@@ -42,18 +42,18 @@ namespace APP
 	  size_t ndata;     //!< Number of selected datapoints
 	  size_t ptmin;     //!< Minimum perturbative order to contribute
 	  
-	  int    fnlobin;   //!< Which bin in the fastNLO grid?
+	  int    fnlobin;   //!< Which bin in the fastNLO grid? (yes, this needs to be signed)
 	  bool pdfwgt;      //!< Using a PDF weight? Typically used for fastNLO grids
 	  bool ppbar;		//!< Does the grid need a pp -> ppbar transform?
 	  vector<bool> mask;//!< Mask for which bins to pick out as datapoints
 	  vector<int>  map; //!< Map to list which bins enter as datapoints
 	  
-	  int nx;           //!< Number of interpolation grid x-points to be used
+	  size_t nx;           //!< Number of interpolation grid x-points to be used
 	  double xmin;      //!< Minimum x-value to be used in interpolation
 	  double tgtprec;	//!< Target precision for interpolation accuracy
 
-	  double incdat;    //!< Datapoint increment operator
-	  double muldat;	//!< Datapoint multiplicative operator
+	  size_t incdat;    //!< Datapoint increment operator
+	  size_t muldat;	//!< Datapoint multiplicative operator
 
 	  vector<string> inventory; //!< List of common grids required for set
 	};
@@ -72,7 +72,7 @@ namespace APP
 	};
 
 	// Parse APPLgrid data into FKHeader form
-	void parse_input(int innum, appl_param& param);
+	void parse_input(int innum, appl_param& param, bool silent = false);
   	void set_params(appl_param const& par, NNPDF::FKHeader& FK);
   	double computeTargetPrecision(std::string const& setname);
 

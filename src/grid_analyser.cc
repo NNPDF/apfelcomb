@@ -18,19 +18,19 @@
 #include "apfelcomb/fk_qcd.h"
 
 #include "NNPDF/nnpdfdb.h"
-
+#include "NNPDF/commondata.h"
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
-  
+
   if (argc!=2)
   {
     cout << "Usage: grid_analyser <grid id>"<<endl;
     exit(1);
   }
 
-  Splash();
+  Splash(); NNPDF::SetVerbosity(0); appl::setVerbose(false);
   const int iDB = atoi(argv[1]);
   NNPDF::IndexDB grid_db(databasePath()+"applgrid.db", "grids");
   NNPDF::IndexDB subgrid_db(databasePath()+"applgrid.db", "subgrids");
@@ -59,18 +59,34 @@ int main(int argc, char* argv[]) {
   std::vector<APP::grid*> subgrids;
   std::vector<APP::appl_param> subgrid_parameters;
   double xmin = 1.0;
+  int lastNdat = 0;
   for (int i: subgridIDs)
   {
     APP::appl_param par;
-    APP::parse_input(i, par);
+    APP::parse_input(i, par, true);
     APP::grid* subgrid = new APP::grid(par);
     xmin = std::min(xmin, APP::getXmin(subgrid->g,true));
 
     subgrid_parameters.push_back(par);
     subgrids.push_back(subgrid);
+
+    // Construct applgrid<->datafile map
+    lastNdat += par.incdat;
+    std::vector< std::vector<int> > applDataMap(par.ndata, vector<int>(par.muldat, -1));
+    for (size_t j=0; j<par.ndata; j++)
+      for (size_t k=0; k<par.muldat; k++)
+        applDataMap[j][k] = lastNdat +  j*par.muldat + k;
+    lastNdat += par.muldat*par.ndata;
   }
 
-  std::cout << xmin <<std::endl;
+  // Compute target interpolation accuracy
+  APP::appl_param& bpar = subgrid_parameters[0];
+  const std::string commonfile = dataPath() + "commondata/DATA_" + bpar.setname + ".dat"; 
+  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + bpar.setname + "_DEFAULT.dat";  
+  NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
+
+
+  std::cout << xmin <<"  "<<lastNdat<<"  "<<cd.GetNData()<<std::endl;
 
   exit(0);
 }
