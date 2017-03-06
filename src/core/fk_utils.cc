@@ -80,6 +80,18 @@ namespace Colour{
 
 // ************* SPLITTERS *************************
 
+vector<string> gsplit(std::string s, std::string delimiter)
+{
+  vector<string> tokens;
+  size_t pos = 0;
+  while ((pos = s.find(delimiter)) != std::string::npos) {
+      tokens.emplace_back(s.substr(0, pos));
+      s.erase(0, pos + delimiter.length());
+  }
+  tokens.emplace_back(s);
+  return tokens;
+}
+
 vector<string> ssplit(string in)
 {
 	stringstream sstr(in);

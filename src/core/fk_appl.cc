@@ -76,6 +76,32 @@ namespace APP
       if (param.mask[i]==true)
         param.map.push_back(i);
 
+    // Read operators
+    const std::string operators = NNPDF::dbquery<string>(subgrid_db,innum,"operators");
+    const bool activeOperator = operators != "";
+    if (activeOperator)
+    {
+      const vector<string> tokens = gsplit(operators, ",");
+      std::cout << tokens.size() << " operators found" <<std::endl;
+      for (auto s:tokens) 
+      {
+        std::cout <<"Operator: " << s <<std::endl;
+        const vector<string> subtoken = gsplit(s, ":");
+        if (subtoken.size() != 2)
+        {
+          std::cerr << "Cannot parse operator: " <<s <<std::endl;
+          exit(-1);
+        }
+
+        if (subtoken[0] == "*") param.muldat = atof(subtoken[1].c_str());
+        if (subtoken[0] == "+") param.incdat = atoi(subtoken[1].c_str());
+      }
+    }
+    else
+    {
+      param.incdat = 0;
+      param.muldat = 1;
+    }
 
     // Read target information
     const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,innum,"fktarget");
@@ -112,9 +138,14 @@ namespace APP
       exit(-1);
     }
     
-    
     if (param.ptmin >= param.pto)
       cout << "Warning: minimum perturbative order is greater than the maximum perturbative order!"<<endl;
+
+    if (param.muldat != 1 && param.ndata != 1)
+    {
+      cerr << "Error: cannot use multiplicative operator unless there is only one datapoint" <<endl;
+      exit(-1);
+    }
 
     // Set number of active ptords
     param.pto -= param.ptmin;
@@ -131,6 +162,12 @@ namespace APP
     cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
     cout << "    - ppbar transform: "<<param.ppbar<<endl;
     cout <<endl;
+    if (activeOperator)
+    {
+      cout << "    - data increment: "<<param.incdat<<endl;
+      cout << "    - data multiplier: "<<param.muldat<<endl;
+      cout <<endl; 
+    }
     cout << "    - Common grids: "<<param.inventory.size()<<endl;
     cout <<endl;
     DisplayHR();

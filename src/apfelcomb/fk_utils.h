@@ -71,6 +71,7 @@ std::string databasePath();
 
 std::string applCommit();
 
+vector<string> gsplit(std::string s, std::string delimiter);
 vector<double> dsplit(string input);
 vector<string> ssplit(string input);
 

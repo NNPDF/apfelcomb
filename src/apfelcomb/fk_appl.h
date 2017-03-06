@@ -52,6 +52,9 @@ namespace APP
 	  double xmin;      //!< Minimum x-value to be used in interpolation
 	  double tgtprec;	//!< Target precision for interpolation accuracy
 
+	  double incdat;    //!< Datapoint increment operator
+	  double muldat;	//!< Datapoint multiplicative operator
+
 	  vector<string> inventory; //!< List of common grids required for set
 	};
 
