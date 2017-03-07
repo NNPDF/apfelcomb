@@ -106,8 +106,9 @@ int main(int argc, char* argv[]) {
   cout << "  --  Compute FKTABLE "<<endl;
 
   // Re-init evol grid with correct (nonzero) x-grid limits
-  QCD::initEvolgrid(par.nx,par.xmin); 
-
+  const double targetXmin = APP::parse_xmin(par.common_subgrids);
+  QCD::initEvolgrid(par.nx, targetXmin);   DisplayHR();
+  std::cout << "Evolution initialised with xmin: " << targetXmin << " and nx: " << par.nx <<std::endl;
 
   // Setup FastKernel Header
   NNPDF::FKHeader FKhead;

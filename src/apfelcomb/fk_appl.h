@@ -34,7 +34,7 @@ namespace APP
 	public:
 	  string setname;   //!< Name of the set to which the grid belongs
 	  string gridname;  //!< Name of the grid to be generated
-	  string gridfile;	//!< Path for the applgrid file
+	  string applgrid;	//!< Path for the applgrid file
 
 	  string desc;      //!< FKTable description
 	  string readme;	//!< APPLgrid README
@@ -55,7 +55,8 @@ namespace APP
 	  size_t incdat;    //!< Datapoint increment operator
 	  size_t muldat;	//!< Datapoint multiplicative operator
 
-	  vector<string> inventory; //!< List of common grids required for set
+	  vector<string> inventory; 		//!< List of common grids required for set
+	  vector<int> 	 common_subgrids;	//!< IDs of common subgrids required for grid
 	};
 
 	// Wrapper for appl::grids (handles fastNLO based grids)
@@ -63,8 +64,8 @@ namespace APP
 	{
 	public:
 		grid(appl_param const& par):
-		fg(par.fnlobin >= 0 ? new fastnlo(par.gridfile):0),
-		g(fg ? fg->grids()[par.fnlobin]:new appl::grid(par.gridfile)){};
+		fg(par.fnlobin >= 0 ? new fastnlo(par.applgrid):0),
+		g(fg ? fg->grids()[par.fnlobin]:new appl::grid(par.applgrid)){};
 		~grid() {fg ? delete fg : delete g;};
 
 		fastnlo* 	fg;
@@ -73,6 +74,9 @@ namespace APP
 
 	// Parse APPLgrid data into FKHeader form
 	void parse_input(int innum, appl_param& param, bool silent = false);
+	double parse_xmin(std::vector<int> const&);
+  	std::vector< std::vector<int> > parse_map(std::vector<int> const&, int const&);
+
   	void set_params(appl_param const& par, NNPDF::FKHeader& FK);
   	double computeTargetPrecision(std::string const& setname);
 

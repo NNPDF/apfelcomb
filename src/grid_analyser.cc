@@ -71,13 +71,8 @@ int main(int argc, char* argv[]) {
     subgrid_parameters.push_back(par);
     subgrids.push_back(subgrid);
 
-    // Construct applgrid<->datafile map
-    lastNdat += par.incdat;
-    std::vector< std::vector<int> > applDataMap(par.ndata, vector<int>(par.muldat, -1));
-    for (size_t j=0; j<par.ndata; j++)
-      for (size_t k=0; k<par.muldat; k++)
-        applDataMap[j][k] = lastNdat +  j*par.muldat + k;
-    lastNdat += par.muldat*par.ndata;
+    // Check NDat
+    lastNdat += par.incdat+par.muldat*par.ndata;
   }
 
   // Compute target interpolation accuracy
