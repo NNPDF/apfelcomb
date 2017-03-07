@@ -44,6 +44,7 @@ int main(int argc, char* argv[]) {
   }
 
   const string name =  NNPDF::dbquery<string>(grid_db,iDB,"name");
+  const string setname =  NNPDF::dbquery<string>(grid_db,iDB,"setname");
   const string desc =  NNPDF::dbquery<string>(grid_db,iDB,"description");
   const int    nx   =  NNPDF::dbquery<int>(grid_db,iDB,"nx");
 
@@ -81,12 +82,17 @@ int main(int argc, char* argv[]) {
 
   // Compute target interpolation accuracy
   APP::appl_param& bpar = subgrid_parameters[0];
-  const std::string commonfile = dataPath() + "commondata/DATA_" + bpar.setname + ".dat"; 
-  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + bpar.setname + "_DEFAULT.dat";  
+  const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; 
+  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat";  
   NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
 
+  if (lastNdat != cd.GetNData())
+  {
+    std::cout << xmin <<"  "<<lastNdat<<"  "<<cd.GetNData()<<std::endl;
+    std::cerr << "ERROR: no match for " <<setname <<std::endl;
+    exit(-1);
+  }
 
-  std::cout << xmin <<"  "<<lastNdat<<"  "<<cd.GetNData()<<std::endl;
 
   exit(0);
 }

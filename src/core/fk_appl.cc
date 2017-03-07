@@ -75,6 +75,7 @@ namespace APP
         param.map.push_back(i);
 
     // Read operators
+    param.incdat = 0; param.muldat = 1;
     const std::string operators = NNPDF::dbquery<string>(subgrid_db,innum,"operators");
     const bool activeOperator = operators != "";
     if (activeOperator)
@@ -92,11 +93,6 @@ namespace APP
         if (subtoken[0] == "*") param.muldat = atof(subtoken[1].c_str());
         if (subtoken[0] == "+") param.incdat = atoi(subtoken[1].c_str());
       }
-    }
-    else
-    {
-      param.incdat = 0;
-      param.muldat = 1;
     }
 
     // Read target information
@@ -137,6 +133,7 @@ namespace APP
     if (param.muldat != 1 && param.ndata != 1)
     {
       cerr << "Error: cannot use multiplicative operator unless there is only one datapoint" <<endl;
+      cerr << param.muldat <<"  "<<param.ndata <<endl;
       exit(-1);
     }
     
