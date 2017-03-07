@@ -45,20 +45,21 @@ namespace APP
       exit(-1);
     }
 
-    // Set/grid names
-    param.gridname  = NNPDF::dbquery<string>(subgrid_db,innum,"gridname");
-    param.setname   = NNPDF::dbquery<string>(subgrid_db,innum,"setname");
-    param.gridfile  = applPath() + param.setname + "/" + NNPDF::dbquery<string>(subgrid_db,innum,"gridfile");
+    // Read grid information
+    const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,innum,"fktarget");
+    const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
+    param.nx      =  NNPDF::dbquery<int>(grid_db,target,"nx");
+    param.xmin    =  NNPDF::dbquery<double>(grid_db,target,"xmin");
+    param.desc    =  NNPDF::dbquery<string>(grid_db,target,"description");
+    param.setname =  NNPDF::dbquery<string>(grid_db,target,"setname");
 
-    // Set up values
+    // Read subgrid information
+    param.gridname  = NNPDF::dbquery<string>(subgrid_db,innum,"gridname");
+    param.gridfile  = applPath() + param.setname + "/" + NNPDF::dbquery<string>(subgrid_db,innum,"gridfile");
     param.fnlobin =  NNPDF::dbquery<int>(subgrid_db,innum,"fnlobin");
     param.ptmin   =  NNPDF::dbquery<int>(subgrid_db,innum,"ptmin");
-
-    param.setname   = NNPDF::dbquery<string>(subgrid_db,innum,"setname");
-
     param.pdfwgt    = NNPDF::dbquery<bool>(subgrid_db,innum,"pdfwgt");
     param.ppbar     = NNPDF::dbquery<bool>(subgrid_db,innum,"ppbar");
-
     param.tgtprec = 0.01;//computeTargetPrecision( param.setname );
 
     // Fetch datapoint mask
@@ -95,12 +96,7 @@ namespace APP
       }
     }
 
-    // Read target information
-    const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,innum,"fktarget");
-    const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
-    param.nx      =  NNPDF::dbquery<int>(grid_db,target,"nx");
-    param.xmin    =  NNPDF::dbquery<double>(grid_db,target,"xmin");
-    param.desc    =  NNPDF::dbquery<string>(grid_db,target,"description");
+
 
     // See if there is a valid README
     string readmefilename  = applPath() + param.setname + "/README_appl_" + param.setname;
@@ -116,9 +112,13 @@ namespace APP
     param.readme = readme;
 
     // Get common grids
-    vector<int> commonGrids = NNPDF::dbmatch(subgrid_db, "setname", param.setname);
-    for ( auto i : commonGrids)
-      param.inventory.push_back(NNPDF::dbquery<string>(subgrid_db,i,"gridname"));
+    // vector<int> commonGrids = NNPDF::dbmatch(grid_db, "setname", param.setname);
+    // for ( auto i : commonGrids)
+    // {
+    //   const std::string commonTarget = NNPDF::dbquery<string>(grid_db,i,"name");
+    //   vector<int> commonSubgrids = NNPDF::dbmatch(subgrid_db, "fktarget", commonTarget);
+    //   for ( auto j : commonSubgrids) param.inventory.push_back(NNPDF::dbquery<string>(subgrid_db,j,"gridname"));
+    // }
 
     /*
      *        ***    VERIFICATION    ***
