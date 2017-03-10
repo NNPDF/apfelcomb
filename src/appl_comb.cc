@@ -64,6 +64,7 @@ int main(int argc, char* argv[]) {
   APP::appl_param par;
   QCD::parse_input(iTh, par);
   APP::parse_input(iDB, par);
+  par.datamap = APP::parse_map(par.common_subgrids, iDB);
   std::cout << "APPLgrid repository version: "<< applCommit() <<std::endl;
 
   // Setup directory
@@ -128,18 +129,19 @@ int main(int argc, char* argv[]) {
   APFELPDFSet apfelPDF;
   NNPDF::ThPredictions theory(&apfelPDF, FK);
 
-  cout << "<bin> \t <FK> \t <APPLgrid> \t <Rel. Error.>"<<endl;
-  for (int i=0; i<theory.GetNData(); i++)
+  cout << "a \t d \t <FK> \t <APPLgrid> \t <Rel. Error.>"<<endl;
+  for (int i : par.maskmap )
+    for (int j : par.datamap[i] )
   {
-    const double rel_err = abs((theory.GetObsCV(i)-xsec[par.map[i]])/xsec[par.map[i]]);
-    cout << setw(5) << left <<i<< setw(15) << left<<theory.GetObsCV(i)<< setw(15) << left<<xsec[par.map[i]]<< setw(15) << left<<rel_err<<endl;
+    const double rel_err = abs((theory.GetObsCV(j)-xsec[i])/xsec[i]);
+    cout << setw(5) << left <<i<<setw(5) << left <<j<< setw(10) << left<<theory.GetObsCV(j)<< setw(15) << left<<xsec[i]<< setw(15) << left<<rel_err<<endl;
 
-    if (rel_err > par.tgtprec)
-    {
-      cerr << "Error: FK Table Verification failed, maxPrec: "<<par.tgtprec<<endl;
-      // if (par.ppbar != true || par.xiF == 1)
-      //   exit(1);  // Sidestep verification when you can't check against APPLgrid
-    }
+    // if (rel_err > par.tgtprec)
+    // {
+    //   cerr << "Error: FK Table Verification failed, maxPrec: "<<par.tgtprec<<endl;
+    //   // if (par.ppbar != true || par.xiF == 1)
+    //   //   exit(1);  // Sidestep verification when you can't check against APPLgrid
+    // }
   }
 
   DisplayHR();

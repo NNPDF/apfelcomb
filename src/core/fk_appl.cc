@@ -31,6 +31,7 @@ namespace APP
 
   // ******************* APPLGrid parsing ******************************
 
+  // Determine the minimum x-point required in a target grid
   double parse_xmin(std::vector<int> const& subgridIDs)
   {
     double xmin = 1;
@@ -43,6 +44,18 @@ namespace APP
     }
 
     return xmin;
+  }
+
+  // Determine the total number of datapoints in a target grid
+  int parse_ndat(std::vector<int> const& subgridIDs)
+  {
+    int nDat = 0; 
+    for (const int i: subgridIDs)
+    {
+      APP::appl_param par; APP::parse_input(i, par, true);
+      nDat += par.incdat + par.muldat*par.ndata;
+    }
+    return nDat;
   }
 
   // Construct applgrid<->datafile map for target subgrid ID
@@ -90,14 +103,14 @@ namespace APP
     param.setname =  NNPDF::dbquery<string>(grid_db,target,"setname");
     
     // Read subgrid information
-    param.gridname  = NNPDF::dbquery<string>(subgrid_db,innum,"gridname");
     param.applgrid  = applPath() + param.setname + "/" + NNPDF::dbquery<string>(subgrid_db,innum,"applgrid");
     param.fnlobin =  NNPDF::dbquery<int>(subgrid_db,innum,"fnlobin");
     param.ptmin   =  NNPDF::dbquery<int>(subgrid_db,innum,"ptmin");
     param.pdfwgt    = NNPDF::dbquery<bool>(subgrid_db,innum,"pdfwgt");
     param.ppbar     = NNPDF::dbquery<bool>(subgrid_db,innum,"ppbar");
     param.common_subgrids = NNPDF::dbmatch(subgrid_db, "fktarget", fktarget);
-    param.tgtprec = 0.01;//computeTargetPrecision( param.setname );
+    param.gridname  = fktarget + "_" + to_string(innum) + ".subgrid";
+
 
     // Fetch datapoint mask
     string mask = NNPDF::dbquery<string>(subgrid_db,innum,"mask");
@@ -107,10 +120,10 @@ namespace APP
     param.ndata   =   std::count(param.mask.begin(), param.mask.end(), 1);
 
     // Fill map
-    param.map.clear();
+    param.maskmap.clear();
     for (size_t i=0; i<param.mask.size(); i++)
       if (param.mask[i]==true)
-        param.map.push_back(i);
+        param.maskmap.push_back(i);
 
     // Read operators
     param.incdat = 0; param.muldat = 1; param.nrmdat = 1.0;
@@ -153,7 +166,7 @@ namespace APP
     {
       const std::string commonTarget = NNPDF::dbquery<string>(grid_db,i,"name");
       vector<int> commonSubgrids = NNPDF::dbmatch(subgrid_db, "fktarget", commonTarget);
-      for ( auto j : commonSubgrids) param.inventory.push_back(NNPDF::dbquery<string>(subgrid_db,j,"gridname"));
+      for ( auto j : commonSubgrids) param.inventory.push_back(fktarget+"_"+to_string(j)+".subgrid");
     }
 
     /*
@@ -183,12 +196,11 @@ namespace APP
     if (!silent)
     {
       cout <<endl;
-      cout << "    - Gridname: "<<param.gridname<<endl;
+      cout << "    - OutputFile: "<<param.gridname<<endl;
       cout << "    - SetName: "<<param.setname<<endl;
       cout <<endl;
       cout << "    - PTMin: "<<param.ptmin<<endl;
       cout << "    - NData: "<<param.ndata<<endl;
-      cout << "    - TrgPr: "<<param.tgtprec<<endl;
       cout << "    - fnlobin: " <<param.fnlobin <<endl;
       cout <<endl;
       cout << "    - PDFWeight: "<<param.pdfwgt<<endl;
@@ -216,7 +228,7 @@ namespace APP
       FK.AddTag(FKHeader::BLOB, "GridDesc", par.desc);
       FK.AddTag(FKHeader::BLOB, "Readme", par.readme);
       FK.AddTag(FKHeader::GRIDINFO, "SETNAME", par.setname);
-      FK.AddTag(FKHeader::GRIDINFO, "NDATA", par.ndata);
+      FK.AddTag(FKHeader::GRIDINFO, "NDATA", parse_ndat(par.common_subgrids));
       FK.AddTag(FKHeader::GRIDINFO, "HADRONIC", true);
       FK.AddTag(FKHeader::VERSIONS, "APPLrepo", applCommit() );
 
@@ -233,39 +245,6 @@ namespace APP
       // Set QCD parameters
       QCD::set_params(par, FK);
   }
-
-
-  double computeTargetPrecision(std::string const& setname)
-  {
-    // Compute target interpolation accuracy
-    const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; 
-    const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat";  
-    NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
-    std::vector<double> accuracy; 
-    for(int i=0; i<cd.GetNData(); i++) 
-    {
-      // Get uncorrelated error
-      double uncorrErr = pow(cd.GetStat(i),2);
-      for (int l=0; l<cd.GetNSys(); l++)
-        if (cd.GetSys(i,l).name == "UNCORR")
-          uncorrErr += pow(cd.GetSys(i,l).add,2);
-      uncorrErr = abs(sqrt(uncorrErr)/cd.GetData(i));
-
-      if (uncorrErr > 1E-10)
-        accuracy.push_back(uncorrErr/3.0);
-      else // If no statistical error is available, go for 10* smaller than total systematic
-      {
-        double sysErr = 0.0;
-        for (int l=0; l<cd.GetNSys(); l++)
-          sysErr += pow(cd.GetSys(i,l).add,2);
-        sysErr = sqrt(sysErr)/cd.GetData(i);
-        accuracy.push_back(abs(sysErr)/10.0);
-      }
-    }
-    const double target = (*std::min_element(accuracy.begin(), accuracy.end()))/5.0;
-    return target;
-  }
-
 
   // *********************** APPLgrid helpers ****************************
 
@@ -427,7 +406,7 @@ namespace APP
   {
     // Counter
     int nElm = 0;
-    for (auto bin : par.map )
+    for (auto bin : par.maskmap )
       for (size_t pto=0; pto<par.pto; pto++) 
       {
         int gidx = get_grid_idx(g, pto); // APPLgrid grid index
@@ -501,10 +480,10 @@ namespace APP
     const vector<size_t> afl = QCD::active_flavours(par);
     std::cout << "APFELcomb: "<<afl.size() <<" active flavours in evolution." <<std::endl;
    
-    for (size_t d=0; d<fk->GetNData(); d++)
+    for (size_t d=0; d<par.ndata; d++)
     {    
       // Fetch associated applgrid info
-      const size_t bin = par.map[d];
+      const size_t bin = par.maskmap[d];
       for (size_t pto=0; pto<((size_t) par.pto); pto++) // Loop over perturbative order
       {
         // Determine grid index, allocate subprocess arrays
@@ -594,7 +573,8 @@ namespace APP
                           if (vary_ren) fill += renscale*H[ip];             // Ren. scale variation
                           if (vary_fac) fill += facscale*(H1[ip] + H2[ip]); // Fac. scale variation
                           if ( fill != 0.0 )
-                            fk->Fill( d, i, j, k, l, norm*fill*W[ip]);
+                            for (int const& td : par.datamap[d])
+                              fk->Fill( td, i, j, k, l, norm*fill*W[ip]);
                         }
                     }
 

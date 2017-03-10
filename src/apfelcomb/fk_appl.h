@@ -45,12 +45,13 @@ namespace APP
 	  int    fnlobin;   //!< Which bin in the fastNLO grid? (yes, this needs to be signed)
 	  bool pdfwgt;      //!< Using a PDF weight? Typically used for fastNLO grids
 	  bool ppbar;		//!< Does the grid need a pp -> ppbar transform?
-	  vector<bool> mask;//!< Mask for which bins to pick out as datapoints
-	  vector<int>  map; //!< Map to list which bins enter as datapoints
-	  
+
+	  vector<bool> mask;				//!< Mask for which bins to pick out as datapoints
+	  vector<int>  maskmap; 			//!< Map to list which bins enter as datapoints
+	  vector< vector<int> > datamap;	//!< Map of applgrid point to data point
+
 	  size_t nx;           //!< Number of interpolation grid x-points to be used
 	  double xmin;      //!< Minimum x-value to be used in interpolation
-	  double tgtprec;	//!< Target precision for interpolation accuracy
 
 	  size_t incdat;    //!< Datapoint increment operator
 	  size_t muldat;	//!< Datapoint multiplicative operator

@@ -32,7 +32,7 @@ try:
 
     print "********************** Available APPLgrids **********************"    
 
-    cur.execute('SELECT id, gridname FROM subgrids')
+    cur.execute('SELECT id, applgrid FROM subgrids')
     col_names = [cn[0] for cn in cur.description]
 
     table = []
