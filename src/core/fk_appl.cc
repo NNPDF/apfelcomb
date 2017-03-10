@@ -113,7 +113,7 @@ namespace APP
         param.map.push_back(i);
 
     // Read operators
-    param.incdat = 0; param.muldat = 1;
+    param.incdat = 0; param.muldat = 1; param.nrmdat = 1.0;
     const std::string operators = NNPDF::dbquery<string>(subgrid_db,innum,"operators");
     const bool activeOperator = operators != "";
     if (activeOperator)
@@ -128,8 +128,9 @@ namespace APP
           exit(-1);
         }
 
-        if (subtoken[0] == "*") param.muldat = atof(subtoken[1].c_str());
+        if (subtoken[0] == "*") param.muldat = atoi(subtoken[1].c_str());
         if (subtoken[0] == "+") param.incdat = atoi(subtoken[1].c_str());
+        if (subtoken[0] == "N") param.nrmdat = atof(subtoken[1].c_str());
       }
     }
 
@@ -197,6 +198,7 @@ namespace APP
       {
         cout << "    - data increment: "<<param.incdat<<endl;
         cout << "    - data multiplier: "<<param.muldat<<endl;
+        cout << "    - data normalisation: "<<param.nrmdat<<endl;
         cout <<endl; 
       }
       cout << "    - Common grids: "<<param.inventory.size()<<endl;
@@ -569,7 +571,7 @@ namespace APP
               // Calculate normalisation factors
               const double x2 = igrid->fx(igrid->gety2(b));
               const double pdfnrm = par.pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
-              const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2);
+              const double norm = pdfnrm*compute_wgt_norm(g, par, bin, pto+par.ptmin, as, x1, x2)*par.nrmdat;
 
               for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
                 for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2

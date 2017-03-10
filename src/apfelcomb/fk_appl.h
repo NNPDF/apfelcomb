@@ -54,7 +54,8 @@ namespace APP
 
 	  size_t incdat;    //!< Datapoint increment operator
 	  size_t muldat;	//!< Datapoint multiplicative operator
-
+	  double nrmdat;	//!< Datapoint normalisation operator
+	  
 	  vector<string> inventory; 		//!< List of common grids required for set
 	  vector<int> 	 common_subgrids;	//!< IDs of common subgrids required for grid
 	};

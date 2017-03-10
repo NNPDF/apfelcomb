@@ -94,6 +94,9 @@ int main(int argc, char* argv[]) {
   else
     xsec = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
 
+  for (double& obs : xsec)
+    obs *= par.nrmdat;
+
   size_t ibin=0;
   for (size_t o=0; o<sourceGrid.g->Nobs(); o++)
     if (par.mask[o])
