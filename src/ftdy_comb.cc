@@ -116,12 +116,12 @@ int main(int argc, char* argv[]) {
   // Export the grid
   if (setname == "DYE886R")
   {
-    exportGrid(par, cd, "DYE886R_P", getOutputFilename(iTh, setname, "DYE886R_P"));
-    exportGrid(par, cd, "DYE886R_D", getOutputFilename(iTh, setname, "DYE886R_D"));
+    exportGrid(par, cd, "DYE886R_P", getOutputFilename(iTh, "DYE886R_P"));
+    exportGrid(par, cd, "DYE886R_D", getOutputFilename(iTh, "DYE886R_D"));
   }
   else
   {
-    exportGrid(par, cd, setname, getOutputFilename(iTh, setname, setname));
+    exportGrid(par, cd, setname, getOutputFilename(iTh, setname));
   }
 
   cout <<endl<< "--  FTDYComb Complete **********************************"<<endl;

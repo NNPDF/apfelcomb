@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
   DisplayHR();
   cout << "  --  Exporting FKTABLE"<<endl;
 
-  const std::string outFile = getOutputFilename(iTh, par.setname, par.gridname);
+  const std::string outFile = getOutputFilename(iTh, par.gridname);
   ofstream outFK;  outFK.open(outFile.c_str());
   
   FK->Print(outFK);

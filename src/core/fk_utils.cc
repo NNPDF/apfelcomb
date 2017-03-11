@@ -118,16 +118,17 @@ void setupDir(int const& theoryID, std::string const& setname)
   stringstream theoryDir;
   theoryDir << resultsPath()<<"theory_" << theoryID<<"/";
 
+  mkdir(resultsPath().c_str(),0777);
   mkdir(theoryDir.str().c_str(),0777);
-  mkdir((theoryDir.str() + "apfelcomb/").c_str(),0777);
-  mkdir((theoryDir.str() + "apfelcomb/" + setname).c_str(),0777);
+  mkdir((theoryDir.str() + "subgrids/").c_str(),0777);
+  mkdir((theoryDir.str() + "fastkernel/").c_str(),0777);
 }
 
-std::string getOutputFilename(int const& theoryID, std::string const& setname, std::string const& gridname)
+std::string getOutputFilename(int const& theoryID, std::string const& gridname)
 {
   // Final output filename
   stringstream fname;
-  fname << resultsPath()<<"theory_" << theoryID<<"/apfelcomb/" << setname<<"/";
+  fname << resultsPath()<<"theory_" << theoryID<<"/subgrids/";
   const std::string outname = fname.str() + "FK_"+gridname+".dat";
   return outname;
 }

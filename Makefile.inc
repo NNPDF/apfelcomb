@@ -10,7 +10,7 @@ LD= g++
 SHELL=/bin/bash
 
 # APPLCOMB paths
-RESULTSDIR=   -D  RESULTS_PATH="../nnpdfcpp/data/" -D  DATA_PATH="../nnpdfcpp/data/"
+RESULTSDIR=   -D  RESULTS_PATH="./results/" -D  DATA_PATH="../nnpdfcpp/data/"
 APPLGRIDDIR=  -D  APPL_PATH="../applgrids/"
 DATABASEDIR=  -D  DB_PATH="./db/"
 ALLDIR= $(RESULTSDIR) $(APPLGRIDDIR) $(DATABASEDIR)

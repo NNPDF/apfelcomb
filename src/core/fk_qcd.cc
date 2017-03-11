@@ -98,7 +98,7 @@ namespace QCD
     param.thID = innum;
 
     // Load theory choices DB
-    NNPDF::IndexDB theoryDB(resultsPath()+"theory.db", "theoryIndex");
+    NNPDF::IndexDB theoryDB(dataPath()+"theory.db", "theoryIndex");
     const int entries =theoryDB.GetNEntries();
     if (innum < 0 || innum > entries)
     {
