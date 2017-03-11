@@ -186,7 +186,7 @@ namespace APP
       exit(-1);
     }
     
-    if (param.ptmin >= param.pto)
+    if (param.ptmin >= param.pto && !silent )
       cout << "Warning: minimum perturbative order is greater than the maximum perturbative order!"<<endl;
 
     // Set number of active ptords
