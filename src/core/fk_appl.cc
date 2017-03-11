@@ -240,11 +240,12 @@ namespace APP
   {
     double targetPrec = std::numeric_limits<double>::infinity();
     for (int i : targetPoints)
-      targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/3.0);
-    if (targetPrec == 0.0)
-    for (int i : targetPoints)
-      targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);   
-    if (targetPrec == 0.0)
+      if (abs(cd.GetUncE(i)/cd.GetData(i)) > 1E-5)
+        targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/3.0);
+    if (targetPrec == std::numeric_limits<double>::infinity())
+      for (int i : targetPoints)
+        targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);  
+    if (targetPrec == std::numeric_limits<double>::infinity())
     {
       targetPrec = 0.001;
       std::cout << "WARNING: NO ERROR AVAILABLE, SETTING TO PERMILLE ACCURACY" <<std::endl;

@@ -88,6 +88,13 @@ int main(int argc, char* argv[]) {
     exit(-1);
   }
 
+  for (int i: subgridIDs)
+  {
+    const std::vector< std::vector<int> > data_map = APP::parse_map(subgridIDs, i);
+    for (auto j : data_map)
+      for (auto k : j)
+        std::cout << k <<" "<< APP::computeTargetPrecision(j, cd) <<"  "<<cd.GetUncE(k)/cd.GetData(k)<<"  "<<cd.GetCorE(k)/cd.GetData(k)<<std::endl;
+  }
 
   exit(0);
 }
