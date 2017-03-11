@@ -12,6 +12,7 @@
 
 #include <chrono>
 #include <ctime>
+#include <limits>
 
 using namespace std;
 using NNPDF::FKHeader;
@@ -234,6 +235,23 @@ namespace APP
       // Set QCD parameters
       QCD::set_params(par, FK);
   }
+
+  double computeTargetPrecision(std::vector<int> const& targetPoints, NNPDF::CommonData const& cd)
+  {
+    double targetPrec = std::numeric_limits<double>::infinity();
+    for (int i : targetPoints)
+      targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/3.0);
+    if (targetPrec == 0.0)
+    for (int i : targetPoints)
+      targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);   
+    if (targetPrec == 0.0)
+    {
+      targetPrec = 0.001;
+      std::cout << "WARNING: NO ERROR AVAILABLE, SETTING TO PERMILLE ACCURACY" <<std::endl;
+    }
+    return targetPrec;
+  }
+
 
   // *********************** APPLgrid helpers ****************************
 

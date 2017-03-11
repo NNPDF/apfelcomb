@@ -13,6 +13,7 @@
 // NNPDF
 #include "NNPDF/fkgenerator.h"
 #include "NNPDF/fastkernel.h"
+#include "NNPDF/commondata.h"
 
 // LHAPDF
 #include "LHAPDF/LHAPDF.h"
@@ -79,7 +80,7 @@ namespace APP
   	std::vector< std::vector<int> > parse_map(std::vector<int> const&, int const&);
 
   	void set_params(appl_param const& par, NNPDF::FKHeader& FK);
-  	double computeTargetPrecision(std::string const& setname);
+  	double computeTargetPrecision(std::vector<int> const& targetPoints, NNPDF::CommonData const&);
 
 	// Populate FK table
 	void computeFK(appl_param const&, appl::grid*, NNPDF::FKGenerator*);
