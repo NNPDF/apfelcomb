@@ -16,8 +16,6 @@
 using namespace std;
 using NNPDF::FKHeader;
 
-bool NNPDF::CommonData::Verbose = false;
-
 namespace APP
 {
   vector<std::string> splitpdf ( std::string const& str )
