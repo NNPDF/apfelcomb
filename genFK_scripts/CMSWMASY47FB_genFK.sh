@@ -1,8 +1,0 @@
-#!/bin/bash
-echo "# COMPOUND FK
-FK: FK_CMSWMASY47FB_WP.dat
-FK: FK_CMSWMASY47FB_WM.dat
-OP: ASY" > FK_CMSWMASY47FB-COMPOUND.dat
-
-# Cleanup
-exit 0

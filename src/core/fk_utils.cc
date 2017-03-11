@@ -112,7 +112,7 @@ vector<double> dsplit(string in)
 
 // ************ Theory Dir **************************
 
-void setupDir(int const& theoryID, std::string const& setname, vector<std::string> const& reqgrids)
+void setupDir(int const& theoryID, std::string const& setname)
 {
   // Setup required directories
   stringstream theoryDir;
@@ -121,35 +121,6 @@ void setupDir(int const& theoryID, std::string const& setname, vector<std::strin
   mkdir(theoryDir.str().c_str(),0777);
   mkdir((theoryDir.str() + "apfelcomb/").c_str(),0777);
   mkdir((theoryDir.str() + "apfelcomb/" + setname).c_str(),0777);
-
-  char mode[] = "0777";
-  const int imode = strtol(mode, 0, 8);
-
-  // Setup GenFK Scripts
-  const std::string genFK  = setname + "_genFK.sh";
-  const std::string source = "genFK_scripts/" + genFK;
-
-  struct stat buf;
-  if (stat(source.c_str(), &buf) == 0)
-  {
-    const std::string dest   = theoryDir.str()  + "apfelcomb/" + setname + "/genFK.sh";
-    std::ifstream  src(source.c_str(), std::ios::binary);
-    std::ofstream  dst(dest.c_str(),   std::ios::binary);
-    dst << src.rdbuf(); chmod( dest.c_str() , imode);
-  }
-
-  // Write set inventory to file
-  const std::string invPath = theoryDir.str()  + "apfelcomb/" + setname + "/inventory";
-  std::ofstream invStream(invPath.c_str());
-  for (auto grid : reqgrids)
-    invStream << grid << std::endl;
-  invStream.close();
-
-  // Setup GenAll script
-  std::ifstream  src("genFK_scripts/genAll.sh", std::ios::binary);
-  const std::string dest = theoryDir.str() + "/apfelcomb/genAll.sh";
-  std::ofstream  dst(dest.c_str(),   std::ios::binary);
-  dst << src.rdbuf(); chmod( dest.c_str() , imode);
 }
 
 std::string getOutputFilename(int const& theoryID, std::string const& setname, std::string const& gridname)

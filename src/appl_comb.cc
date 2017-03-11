@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
   std::cout << "APPLgrid repository version: "<< applCommit() <<std::endl;
 
   // Setup directory
-  setupDir(iTh, par.setname, par.inventory);
+  setupDir(iTh, par.setname);
   APP::grid sourceGrid(par);
 
   if (!verifyGrid(par, sourceGrid.g)) exit(-1);
@@ -129,12 +129,13 @@ int main(int argc, char* argv[]) {
   APFELPDFSet apfelPDF;
   NNPDF::ThPredictions theory(&apfelPDF, FK);
 
-  cout << "a \t d \t <FK> \t <APPLgrid> \t <Rel. Error.>"<<endl;
+  cout << "<data>\t <FK> \t <APPLgrid> \t <Rel. Error.>"<<endl;
   for (int i : par.maskmap )
     for (int j : par.datamap[i] )
   {
+    const std::string point = to_string(i) + " (" + to_string(j) + ")";
     const double rel_err = abs((theory.GetObsCV(j)-xsec[i])/xsec[i]);
-    cout << setw(5) << left <<i<<setw(5) << left <<j<< setw(10) << left<<theory.GetObsCV(j)<< setw(15) << left<<xsec[i]<< setw(15) << left<<rel_err<<endl;
+    cout << setw(10) << left <<point<< setw(10) << left<<theory.GetObsCV(j)<< setw(15) << left<<xsec[i]<< setw(15) << left<<rel_err<<endl;
 
     // if (rel_err > par.tgtprec)
     // {

@@ -76,7 +76,7 @@ vector<double> dsplit(string input);
 vector<string> ssplit(string input);
 
 // Directory helper functions
-void setupDir(int const& theoryID, std::string const& setname, vector<std::string> const& reqgrids);
+void setupDir(int const& theoryID, std::string const& setname);
 std::string getOutputFilename(int const& theoryID, std::string const& setname, std::string const& gridname);
 
 // Tostring function

@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     DIS::parse_input(iDB, par, std::string("dis.db"));
 
   // Setup directory
-  setupDir(iTh, par.setname, par.inventory);
+  setupDir(iTh, par.setname);
 
   // Read CommonData
   NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(par.commonfile, par.sysfile);

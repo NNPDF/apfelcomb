@@ -95,17 +95,7 @@ int main(int argc, char* argv[]) {
 
   // Setup directory
   const std::string setname = FTDY::setnames[iDt-1];
-  std::vector<std::string> inventory;
-  if (setname == "DYE886R")
-  {
-    inventory.push_back("DYE886R_P");
-    inventory.push_back("DYE886R_D");
-  }
-  else
-  {
-    inventory.push_back(setname);
-  }
-  setupDir(iTh, setname, inventory);
+  setupDir(iTh, setname);
 
   const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; //!< Path for the commondata file
   const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat"; //!< Path for the SYSTYPE file

@@ -101,7 +101,7 @@ namespace APP
     param.nx      =  NNPDF::dbquery<int>(grid_db,target,"nx");
     param.desc    =  NNPDF::dbquery<string>(grid_db,target,"description");
     param.setname =  NNPDF::dbquery<string>(grid_db,target,"setname");
-    
+
     // Read subgrid information
     param.applgrid  = applPath() + param.setname + "/" + NNPDF::dbquery<string>(subgrid_db,innum,"applgrid");
     param.fnlobin =  NNPDF::dbquery<int>(subgrid_db,innum,"fnlobin");
@@ -110,7 +110,6 @@ namespace APP
     param.ppbar     = NNPDF::dbquery<bool>(subgrid_db,innum,"ppbar");
     param.common_subgrids = NNPDF::dbmatch(subgrid_db, "fktarget", fktarget);
     param.gridname  = fktarget + "_" + to_string(innum) + ".subgrid";
-
 
     // Fetch datapoint mask
     string mask = NNPDF::dbquery<string>(subgrid_db,innum,"mask");
@@ -160,15 +159,6 @@ namespace APP
                 std::istreambuf_iterator<char>());
     param.readme = readme;
 
-    // Get common grids for inventory
-    vector<int> commonGrids = NNPDF::dbmatch(grid_db, "setname", param.setname);
-    for ( auto i : commonGrids)
-    {
-      const std::string commonTarget = NNPDF::dbquery<string>(grid_db,i,"name");
-      vector<int> commonSubgrids = NNPDF::dbmatch(subgrid_db, "fktarget", commonTarget);
-      for ( auto j : commonSubgrids) param.inventory.push_back(fktarget+"_"+to_string(j)+".subgrid");
-    }
-
     /*
      *        ***    VERIFICATION    ***
      */
@@ -213,7 +203,6 @@ namespace APP
         cout << "    - data normalisation: "<<param.nrmdat<<endl;
         cout <<endl; 
       }
-      cout << "    - Common grids: "<<param.inventory.size()<<endl;
       cout <<endl;
       DisplayHR();
     }

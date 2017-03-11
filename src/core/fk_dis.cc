@@ -38,11 +38,6 @@ namespace DIS
 
     param.positivity   = NNPDF::dbquery<bool>(db,innum,"positivity");
 
-    // Get common grids
-    vector<int> commonGrids = NNPDF::dbmatch(db, "setname", param.setname);
-    for ( auto i : commonGrids)
-      param.inventory.push_back(NNPDF::dbquery<string>(db,i,"gridname"));
-
     // Fix positivity observables to NLO and disable TMCs
     if (param.positivity)
     {
@@ -70,7 +65,6 @@ namespace DIS
 
     cout << "    - Gridname: "<<param.gridname<<endl;
     cout << "    - SetName: "<<param.setname<<endl;
-    cout << "    - Common grids: "<<param.inventory.size()<<endl;
     DisplayHR();
 
     return;
