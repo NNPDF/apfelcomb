@@ -125,11 +125,15 @@ int main(int argc, char* argv[]) {
 
   for (int i=0; i<par.ndata; i++)
     {
-      const int iappl = par.maskmap[i];
-      const std::string point = to_string(i) + " (" + to_string(iappl) + ")";
-      const double rel_err = abs((theory.GetObsCV(i)-xsec[iappl])/xsec[iappl]);
+      const double applpred = xsec[par.maskmap[i]];
+      const double FKpred  = theory.GetObsCV(par.datamap[i][0]);
+      const double rel_err = abs((FKpred-applpred)/applpred);
       const double targetPrec = APP::computeTargetPrecision(par.datamap[i], cd);
-      cout << setw(10) << left <<point<< setw(10) << left<<theory.GetObsCV(i)<< setw(15) << left<<xsec[iappl]<< setw(15) << left<<rel_err<< setw(15) << left<<targetPrec<<endl;
+      cout  << setw(5)  << left << i
+            << setw(10) << left << FKpred
+            << setw(15) << left << applpred
+            << setw(15) << left << rel_err
+            << setw(15) << left << targetPrec<<endl;
     }
 
   DisplayHR();
