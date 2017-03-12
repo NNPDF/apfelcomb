@@ -67,6 +67,10 @@ int main(int argc, char* argv[]) {
   par.datamap = APP::parse_map(par.common_subgrids, iDB);
   std::cout << "APPLgrid repository version: "<< applCommit() <<std::endl;
 
+  const std::string commonfile = dataPath() + "commondata/DATA_" + par.setname + ".dat"; 
+  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + par.setname + "_DEFAULT.dat";  
+  const NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
+
   // Setup directory
   setupDir(iTh, par.setname);
   APP::grid sourceGrid(par);
@@ -120,12 +124,12 @@ int main(int argc, char* argv[]) {
   cout << "<data>\t <FK> \t <APPLgrid> \t <Rel. Error.>"<<endl;
 
   for (int i=0; i<par.ndata; i++)
-    for (int icd : par.datamap[i] )
     {
       const int iappl = par.maskmap[i];
-      const std::string point = to_string(i) + " (" + to_string(icd) + ")";
-      const double rel_err = abs((theory.GetObsCV(icd)-xsec[iappl])/xsec[iappl]);
-      cout << setw(10) << left <<point<< setw(10) << left<<theory.GetObsCV(icd)<< setw(15) << left<<xsec[iappl]<< setw(15) << left<<rel_err<<endl;
+      const std::string point = to_string(i) + " (" + to_string(iappl) + ")";
+      const double rel_err = abs((theory.GetObsCV(i)-xsec[iappl])/xsec[iappl]);
+      const double targetPrec = APP::computeTargetPrecision(par.datamap[i], cd);
+      cout << setw(10) << left <<point<< setw(10) << left<<theory.GetObsCV(i)<< setw(15) << left<<xsec[iappl]<< setw(15) << left<<rel_err<< setw(15) << left<<targetPrec<<endl;
     }
 
   DisplayHR();
