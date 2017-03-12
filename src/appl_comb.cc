@@ -81,9 +81,7 @@ int main(int argc, char* argv[]) {
   // Need to get the absolute smallest x-grid value in APPLgrid here, not the value in par, hence the false
   // This is due to APPLgrids convolution routine requesting the smallest x-grid value from the PDF
   QCD::initTruthGrid(par, APP::getXmin(sourceGrid.g,false)); 
-  DisplayHR();
-  cout << "  --  High accuracy APPLgrid Result "<<endl;
-  
+
   if (par.ppbar == true && par.xiF != 1)
     std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
 
@@ -94,19 +92,9 @@ int main(int argc, char* argv[]) {
     xsec = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
   else
     xsec = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
-
   for (double& obs : xsec)
     obs *= par.nrmdat;
-
-  size_t ibin=0;
-  for (size_t o=0; o<sourceGrid.g->Nobs(); o++)
-    if (par.mask[o])
-    {
-      cout << "  APPLGRID result, bin: "<<ibin<<"  = "<<xsec[o]<<endl;
-      ibin++;
-    }
   
-  DisplayHR();
   cout << "  --  Compute FKTABLE "<<endl;
 
   // Re-init evol grid with correct (nonzero) x-grid limits
@@ -130,20 +118,15 @@ int main(int argc, char* argv[]) {
   NNPDF::ThPredictions theory(&apfelPDF, FK);
 
   cout << "<data>\t <FK> \t <APPLgrid> \t <Rel. Error.>"<<endl;
-  for (int i : par.maskmap )
-    for (int j : par.datamap[i] )
-  {
-    const std::string point = to_string(i) + " (" + to_string(j) + ")";
-    const double rel_err = abs((theory.GetObsCV(j)-xsec[i])/xsec[i]);
-    cout << setw(10) << left <<point<< setw(10) << left<<theory.GetObsCV(j)<< setw(15) << left<<xsec[i]<< setw(15) << left<<rel_err<<endl;
 
-    // if (rel_err > par.tgtprec)
-    // {
-    //   cerr << "Error: FK Table Verification failed, maxPrec: "<<par.tgtprec<<endl;
-    //   // if (par.ppbar != true || par.xiF == 1)
-    //   //   exit(1);  // Sidestep verification when you can't check against APPLgrid
-    // }
-  }
+  for (int i=0; i<par.ndata; i++)
+    for (int icd : par.datamap[i] )
+    {
+      const int iappl = par.maskmap[i];
+      const std::string point = to_string(i) + " (" + to_string(icd) + ")";
+      const double rel_err = abs((theory.GetObsCV(icd)-xsec[iappl])/xsec[iappl]);
+      cout << setw(10) << left <<point<< setw(10) << left<<theory.GetObsCV(icd)<< setw(15) << left<<xsec[iappl]<< setw(15) << left<<rel_err<<endl;
+    }
 
   DisplayHR();
   const std::string outFile = getOutputFilename(iTh, par.gridname);
