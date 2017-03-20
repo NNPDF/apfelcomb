@@ -5,7 +5,7 @@ import sys,os
 from subprocess import call
 
 def infoSplash():
-    print 'Usage: ' + sys.argv[0] + " <gridID> <theoryID>"
+    print('Usage: ' + sys.argv[0] + " <gridID> <theoryID>")
     exit(-1)
 
 if len(sys.argv) != 3:
@@ -26,7 +26,7 @@ try:
     cur.execute('SELECT name FROM grids WHERE id = \''+gridID+'\' ORDER BY id ' )
     grids = cur.fetchall()
     if len(grids) != 1:
-        print "RowError: Either cannot find id: " + gridID + " or something very strange has happened"
+        print("RowError: Either cannot find id: " + gridID + " or something very strange has happened")
         exit(-1)
 
     # merge the grids
@@ -34,7 +34,7 @@ try:
    
     
 except lite.Error, e:
-    print "Error %s:" % e.args[0]
+    print("Error %s:" % e.args[0])
     sys.exit(1)
 finally:
     if con:
