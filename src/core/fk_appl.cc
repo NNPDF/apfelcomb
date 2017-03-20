@@ -241,7 +241,7 @@ namespace APP
     double targetPrec = std::numeric_limits<double>::infinity();
     for (int i : targetPoints)
       if (abs(cd.GetUncE(i)/cd.GetData(i)) > 1E-5)
-        targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/3.0);
+        targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/5.0);
     if (targetPrec == std::numeric_limits<double>::infinity())
       for (int i : targetPoints)
         targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);  
