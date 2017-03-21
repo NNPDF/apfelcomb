@@ -40,6 +40,7 @@ public:
 
 	string GetSetName() 		const {return setname;};
 	string GetDescription() 	const {return description;};
+	NNPDF::CommonData const& GetCommonData() const {return data;};
 
 private:
 	const int    id;			//!< Target ID
@@ -51,7 +52,7 @@ private:
 	const int 		nx;				//!< Number of x-points in the interpolation grid
 	const NNPDF::CommonData data;	// Reference data file
 
-	vector<FKSubGrid*> components;	//!< Subgrid components
+	map<int,FKSubGrid*> components;	//!< Subgrid components
 
 	Source parse_source(std::string const&); //!< Returns the appropriate enum for the strings "APP/DIS/DYP"
 };

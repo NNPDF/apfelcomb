@@ -36,27 +36,23 @@ int main(int argc, char* argv[]) {
   NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
   NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", "app_subgrids");
 
-  // Fetch number of entries
-  const int entries =grid_db.GetNEntries();
-  if (iDB < 0 || iDB > entries)
-  {
-    cerr << "Error: grid ID ("<<iDB<<") must be between 1 and "<<entries<<endl;
-    exit(-1);
-  }
-
   FKTarget table(grid_db, iDB);
   table.ReadSubGrids(subgrid_db);
   table.Splash(std::cout);
-
 
   QCD::qcd_param par;
   QCD::parse_input(52, par);
   QCD::initQCD(par, table.GetQ2max());
   QCD::initTruthGrid(par, table.GetComputeXmin()); 
   const vector<double> xsec = table.Compute(par);
-  for (size_t i=0; i<xsec.size(); i++)
-    std::cout << i <<"\t"<<xsec[i]<<std::endl;
 
+  double chi2 = 0;
+  for (size_t i=0; i<xsec.size(); i++)
+  {
+    chi2 += pow(xsec[i] - table.GetCommonData().GetData(i), 2)/pow(table.GetCommonData().GetUncE(i),2);
+    std::cout << i <<"\t"<<xsec[i]<<"\t"<<table.GetCommonData().GetData(i)<<std::endl;
+  }
+  std::cout << "Uncorrelated chi2: " << chi2/(double)xsec.size()<<std::endl;
   exit(0);
 }
 

@@ -64,7 +64,12 @@ namespace APP
 		ppbar(	NNPDF::dbquery<bool>(db,iDB,"ppbar")),
 		applgrid(applPath() + parent.GetSetName() + "/" + applfile , fnlobin)
 		{
-
+		  if (ndata>applgrid.g->Nobs())
+		  {
+		    cerr <<"Error: number of datapoints in settings: "<<ndata<<" > appl grid Nobs: "<<applgrid.g->Nobs()<<endl;
+		    cerr <<"Please check the provided mask" <<endl;
+		    exit(-1);
+		  }
 		};
 
 		size_t GetNdat() {return ndata;};					//!< Return number of datapoints in subgrid
