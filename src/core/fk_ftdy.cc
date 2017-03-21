@@ -53,7 +53,7 @@ namespace FTDY
 
     // Setup required directories
     stringstream theoryDir;
-    theoryDir << resultsPath()<<"theory_" << par.thID<<"/apfelcomb/" << cd.GetSetName() <<"/";
+    theoryDir << resultsPath()<<"theory_" << par.thID<<"/subgrids/";
 
     APFEL::ComputeFKTables(hcxfile, theoryDir.str().c_str(), par.Q0, flmap);
   }
@@ -62,7 +62,7 @@ namespace FTDY
   void processFK(QCD::qcd_param const& par, NNPDF::CommonData const& cd, std::string const& fkname, NNPDF::FKGenerator* fk)
   {
     stringstream theoryDir;
-    theoryDir << resultsPath()<<"theory_" << par.thID<<"/apfelcomb/" << cd.GetSetName() <<"/";
+    theoryDir << resultsPath()<<"theory_" << par.thID<<"/subgrids/";
     const std::string filename = theoryDir.str() + "FK_"+fkname+".dat";
 
     // Read written table

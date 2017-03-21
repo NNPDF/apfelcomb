@@ -13,7 +13,7 @@ if len(sys.argv) != 2:
 theoryID = sys.argv[1]
 
 currentPath = os.path.dirname(os.path.realpath(__file__))
-sqlite3Path = currentPath+'/db/applgrid.db'
+sqlite3Path = currentPath+'/db/apfelcomb.db'
 
 # sqlite con
 con = None
@@ -22,13 +22,13 @@ try:
     con = lite.connect(sqlite3Path)
     cur = con.cursor()    
     
-    cur.execute('SELECT name FROM grids ORDER BY id' )
+    cur.execute('SELECT name, source FROM grids ORDER BY id' )
     grids = cur.fetchall()
     if len(grids) == 1:
         print("Error: no grids found!")
         exit(-1)
     for grid in grids:
-        mergegrid(grid[0], theoryID, cur)
+        mergegrid(grid[0], grid[1], theoryID, cur)
    
     
 except lite.Error, e:
