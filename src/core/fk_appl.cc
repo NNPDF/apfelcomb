@@ -340,7 +340,6 @@ namespace APP
    
     for (size_t d=0; d<maskmap.size(); d++)
     {    
-      std::cout << d <<"  "<< bin<<std::endl<<std::endl;
       // Fetch associated applgrid info
       const size_t bin = maskmap[d];
       for (size_t pto=0; pto<((size_t) par.pto); pto++) // Loop over perturbative order
