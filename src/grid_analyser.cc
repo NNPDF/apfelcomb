@@ -16,6 +16,7 @@
 #include "apfelcomb/fk_utils.h"
 #include "apfelcomb/fk_appl.h"
 #include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_grids.h"
 
 #include "NNPDF/nnpdfdb.h"
 #include "NNPDF/commondata.h"
@@ -32,8 +33,8 @@ int main(int argc, char* argv[]) {
 
   Splash(); NNPDF::SetVerbosity(0); appl::setVerbose(false);
   const int iDB = atoi(argv[1]);
-  NNPDF::IndexDB grid_db(databasePath()+"applgrid.db", "grids");
-  NNPDF::IndexDB subgrid_db(databasePath()+"applgrid.db", "subgrids");
+  NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
+  NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", "app_subgrids");
 
   // Fetch number of entries
   const int entries =grid_db.GetNEntries();
@@ -42,6 +43,10 @@ int main(int argc, char* argv[]) {
     cerr << "Error: grid ID ("<<iDB<<") must be between 1 and "<<entries<<endl;
     exit(-1);
   }
+
+  FKTarget table(grid_db, iDB);
+  table.ReadSubGrids(subgrid_db);
+  table.Splash(std::cout);
 
   const string name =  NNPDF::dbquery<string>(grid_db,iDB,"name");
   const string setname =  NNPDF::dbquery<string>(grid_db,iDB,"setname");

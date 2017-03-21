@@ -14,6 +14,7 @@
 #include "NNPDF/fkgenerator.h"
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/commondata.h"
+#include "NNPDF/nnpdfdb.h"
 
 // LHAPDF
 #include "LHAPDF/LHAPDF.h"
@@ -26,9 +27,51 @@
 
 #include "fk_utils.h"
 #include "fk_qcd.h"
+#include "fk_grids.h"
 
 namespace APP
 {
+
+	class SubGrid: public FKSubGrid
+	{
+	public:
+		SubGrid(NNPDF::IndexDB const& db, int const& iDB):
+		FKSubGrid( iDB, NNPDF::dbquery<string>(db, iDB, "operators")),
+		applgrid(NNPDF::dbquery<string>(db,iDB,"applgrid")),
+		readme(),
+		maskmap(parse_maskmap(NNPDF::dbquery<string>(db,iDB,"mask"))),
+		ndata(	maskmap.size() ),
+		ptmin(	NNPDF::dbquery<size_t>(db,iDB,"ptmin")),
+		fnlobin(NNPDF::dbquery<int>(db,iDB,"fnlobin")),
+		pdfwgt(	NNPDF::dbquery<bool>(db,iDB,"pdfwgt")),
+		ppbar(	NNPDF::dbquery<bool>(db,iDB,"ppbar"))
+		{
+
+		};
+
+		size_t GetNdat() {return ndata;};	//!< Return number of datapoints in subgrid
+		double GetXmin();					//!< Return minimum x-value used in this sub grid
+		double GetComputeXmin();			//!< Return minimal x-value used in computation of this observable
+
+		void Splash(ostream&);
+
+	private:
+	  const string 			applgrid;	//!< Path for the applgrid file
+	  const string 			readme;		//!< APPLgrid README
+	  
+	  const vector<int> 	maskmap;	//!< Map of masked applgrid points to datapoints
+	  const size_t 			ndata;     	//!< Number of selected datapoints
+	  const size_t 			ptmin;     	//!< Minimum perturbative order to contribute
+	  
+	  const int    			fnlobin;   	//!< Which bin in the fastNLO grid? (yes, this needs to be signed)
+	  const bool 			pdfwgt;     //!< Using a PDF weight? Typically used for fastNLO grids
+	  const bool 			ppbar;		//!< Does the grid need a pp -> ppbar transform?
+
+	  static vector<int>  parse_maskmap(string const&);
+
+	};
+
+
 	// Grid data struct
 	class appl_param: public QCD::qcd_param
 	{

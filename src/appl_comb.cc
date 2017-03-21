@@ -22,6 +22,7 @@
 #include "apfelcomb/fk_utils.h"
 #include "apfelcomb/fk_pdf.h"
 #include "apfelcomb/fk_qcd.h"
+#include "apfelcomb/fk_grids.h"
 
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/thpredictions.h"

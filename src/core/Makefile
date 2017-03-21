@@ -6,7 +6,7 @@ CXXFLAGS = 	$(PRJCXXFLAGS) -I ..
 LDFLAGS	 = 	$(PRJLDFLAGS)
 
 CORELIB = ../libac_core.a
-COREOBJ = fk_appl.o fk_dis.o fk_ftdy.o fk_qcd.o fk_utils.o
+COREOBJ = fk_appl.o fk_dis.o fk_ftdy.o fk_qcd.o fk_utils.o fk_grids.o
 
 all : $(CORELIB)
 

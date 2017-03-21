@@ -19,6 +19,30 @@ using NNPDF::FKHeader;
 
 namespace APP
 {
+
+
+  vector<int> SubGrid::parse_maskmap(string const& mask)
+  {
+    const vector<string> masksplit = ssplit(mask);
+    vector<int> _maskmap;
+    for (size_t i=0; i<masksplit.size(); i++)
+      if ((bool) atoi(masksplit[i].c_str()))
+        _maskmap.push_back(i);
+    return _maskmap;
+  }
+
+  void SubGrid::Splash(ostream& o)
+  {
+    FKSubGrid::Splash(o);
+    o << "- APPLgrid: " << applgrid << endl
+      << "- PTMin: "    << ptmin    << endl
+      << "- fnlobin: "  << fnlobin  << endl
+      << "- PDFWeight: "<< pdfwgt   << endl
+      << "- ppbar: "    << ppbar    << endl
+      << endl;
+  }
+
+
   vector<std::string> splitpdf ( std::string const& str )
   {
     vector<std::string> outvec;
