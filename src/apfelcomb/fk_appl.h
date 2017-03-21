@@ -13,11 +13,7 @@
 // NNPDF
 #include "NNPDF/fkgenerator.h"
 #include "NNPDF/fastkernel.h"
-#include "NNPDF/commondata.h"
 #include "NNPDF/nnpdfdb.h"
-
-// LHAPDF
-#include "LHAPDF/LHAPDF.h"
 
 // APPLGrid main includes
 #include "appl_grid/appl_grid.h"

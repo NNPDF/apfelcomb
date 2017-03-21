@@ -112,7 +112,7 @@ vector<double> dsplit(string in)
 
 // ************ Theory Dir **************************
 
-void setupDir(int const& theoryID, std::string const& setname)
+void setupDir(int const& theoryID)
 {
   // Setup required directories
   stringstream theoryDir;

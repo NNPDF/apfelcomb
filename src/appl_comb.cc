@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
   // APPLgrid and theory indices
   const int iDB = atoi(argv[1]);
   const int iTh = atoi(argv[2]);
+  setupDir(iTh);
 
   // Parse parameters
    Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
@@ -54,24 +55,46 @@ int main(int argc, char* argv[]) {
   // Read grid information
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");
   const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
-  FKTarget table(grid_db, iDB); table.ReadSubGrids(subgrid_db);
+  FKTarget table(grid_db, target); table.ReadSubGrids(subgrid_db);
 
-
-
-
-  // const std::string commonfile = dataPath() + "commondata/DATA_" + par.setname + ".dat"; 
-  // const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + par.setname + "_DEFAULT.dat";  
-  // const NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
-
-  // // Setup directory
-  // setupDir(iTh, par.setname);
-  // APP::grid sourceGrid(par);
-
-  // if (!verifyGrid(par, sourceGrid.g)) exit(-1);
-  // DisplayHR();
+  DisplayHR();
 
   // // Initialise QCD
-  // QCD::initQCD(par, APP::getQ2max(sourceGrid.g));
+  QCD::initQCD(par, table.GetQ2max());
+  QCD::initEvolgrid(table.GetNX(), table.GetXmin());  DisplayHR();
+
+  // Initialise empty mFK table
+  NNPDF::FKHeader FKhead; table.SetFKHeader(FKhead); QCD::set_params(par, FKhead);
+  std::stringstream IO; FKhead.Print(IO);
+  NNPDF::FKGenerator* FK = new NNPDF::FKGenerator( IO );
+
+  // Compute FK table
+  table.Combine(par, FK);
+
+  DisplayHR();
+  cout << "  --  Verify FKTABLE"<<endl;
+
+  APFELPDFSet apfelPDF;
+
+  const vector<double>       xsec = table.Compute(par);
+  const NNPDF::ThPredictions theory(&apfelPDF, FK);
+
+  cout << "<data>\t <FK> \t <APPLgrid> \t <Rel. Error.>"<<endl;
+
+  for (int i=0; i<theory.GetNData(); i++)
+    {
+      const double applpred = xsec[i];
+      const double FKpred  = theory.GetObsCV(i);
+      const double rel_err = abs((FKpred-applpred)/applpred);
+      cout  << setw(5)  << left << i
+            << setw(10) << left << FKpred
+            << setw(15) << left << applpred
+            << setw(15) << left << rel_err
+            << endl;
+    }
+
+  DisplayHR();
+
 
   // // Initialise truth x-grid
   // // Need to get the absolute smallest x-grid value in APPLgrid here, not the value in par, hence the false

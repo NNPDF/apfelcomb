@@ -35,8 +35,11 @@ public:
 	double GetQ2max();								//!< Return maximum Q2-value used in this FK grid
 	double GetXmin();								//!< Return minimum x-value used in this FK grid
 	double GetComputeXmin();						//!< Return minimal x-value used in computation of this observable (if different to above)
+	int    GetNX() const {return nx;};				//!< Return number of x-points in the target table
 
-	vector<double> Compute(QCD::qcd_param const&);		//!< Compute the full FK table predictions
+	void SetFKHeader(NNPDF::FKHeader&) const;					//!< Set the parameters in an FK header
+	vector<double> Compute(QCD::qcd_param const&);				//!< Compute the full FK table predictions
+	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*); 	//!< Perform the FK combination
 
 	string GetSetName() 		const {return setname;};
 	string GetDescription() 	const {return description;};
