@@ -100,8 +100,14 @@ namespace APP
     const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,innum,"fktarget");
     const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
     param.nx      =  NNPDF::dbquery<int>(grid_db,target,"nx");
-    param.desc    =  NNPDF::dbquery<string>(grid_db,target,"description");
     param.setname =  NNPDF::dbquery<string>(grid_db,target,"setname");
+
+    std::stringstream description;
+    description << "------------------------------------------------------------"  << std::endl
+                << NNPDF::dbquery<string>(grid_db,target,"description")           << std::endl
+                << "------------------------------------------------------------";
+    param.desc = description.str();  
+
 
     // Read subgrid information
     param.applgrid  = applPath() + param.setname + "/" + NNPDF::dbquery<string>(subgrid_db,innum,"applgrid");
