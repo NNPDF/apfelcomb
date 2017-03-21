@@ -186,6 +186,12 @@ namespace APP
 
 //   // ******************* APPLGrid parsing ******************************
 
+    void SubGrid::Combine(QCD::qcd_param const&, NNPDF::FKGenerator*)   //!< Perform the FK combination on a subgrid
+    {
+      return;
+    };
+
+
 
 //   void set_params(appl_param const& par, NNPDF::FKHeader& FK)
 //   {

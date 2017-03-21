@@ -41,6 +41,7 @@ public:
 	string GetSetName() 		const {return setname;};
 	string GetDescription() 	const {return description;};
 	NNPDF::CommonData const& GetCommonData() const {return data;};
+	FKSubGrid const*  GetSubgrid(int id) const {return components.find(id)->second;};
 
 private:
 	const int    id;			//!< Target ID
@@ -60,6 +61,9 @@ private:
 
 class FKSubGrid
 {
+public:
+	virtual void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) = 0;		//!< Perform the FK combination on a subgrid
+
 protected:
 	friend class FKTarget;
 	FKSubGrid(FKTarget const& _parent, int const& _id, std::string const& operators):
@@ -70,7 +74,7 @@ protected:
 	nrmdat(parse_operator<double>(operators, "N") == 0 ? 1 : parse_operator<double>(operators, "N"))
 	{}
 
-	virtual void Splash( ostream& ); 								//!< Write subgrid information to stream
+	virtual void Splash( ostream& ); 									//!< Write subgrid information to stream
 	virtual	void Compute(QCD::qcd_param const&, vector<double>&) = 0;	//!< Compute the full FK table predictions
 
 	virtual size_t GetNdat()  = 0;									//!< Return number of datapoints in a subgrid

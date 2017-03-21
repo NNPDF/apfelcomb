@@ -50,6 +50,8 @@ namespace APP
 
 	class SubGrid: public FKSubGrid
 	{
+	public:
+	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*);		//!< Perform the FK combination on a subgrid
 	private:
 		friend class ::FKTarget;
 		SubGrid(FKTarget const& parent, NNPDF::IndexDB const& db, int const& iDB):
