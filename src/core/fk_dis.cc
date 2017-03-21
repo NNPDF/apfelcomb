@@ -22,21 +22,26 @@ namespace DIS
   void parse_input(int innum, dis_param& param, std::string dbfile)
   {
     // Setup db connection
-    NNPDF::IndexDB db(databasePath()+dbfile, "sets");
+    NNPDF::IndexDB grid_db(databasePath()+dbfile, "grids");
+    NNPDF::IndexDB subgrid_db(databasePath()+dbfile, "dis_subgrids");
 
     // Fetch number of entries
-    const int entries =db.GetNEntries();
+    const int entries =subgrid_db.GetNEntries();
     if (innum < 0 || innum > entries)
     {
       cerr << "Error: DIS ID ("<<innum<<") must be between 1 and "<<entries<<endl;
       exit(-1);
     }
 
-    param.setname   = NNPDF::dbquery<string>(db,innum,"setname");
-    param.gridname  = NNPDF::dbquery<string>(db,innum,"gridname");
-    param.process   = NNPDF::dbquery<string>(db,innum,"process");
+    // Read grid information
+    const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,innum,"fktarget");
+    const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
+    param.nx      =  NNPDF::dbquery<int>(grid_db,target,"nx");
+    param.setname =  NNPDF::dbquery<string>(grid_db,target,"setname");
 
-    param.positivity   = NNPDF::dbquery<bool>(db,innum,"positivity");
+    param.gridname    = fktarget + "_" + to_string(innum) + ".subgrid";
+    param.process     = NNPDF::dbquery<string>(subgrid_db,innum,"process");
+    param.positivity  = NNPDF::dbquery<bool>(subgrid_db,innum,"positivity");
 
     // Fix positivity observables to NLO and disable TMCs
     if (param.positivity)
@@ -60,7 +65,6 @@ namespace DIS
     param.desc = desc.str();      //!< FKTable description
     
     param.ndata = 0;  //!< Number of selected datapoints
-    param.nx    = 0;  //!< Number of interpolation grid x-points to be used
     param.xmin  = 0;  //!< Minimum x-value to be used in interpolation
 
     cout << "    - Gridname: "<<param.gridname<<endl;

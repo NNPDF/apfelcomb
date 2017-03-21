@@ -85,8 +85,8 @@ namespace APP
   void parse_input(int innum, appl_param& param, bool silent)
   {
     // Setup db connection
-    NNPDF::IndexDB grid_db(databasePath()+"applgrid.db", "grids");
-    NNPDF::IndexDB subgrid_db(databasePath()+"applgrid.db", "subgrids");
+    NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
+    NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", "app_subgrids");
 
     // Fetch number of entries
     const int entries =subgrid_db.GetNEntries();

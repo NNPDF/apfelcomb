@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
   if (argc>3)
     DIS::parse_input(iDB, par, std::string(argv[3]));
   else
-    DIS::parse_input(iDB, par, std::string("dis.db"));
+    DIS::parse_input(iDB, par, std::string("apfelcomb.db"));
 
   // Setup directory
   setupDir(iTh, par.setname);
@@ -68,8 +68,6 @@ int main(int argc, char* argv[]) {
   // Initialise QCD
   QCD::initQCD(par, DIS::getQ2max(cd));
 
-  par.nx = 50;
-  par.maxprec = 1E-7;
   par.ndata = cd.GetNData();
   par.xmin = DIS::getXmin(cd);
 
