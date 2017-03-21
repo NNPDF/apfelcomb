@@ -32,9 +32,14 @@ public:
 	virtual void Splash( ostream& ); 				//!< Write table information to stream
 	void ReadSubGrids(NNPDF::IndexDB const& db);	//!< Read information on subgrids from database
 
+	double GetQ2max();								//!< Return maximum Q2-value used in this FK grid
 	double GetXmin();								//!< Return minimum x-value used in this FK grid
 	double GetComputeXmin();						//!< Return minimal x-value used in computation of this observable (if different to above)
 
+	vector<double> Compute(QCD::qcd_param const&);		//!< Compute the full FK table predictions
+
+	string GetSetName() 		const {return setname;};
+	string GetDescription() 	const {return description;};
 
 private:
 	const int    id;			//!< Target ID
@@ -54,28 +59,33 @@ private:
 
 class FKSubGrid
 {
-public:
-	FKSubGrid(int _id, std::string const& operators):
+protected:
+	friend class FKTarget;
+	FKSubGrid(FKTarget const& _parent, int const& _id, std::string const& operators):
+	parent(_parent),
 	id(_id),
 	incdat(parse_operator<size_t>(operators, "+")),
 	muldat(parse_operator<size_t>(operators, "*") == 0 ? 1 : parse_operator<size_t>(operators, "*")),
 	nrmdat(parse_operator<double>(operators, "N") == 0 ? 1 : parse_operator<double>(operators, "N"))
 	{}
 
-	virtual void Splash( ostream& ); 						//!< Write subgrid information to stream
+	virtual void Splash( ostream& ); 								//!< Write subgrid information to stream
+	virtual	void Compute(QCD::qcd_param const&, vector<double>&) = 0;	//!< Compute the full FK table predictions
 
-	virtual size_t GetNdat() = 0;
-	virtual double GetXmin() = 0;							//!< Return minimum x-value used in this subgrid
-	virtual double GetComputeXmin() {return getXmin();};	//!< Return minimal x-value used in computation of this subgrid (if different to above)
+	virtual size_t GetNdat()  = 0;									//!< Return number of datapoints in a subgrid
+	virtual double GetQ2max() = 0;									//!< Return maximum scale used in a subgrid
+	virtual double GetXmin()  = 0;									//!< Return minimum x-value used in this subgrid
+	virtual double GetComputeXmin() {return GetXmin();};			//!< Return minimal x-value used in computation of this subgrid (if different to above)
 
-private:
-	const int id;											//!< Subgrid ID
-	vector< vector<int> > datamap;							//!< Map of subgrid point to data point
+protected:
+	FKTarget const& parent;											//!< Parent FKTarget
+	const int id;													//!< Subgrid ID
+	vector< vector<int> > datamap;									//!< Map of subgrid point to data point
 
 	// Operators
-	const size_t incdat;    //!< Datapoint increment operator
-	const size_t muldat;	//!< Datapoint multiplicative operator
-	const double nrmdat;	//!< Datapoint normalisation operator
+	const size_t incdat;    										//!< Datapoint increment operator
+	const size_t muldat;											//!< Datapoint multiplicative operator
+	const double nrmdat;											//!< Datapoint normalisation operator
 
 	template< typename T>
 	T parse_operator(std::string const& operators, string const& key)
@@ -102,6 +112,4 @@ private:
 		}
 		return retval;
 	}
-
-	friend class FKTarget;
 };
