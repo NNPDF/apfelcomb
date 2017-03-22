@@ -175,8 +175,14 @@ void FKSubGrid::StatusUpdate( time_point const& t1, double const& complete_frac,
 	const time_point t3 = t2 + std::chrono::duration_cast<time_span>( (t2-t1) * ( 100.0 / percomp - 1.0 ));
 	const std::time_t end_time = std::chrono::system_clock::to_time_t(t3);
 
-	char eta[80]; strftime (eta,80,"ETA: %R %x.", localtime(&end_time));
-	o 	<< "-- "<< setw(6) << setprecision(4)  << percomp << "\% complete. "
-		<< eta <<"\r";
-	o.flush();
+	if (complete_frac < 1.0)
+	{
+		char eta[80]; strftime (eta,80,"ETA: %R %x.", localtime(&end_time));
+		o 	<< "-- "<< setw(6) << setprecision(4)  << percomp << "\% complete. "
+			<< eta <<"\r";
+		o.flush();
+	} else
+	{
+		o << "-- Completed in " << std::chrono::duration_cast<std::chrono::minutes>(t2 - t1).count() << " minutes"<< endl;
+	}
 }

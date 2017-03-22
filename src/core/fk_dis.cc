@@ -45,6 +45,7 @@ namespace DIS
 
   void SubGrid::Compute(QCD::qcd_param const& par, vector<double>& xsec) const
   {
+    const time_point t1 = std::chrono::system_clock::now();
     const NNPDF::CommonData& cd = parent.GetCommonData();
     for (int i=0; i<cd.GetNData(); i++)
     {
@@ -53,6 +54,7 @@ namespace DIS
       const double y = cd.GetKinematics(i,2);
 
       xsec[i] = nrmdat*QCD::disobs(process, x, Q, y);
+      StatusUpdate(t1, ((double)i+1)/(double)cd.GetNData(), cout );
     }
   }
 
@@ -63,10 +65,10 @@ namespace DIS
 
   void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* FK) const
   {
+    const time_point t1 = std::chrono::system_clock::now();
     const NNPDF::CommonData& cd = parent.GetCommonData();
     for (size_t d=0; d<cd.GetNData(); d++)
     {
-      cout << d<<"/"<<cd.GetNData() <<" datapoints computed"<<endl;
       const double x = cd.GetKinematics(d,0);
       const double Q = sqrt(cd.GetKinematics(d,1));
       const double y = cd.GetKinematics(d,2);
@@ -78,6 +80,7 @@ namespace DIS
       for(size_t ix=0; ix<FK->GetNx(); ix++) 
         for(int ifl=0; ifl<14; ifl++) 
           FK->Fill(d, ix, ifl, nrmdat*QCD::diskernel(process, x, Q, y, ifl, ix) );
+      StatusUpdate(t1, ((double)d+1)/(double)cd.GetNData(), cout );
     }
     return;
   }
