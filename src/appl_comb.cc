@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 
   NNPDF::SetVerbosity(0); appl::setVerbose(false);
   NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
-  NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", "dis_subgrids");
+  NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", "app_subgrids");
 
   // Read grid information
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");

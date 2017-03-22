@@ -78,11 +78,13 @@ protected:
 	nrmdat(parse_operator<double>(operators, "N") == 0 ? 1 : parse_operator<double>(operators, "N"))
 	{}
 
-	virtual void Splash( ostream& ) const;							//!< Write subgrid information to stream
-	virtual size_t GetNdat()  const = 0;							//!< Return number of datapoints in a subgrid
-	virtual double GetQ2max() const = 0;							//!< Return maximum scale used in a subgrid
-	virtual double GetXmin()  const = 0;							//!< Return minimum x-value used in this subgrid
-	virtual double GetComputeXmin() const {return GetXmin();};		//!< Return minimal x-value used in computation of this subgrid (if different to above)
+	virtual void 	Splash( ostream& ) 	const;						//!< Write subgrid information to stream
+	virtual size_t 	GetNdat()  			const = 0;					//!< Return number of datapoints in a subgrid
+	virtual double 	GetQ2max() 			const = 0;					//!< Return maximum scale used in a subgrid
+	virtual double 	GetXmin()  			const = 0;					//!< Return minimum x-value used in this subgrid
+	virtual double 	GetComputeXmin() 	const {return GetXmin();};	//!< Return minimal x-value used in computation of this subgrid (if different to above)
+
+  	void StatusUpdate( time_point const&, double const&, ostream&) const; //!< Print a status update to screen
 
 protected:
 	FKTarget const& parent;											//!< Parent FKTarget

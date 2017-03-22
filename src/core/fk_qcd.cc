@@ -183,10 +183,10 @@ namespace QCD
     }
 
     // Start APFEL
-    if (DIS_mode)
+    // if (DIS_mode)
       APFEL::InitializeAPFEL_DIS();
-    else
-      APFEL::InitializeAPFEL();
+    // else
+      // APFEL::InitializeAPFEL();
 
     return;
   }
@@ -205,10 +205,10 @@ namespace QCD
       APFEL::SetQLimits( Q0, QM );
 
     // Start APFEL
-    if (DIS_mode)
+    // if (DIS_mode)
       APFEL::InitializeAPFEL_DIS();
-    else
-      APFEL::InitializeAPFEL();
+    // else
+      // APFEL::InitializeAPFEL();
   
     return;
   }
@@ -264,10 +264,10 @@ namespace QCD
     APFEL::EnableWelcomeMessage(false);
 
     // Start APFEL
-    if (DIS_mode)
+    // if (DIS_mode)
       APFEL::InitializeAPFEL_DIS();
-    else
-      APFEL::InitializeAPFEL();
+    // else
+      // APFEL::InitializeAPFEL();
 
     // Needed to join the grids
     APFEL::EvolveAPFEL(Q0,Q0);

@@ -13,6 +13,9 @@
 #include "apfelcomb/fk_appl.h"
 #include "apfelcomb/fk_dis.h"
 
+#include <chrono>
+#include <ctime>
+
 using namespace std;
 using namespace NNPDF;
 
@@ -162,4 +165,18 @@ void FKSubGrid::Splash(ostream& o) const
 	    << "- xmin: "     << GetXmin()<< endl
 		<< "- Qmax: "<<sqrt(GetQ2max())<< endl;
 
+}
+
+void FKSubGrid::StatusUpdate( time_point const& t1, double const& complete_frac, ostream& o) const
+{
+      // Elapsed time update
+	const time_point t2 = std::chrono::system_clock::now();
+	const double percomp= 100.0*complete_frac;
+	const time_point t3 = t2 + std::chrono::duration_cast<time_span>( (t2-t1) * ( 100.0 / percomp - 1.0 ));
+	const std::time_t end_time = std::chrono::system_clock::to_time_t(t3);
+
+	char eta[80]; strftime (eta,80,"ETA: %R %x.", localtime(&end_time));
+	o 	<< "-- "<< setw(6) << setprecision(4)  << percomp << "\% complete. "
+		<< eta <<"\r";
+	o.flush();
 }

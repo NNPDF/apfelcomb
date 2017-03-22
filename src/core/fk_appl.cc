@@ -255,26 +255,6 @@ namespace APP
     return nElm;
   } 
 
-  void statusUpdate( time_point const& t1, int const& totElements, int& compElements)
-  {
-    // Increment computed elements
-    compElements++;
-    const int interval = compElements< 100 ? 5:10;
-    if (compElements % interval == 0)
-    {
-      // Elapsed time update
-      const time_point t2 = std::chrono::system_clock::now();
-      const double percomp= 100.0*((double)compElements/(double)totElements);
-      const time_point t3 = t2 + std::chrono::duration_cast<time_span>( (t2-t1) * ( 100.0 / percomp - 1.0 ));
-      const std::time_t end_time = std::chrono::system_clock::to_time_t(t3);
-
-      char eta[80]; strftime (eta,80,"ETA: %R %x.", localtime(&end_time));
-      cout << "-- "<< setw(6) << setprecision(4)  << percomp << "\% complete. "
-           << eta <<"\r";
-      cout.flush();
-    }
-  }
-
 
 // // ********************* Evolution factors ******************************
 
@@ -417,7 +397,8 @@ namespace APP
                     }
 
               // Update progress
-              statusUpdate(t1, nXelements, completedElements);
+              completedElements++;
+              StatusUpdate(t1, (double)completedElements/(double)nXelements, cout);
             }
           }
         }
