@@ -41,7 +41,7 @@ namespace APP
     return _maskmap;
   }
 
-  void SubGrid::Splash(ostream& o)
+  void SubGrid::Splash(ostream& o) const
   {
     FKSubGrid::Splash(o);
     o << "- APPLgrid: " << applfile << endl
@@ -104,7 +104,7 @@ namespace APP
   }
 
   // Return the minimum x used in the subgrid
-  double SubGrid::GetXmin()
+  double SubGrid::GetXmin() const
   { 
     double xmin = 1.0;
     for(int i=0; i<=applgrid.g->nloops(); i++) 
@@ -132,7 +132,7 @@ namespace APP
     return xmin;
   };        
 
-  double SubGrid::GetComputeXmin()    
+  double SubGrid::GetComputeXmin() const  
   { 
     double xmin = 1.0;
     for(int i=0; i<=applgrid.g->nloops(); i++) 
@@ -149,7 +149,7 @@ namespace APP
   };         
 
   // Get the maximum scale of an applgrid
-  double SubGrid::GetQ2max()
+  double SubGrid::GetQ2max() const
   {
     // Find maximum required scale
     double Q2max = applgrid.g->weightgrid(0, 0)->getQ2max();
@@ -163,7 +163,7 @@ namespace APP
   }
 
  // ******************* APPLGrid convolutions ******************************
-  void SubGrid::Compute(qcd_param const& par, vector<double>& results)
+  void SubGrid::Compute(qcd_param const& par, vector<double>& results) const
   {
     if (ppbar == true && par.xiF != 1)
       std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
@@ -183,30 +183,6 @@ namespace APP
       for (int const& j : datamap[i])
         results[j] += xsec[maskmap[i]];
   }
-
-//   // ******************* APPLGrid parsing ******************************
-
-//   double computeTargetPrecision(std::vector<int> const& targetPoints, NNPDF::CommonData const& cd)
-//   {
-//     double targetPrec = std::numeric_limits<double>::infinity();
-//     for (int i : targetPoints)
-//       if (abs(cd.GetUncE(i)/cd.GetData(i)) > 1E-5)
-//         targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/5.0);
-//     if (targetPrec == std::numeric_limits<double>::infinity())
-//       for (int i : targetPoints)
-//         targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);  
-//     if (targetPrec == std::numeric_limits<double>::infinity())
-//     {
-//       targetPrec = 0.001;
-//       std::cout << "WARNING: NO ERROR AVAILABLE, SETTING TO PERMILLE ACCURACY" <<std::endl;
-//     }
-//     return targetPrec;
-//   }
-
-
-//   // *********************** APPLgrid helpers ****************************
-
-
 
 
   // Translates 'loop' order to appl::grid index
@@ -264,8 +240,8 @@ namespace APP
     for (auto bin : maskmap )
       for (size_t pto=0; pto<par.pto; pto++) 
       {
-        int gidx = get_grid_idx(g, pto); // APPLgrid grid index
-        appl::igrid const *igrid = g->weightgrid(gidx, bin);
+        const int gidx = get_grid_idx(g, pto); // APPLgrid grid index
+        const appl::igrid *igrid = g->weightgrid(gidx, bin);
         const size_t nsubproc = g->subProcesses(gidx);     // Number of subprocesses
         for (int t=0; t<igrid->Ntau(); t++)     // Loop over scale bins
           for (int a=0; a<igrid->Ny1(); a++  )  // Loop over x1 bins
@@ -325,7 +301,7 @@ namespace APP
 
 //   // ******************* FK Table computation ****************************
 
-  void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* fk) 
+  void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* fk) const
   {    
     // APPLgrid pointer
     const appl::grid* g = applgrid.g;
@@ -334,9 +310,7 @@ namespace APP
     int completedElements = 0;
     const int nXelements = countElements(par, maskmap, g);
     const time_point t1 = std::chrono::system_clock::now();
-
     const vector<size_t> afl = QCD::active_flavours(par);
-    std::cout << "APFELcomb: "<<afl.size() <<" active flavours in evolution." <<std::endl;
    
     for (size_t d=0; d<maskmap.size(); d++)
     {    

@@ -132,12 +132,6 @@ namespace QCD
     param.xiF = atof(param.thMap["XIF"].c_str());
     param.xiR = atof(param.thMap["XIR"].c_str());
 
-    cout << "                FastKernel Grid Combination                 "<<endl;
-    cout << "    - TheoryID: "<<param.thID << endl;
-    cout << "    - Conv PTOrd: N"<<param.pto -1<<"LO"<<endl;
-    cout << "    - xi_F: " << param.xiF<<endl;
-    cout << "    - xi_R: " << param.xiR<<endl;
-
     return;
   }
 

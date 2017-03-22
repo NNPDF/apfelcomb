@@ -13,7 +13,7 @@
   public:
     //!< Constructor
     APFELPDFSet():
-    PDFSet("ApfelSet",1, ER_NONE)
+    PDFSet("ApfelSet",1, ER_MCT0)
     {
 
     };
