@@ -65,8 +65,9 @@ private:
 class FKSubGrid
 {
 public:
-	virtual void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const = 0;		//!< Perform the FK combination on a subgrid
-	vector< vector<int > > const& GetDataMap() const {return datamap;};
+	virtual void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) 	const = 0;		//!< Perform the FK combination on a subgrid
+	virtual	void Compute(QCD::qcd_param const&, vector<double>&) 		const = 0;		//!< Compute the full FK table predictions
+	vector< vector<int > > const& GetDataMap() 	const {return datamap;};				//!< Return the associated datamap
 protected:
 	friend class FKTarget;
 	FKSubGrid(FKTarget const& _parent, int const& _id, std::string const& operators):
@@ -77,13 +78,11 @@ protected:
 	nrmdat(parse_operator<double>(operators, "N") == 0 ? 1 : parse_operator<double>(operators, "N"))
 	{}
 
-	virtual void Splash( ostream& ) const;								//!< Write subgrid information to stream
-	virtual	void Compute(QCD::qcd_param const&, vector<double>&) const = 0;	//!< Compute the full FK table predictions
-
-	virtual size_t GetNdat()  const = 0;									//!< Return number of datapoints in a subgrid
-	virtual double GetQ2max() const = 0;									//!< Return maximum scale used in a subgrid
-	virtual double GetXmin()  const = 0;									//!< Return minimum x-value used in this subgrid
-	virtual double GetComputeXmin() const {return GetXmin();};				//!< Return minimal x-value used in computation of this subgrid (if different to above)
+	virtual void Splash( ostream& ) const;							//!< Write subgrid information to stream
+	virtual size_t GetNdat()  const = 0;							//!< Return number of datapoints in a subgrid
+	virtual double GetQ2max() const = 0;							//!< Return maximum scale used in a subgrid
+	virtual double GetXmin()  const = 0;							//!< Return minimum x-value used in this subgrid
+	virtual double GetComputeXmin() const {return GetXmin();};		//!< Return minimal x-value used in computation of this subgrid (if different to above)
 
 protected:
 	FKTarget const& parent;											//!< Parent FKTarget

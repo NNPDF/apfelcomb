@@ -8,53 +8,46 @@
 #include <stdlib.h>
 #include <fstream>
 #include <vector>
-#include <sys/stat.h>
 
 // NNPDF
 #include "NNPDF/fkgenerator.h"
-#include "NNPDF/fastkernel.h"
 #include "NNPDF/commondata.h"
-
-// LHAPDF
-#include "LHAPDF/LHAPDF.h"
+#include "NNPDF/nnpdfdb.h"
 
 #include "fk_utils.h"
 #include "fk_qcd.h"
+#include "fk_grids.h"
 
 namespace DIS
 {
-	// Grid data struct
-	class dis_param: public QCD::qcd_param
+	// A DIS SubGrid essentially just aliases the parent FKSubGrid's CommonData attribute
+	// I put this into a 'SubGrid' such that we can use the same testing/optimisation procedures as in APPLgrids
+	class SubGrid: public FKSubGrid
 	{
 	public:
-	  std::string setname;   	//!< Name of the set to which the grid belongs
-	  std::string gridname;  	//!< Name of the grid to be generated
-  	  std::string process;  	//!< Process of the grid
+	void Compute(QCD::qcd_param const&, vector<double>&) const;			//!< Compute APPLgrid results mapped to Commondata
+	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const;		//!< Perform the FK combination on a subgrid
+	private:
+		friend class ::FKTarget;
+		SubGrid(FKTarget const& parent, NNPDF::IndexDB const& db, int const& iDB):
+		FKSubGrid(parent, iDB, NNPDF::dbquery<string>(db, iDB, "operators")),
+	    process(NNPDF::dbquery<string>(db,iDB,"process"))
+		{
+			if (incdat != 0 || muldat != 1)
+			{
+				cerr << "Error: DIS grids do not support operators other than normalisation" << endl;
+				exit(-1);
+			}
+		};
 
-	  std::string commonfile;	//!< Path for the commondata file
-	  std::string sysfile;		//!< Path for the SYSTYPE file
-	  	  
-	  std::string desc;      //!< FKTable description
-	  
-	  size_t ndata;     //!< Number of selected datapoints
+		void Splash(ostream&) 	const;	//!< Print metadata to stream
+		size_t GetNdat() 		const;	//!< Return number of datapoints in subgrid
+		double GetQ2max() 		const;	//!< Return maximum scale used in a subgrid
+		double GetXmin() 		const;	//!< Return minimum x-value used in this sub grid
 
-	  bool positivity;	//!< Is a positivity observable
-	  	  
-	  int nx;           //!< Number of interpolation grid x-points to be used
-	  double xmin;      //!< Minimum x-value to be used in interpolation
-	  double maxprec;   //!< Highest experimental precision reached in dataset
+		// **********************************************************
+
+		const string process;			//!< Process string of the observable
 	};
-
-	// Parse DIS data
-	void parse_input(int innum, dis_param& param, std::string dbfile);
-  	void set_params(dis_param const& par, NNPDF::FKHeader& hd);
-
-	// Populate FK table
-	void computeFK(dis_param const&, NNPDF::CommonData const&, NNPDF::FKGenerator*);
-
-	// Kinematic info fetchers
-	double getXmin (const NNPDF::CommonData& cdata);
-	double getQ2max(const NNPDF::CommonData& cdata);
-	double getQ2min(const NNPDF::CommonData& cdata);
 }
 

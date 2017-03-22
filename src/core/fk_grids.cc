@@ -11,6 +11,7 @@
 #include "NNPDF/commondata.h"
 
 #include "apfelcomb/fk_appl.h"
+#include "apfelcomb/fk_dis.h"
 
 using namespace std;
 using namespace NNPDF;
@@ -64,13 +65,16 @@ FKTarget::Source FKTarget::parse_source(string const& ss)
 void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 {
 	const std::vector<int> subgridIDs = NNPDF::dbmatch(db, "fktarget", name);
-	switch(subgrid_source)
-	{
-		case APP:
-			for (int i : subgridIDs) 
+	for (int i : subgridIDs) 
+		switch(subgrid_source)
+		{
+			case APP:
 				components.insert(pair<int, FKSubGrid*>(i, new APP::SubGrid(*this, db, i)));
-			break;
-	}
+				break;
+			case DIS:
+				components.insert(pair<int, FKSubGrid*>(i, new DIS::SubGrid(*this, db, i)));
+				break;
+		}
 
 	// Compute subgrid maps
 	int lastNdat = 0; 

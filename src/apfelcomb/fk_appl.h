@@ -47,7 +47,8 @@ namespace APP
 	class SubGrid: public FKSubGrid
 	{
 	public:
-	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const;		//!< Perform the FK combination on a subgrid
+	void Compute(qcd_param const&, vector<double>&) 			const;	//!< Compute APPLgrid results mapped to Commondata
+	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) 	const;	//!< Perform the FK combination on a subgrid
 	private:
 		friend class ::FKTarget;
 		SubGrid(FKTarget const& parent, NNPDF::IndexDB const& db, int const& iDB):
@@ -70,13 +71,12 @@ namespace APP
 		  }
 		};
 
-		size_t GetNdat() const {return ndata;};					//!< Return number of datapoints in subgrid
-		double GetQ2max() const;									//!< Return maximum scale used in a subgrid
-		double GetXmin() const;									//!< Return minimum x-value used in this sub grid
-		double GetComputeXmin() const;							//!< Return minimal x-value used in computation of this observable
+		void Splash(ostream&) 	const;					//!< Print metadata to stream
+		size_t GetNdat() 		const {return ndata;};	//!< Return number of datapoints in subgrid
+		double GetQ2max() 		const;					//!< Return maximum scale used in a subgrid
+		double GetXmin() 		const;					//!< Return minimum x-value used in this sub grid
+		double GetComputeXmin() const;					//!< Return minimal x-value used in computation of this observable
 
-		void Splash(ostream&) const;								//!< Print metadata to stream
-		void Compute(qcd_param const&, vector<double>&) const;	//!< Compute APPLgrid results mapped to Commondata
 		// ***********************************************************
 
 		const string 		applfile;	//!< Path for the applgrid file

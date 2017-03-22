@@ -151,6 +151,19 @@ namespace QCD
   // Initialise QCD according to parameters
   void initQCD(qcd_param const& par, const double& Q2max)
   {
+
+    // Fix positivity observables to NLO and disable TMCs
+    // if (param.positivity)
+    // {
+    //   param.thMap["TMC"] = '0'; 
+    //   param.thMap["PTO"] = to_string(std::min(param.evol_pto,(size_t)1)); 
+    //   param.evol_pto = std::min(param.evol_pto,(size_t)1);
+
+    //   std::cout<< "****** POSITIVITY OBSERVABLE ******"<<std::endl;
+    //   std::cout<< "Limiting PTO to NLO, disabling TMCs"<<std::endl;
+    //   std::cout<< "***********************************"<<std::endl;
+    // }
+    
     APFEL::SetParam(par.thMap);
 
     // Init Q0
