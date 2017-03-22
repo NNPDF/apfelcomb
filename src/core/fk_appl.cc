@@ -235,12 +235,12 @@ namespace APP
 
 //    // Progress update ****************************************************
 
-  int countElements(qcd_param const& par, vector<int> const& maskmap, const appl::grid* g)
+  int countElements(vector<int> const& maskmap, int const& max_pto, const appl::grid* g)
   {
     // Counter
     int nElm = 0;
     for (auto bin : maskmap )
-      for (size_t pto=0; pto<=min(par.evol_pto,(size_t)1); pto++) 
+      for (size_t pto=0; pto<=max_pto; pto++) 
       {
         const int gidx = get_grid_idx(g, pto); // APPLgrid grid index
         const appl::igrid *igrid = g->weightgrid(gidx, bin);
@@ -310,10 +310,11 @@ namespace APP
 
     // APPLgrid pointer
     const appl::grid* g = applgrid.g;
+    const int max_pto = min(par.evol_pto,(size_t)1); // Maximum perturbative order limited to NLO
 
     // Progress monitoring
     int completedElements = 0;
-    const int nXelements = countElements(par, maskmap, g);
+    const int nXelements = countElements(maskmap, max_pto, g);
     const time_point t1 = std::chrono::system_clock::now();
     const vector<size_t> afl = QCD::active_flavours(par);
    
@@ -321,7 +322,7 @@ namespace APP
     {    
       // Fetch associated applgrid info
       const size_t bin = maskmap[d];
-      for (size_t pto=0; pto<=min(par.evol_pto,(size_t)1); pto++) // Loop over perturbative order
+      for (size_t pto=0; pto<=max_pto; pto++) // Loop over perturbative order
       {
         // Determine grid index, allocate subprocess arrays
         const int gidx = get_grid_idx(g, pto+ptmin);
