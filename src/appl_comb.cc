@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
   cout << "                        Verification                  "<<endl;
   DisplayHR();
   APFELPDFSet apfelPDF;
-  const vector<double>       xsec = table.Compute(par);
+  const vector<double> xsec = table.Compute(par);
   const NNPDF::ThPredictions theory(&apfelPDF, FK);
 
   cout  << setw(10) << left << "<idat>"

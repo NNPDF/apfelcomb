@@ -47,12 +47,12 @@ public:
 	FKSubGrid const*  GetSubgrid(int id) const {return components.find(id)->second;};
 
 private:
-	const int    id;			//!< Target ID
-	const string name;			//!< Name of the FK target
-	const string setname;		//!< Parent dataset name
-	const string description;	//!< FK table description
-	const Source subgrid_source;//!< Source of subgrids (APP/DIS/DYP)
-
+	const int    	id;				//!< Target ID
+	const string 	name;			//!< Name of the FK target
+	const string 	setname;		//!< Parent dataset name
+	const string 	description;	//!< FK table description
+	const Source 	subgrid_source;	//!< Source of subgrids (APP/DIS/DYP)
+	const bool		positivity;		//!< Positivity observable flag
 	const int 		nx;				//!< Number of x-points in the interpolation grid
 	const NNPDF::CommonData data;	// Reference data file
 

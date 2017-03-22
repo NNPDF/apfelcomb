@@ -25,6 +25,7 @@ name(dbquery<string>(db,id,"name")),
 setname(dbquery<string>(db,id,"setname")),
 description(dbquery<string>(db,id,"description")),
 subgrid_source(parse_source(dbquery<string>(db,id,"source"))),
+positivity(dbquery<bool>(db,id,"positivity")),
 nx(dbquery<int>(db,id,"nx")),
 data(CommonData::ReadFile(dataPath() + "commondata/DATA_" + setname + ".dat", dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat"))
 {
