@@ -112,21 +112,6 @@ namespace QCD
     // Set perturbative order and initial scale
     param.Q0 = atof(param.thMap["Q0"].c_str());
     param.evol_pto = atoi(param.thMap["PTO"].c_str());
-    if (param.evol_pto == 2 and DIS_mode == false and FTDY_mode == false)
-    {
-      cout << endl<<endl;
-      cout << " ****************** WARNING ****************** "<<endl;
-      cout << " *    APPLGRID CONVOLUTION WITH N2LO NOT     * "<<endl;
-      cout << " *    ENABLED - CONVOLUTION FIXED TO N1LO    * "<<endl;
-      cout << " ********************************************* "<<endl;
-      cout << endl<<endl;
-      
-      // Set internal PTO to N1LO
-      param.pto = 2;
-    } else
-    {
-      param.pto = param.evol_pto + 1;
-    }
 
     // Set scale variation parameters
     param.xiF = atof(param.thMap["XIF"].c_str());
@@ -173,8 +158,10 @@ namespace QCD
     QCD::QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
     APFEL::SetQLimits( Q0, QM );
 
-    // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);
+    APFEL::SetFastEvolution(false);
+    APFEL::LockGrids(false);
+    APFEL::EnableEvolutionOperator(true); 
 
     if (SIA_mode) 
     {
@@ -195,9 +182,9 @@ namespace QCD
   void initTruthGrid(qcd_param const& par, const double& xmin)
   {
     // Initialise
-    APFEL::LockGrids(true);
-    APFEL::EnableWelcomeMessage(false);
-    APFEL::SetFastEvolution(true);
+    APFEL::SetFastEvolution(false);
+    APFEL::LockGrids(false);
+    APFEL::EnableEvolutionOperator(true); 
 
     if ( fabs(par.xiF - 1.0) > 1E-5)
       APFEL::SetQLimits( 1.0, std::max(15000., QM) );
@@ -255,9 +242,10 @@ namespace QCD
 
     // Set evolution operator parameters
     APFEL::SetFastEvolution(false);
-    APFEL::EnableEvolutionOperator(true); // Enable the computation of the Evolution Operator
-    APFEL::SetNumberOfGrids(1);           // The evolution will be done on a number of subgrids defined here
-    APFEL::SetExternalGrid(1,nx,3,xg);    // Set the grid as external (np: number of intervals, 3: interpolation degree, xg: defined above)
+    APFEL::LockGrids(false);
+    APFEL::EnableEvolutionOperator(true); 
+    APFEL::SetNumberOfGrids(1);           
+    APFEL::SetExternalGrid(1,nx,3,xg);  
 
     // Initialise
     APFEL::EnableWelcomeMessage(false);

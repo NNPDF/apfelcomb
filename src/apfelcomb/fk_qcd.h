@@ -88,8 +88,6 @@ namespace QCD
     std::map<std::string, std::string> thMap; //!< Map of theory parameters obtained from database
 
     size_t evol_pto;  //!< Perturbative order of the evolution
-    size_t pto;       //!< Perturbative order of the produced grid
-
     double Q0;        //!< Initial Q^2
     double xiF;       //!< mu_F/Q_F
     double xiR;       //!< mu_R/Q_R

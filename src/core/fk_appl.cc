@@ -153,7 +153,7 @@ namespace APP
   {
     // Find maximum required scale
     double Q2max = applgrid.g->weightgrid(0, 0)->getQ2max();
-    for(int i=0; i<2; i++)  // pto
+    for(int i=0; i<applgrid.g->nloops(); i++)  // pto
       for (int j=0; j<applgrid.g->Nobs(); j++) // bin
       {
         appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
@@ -167,9 +167,11 @@ namespace APP
   {
     if (ppbar == true && par.xiF != 1)
       std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
+    if (par.evol_pto == 2)
+      std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
 
     // Compute with applgrid interface
-    const int pto = (ptmin == 1) ? -1:(par.pto-1);
+    const int pto = (ptmin == 1) ? -1: min(par.evol_pto,(size_t)1);
     vector<double> xsec;
     if ( ppbar == true && par.xiF == 1)
       xsec = applgrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
@@ -238,7 +240,7 @@ namespace APP
     // Counter
     int nElm = 0;
     for (auto bin : maskmap )
-      for (size_t pto=0; pto<par.pto; pto++) 
+      for (size_t pto=0; pto<=min(par.evol_pto,(size_t)1); pto++) 
       {
         const int gidx = get_grid_idx(g, pto); // APPLgrid grid index
         const appl::igrid *igrid = g->weightgrid(gidx, bin);
@@ -302,7 +304,10 @@ namespace APP
 //   // ******************* FK Table computation ****************************
 
   void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* fk) const
-  {    
+  { 
+    if (par.evol_pto == 2)
+      std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
+
     // APPLgrid pointer
     const appl::grid* g = applgrid.g;
 
@@ -316,7 +321,7 @@ namespace APP
     {    
       // Fetch associated applgrid info
       const size_t bin = maskmap[d];
-      for (size_t pto=0; pto<((size_t) par.pto); pto++) // Loop over perturbative order
+      for (size_t pto=0; pto<=min(par.evol_pto,(size_t)1); pto++) // Loop over perturbative order
       {
         // Determine grid index, allocate subprocess arrays
         const int gidx = get_grid_idx(g, pto+ptmin);
