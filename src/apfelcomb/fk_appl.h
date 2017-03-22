@@ -79,7 +79,6 @@ namespace APP
 		void Compute(qcd_param const&, vector<double>&) const;	//!< Compute APPLgrid results mapped to Commondata
 		// ***********************************************************
 
-		const string 		setname;	//!< Parent Dataset name
 		const string 		applfile;	//!< Path for the applgrid file
 		const string 		readme;		//!< APPLgrid README
 
