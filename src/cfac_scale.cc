@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
   QCD::qcd_param  tPar;
   QCD::parse_input(tTh, tPar);
 
-  const int bTh = 3;
+  const int bTh = (tPar.evol_pto == 1) ? 2:3;
   QCD::qcd_param  bPar;
   QCD::parse_input(bTh, bPar);
 
