@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
 
   // Read Cfactors
   double* cFac = new double[cd.GetNData()];
+  double* cFacERR = new double[cd.GetNData()];
   std::ifstream instream(cFacPath.c_str());
   std::ofstream outstream(cFacOut.c_str());
 
@@ -97,6 +98,8 @@ int main(int argc, char* argv[]) {
     getline(instream,dum);
     cvrt << dum;
     cvrt >> cFac[i];
+    cvrt << dum;
+    cvrt >> cFacERR[i];
   }
   // alphas_0
   QCD::initQCD(bPar, std::max(fixed,DIS::getQ2max(cd)));
@@ -112,7 +115,7 @@ int main(int argc, char* argv[]) {
   for (int i=0; i< cd.GetNData(); i++)
   {
     const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i], tPar.pto);
-    outstream << fac1 <<endl;
+    outstream << fac1 <<"\t"<<cFacERR[i]<<endl;
 
     // Print to screen
     std::cout << std::setw(8)
