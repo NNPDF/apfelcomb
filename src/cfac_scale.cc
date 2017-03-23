@@ -94,12 +94,12 @@ int main(int argc, char* argv[]) {
 
   for (int i=0; i< cd.GetNData(); i++)
   {
-    std::string dum; stringstream cvrt;
+    std::string dum; 
     getline(instream,dum);
-    cvrt << dum;
-    cvrt >> cFac[i];
-    cvrt << dum;
-    cvrt >> cFacERR[i];
+    const vector<double> tokens = dsplit(dum);
+    cFac[i] = tokens[0];
+    cFacERR[i] = tokens[1];
+    std::cout << cFac[i] <<"  "<<cFacERR[i]<<std::endl;
   }
   // alphas_0
   QCD::initQCD(bPar, std::max(fixed,DIS::getQ2max(cd)));
