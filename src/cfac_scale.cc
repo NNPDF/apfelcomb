@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
     cvrt >> cFac[i];
   }
   // alphas_0
-  QCD::initQCD(bPar, DIS::getQ2max(cd));
+  QCD::initQCD(bPar, std::max(fixed,DIS::getQ2max(cd)));
   for (int i=0; i< cd.GetNData(); i++)
     alphas_0[i] = QCD::alphas( bfixed ? fixed:std::sqrt(cd.GetKinematics(i,1)));
 
