@@ -78,6 +78,10 @@ void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 			case DIS:
 				components.insert(pair<int, FKSubGrid*>(i, new DIS::SubGrid(*this, db, i)));
 				break;
+			case DYP:
+			case NSR:
+				cerr << "ERROR: Cannot handle source" <<endl;
+				exit(-1);
 		}
 
 	// Compute subgrid maps

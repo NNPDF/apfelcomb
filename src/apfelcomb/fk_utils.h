@@ -77,7 +77,6 @@ vector<string> ssplit(string input);
 
 // Directory helper functions
 void setupDir(int const& theoryID);
-std::string getOutputFilename(int const& theoryID, std::string const& gridname);
 
 // Tostring function
 template < typename T > std::string to_string( const T& n )

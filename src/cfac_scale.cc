@@ -23,9 +23,9 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
   
-  if ( argc != 4 )
+  if ( argc != 4 && argc != 5 )
   {
-    std::cerr << "Usage: " <<argv[0] <<" <target ThID> <cFactor_name> <set_name>" <<std::endl;
+    std::cerr << "Usage: " <<argv[0] <<" <target ThID> <cFactor_name> <set_name> [MZ/MW/MT]" <<std::endl;
     exit(-1);
   }
 
@@ -36,19 +36,24 @@ int main(int argc, char* argv[]) {
   QCD::qcd_param  tPar;
   QCD::parse_input(tTh, tPar);
 
-  const int bTh = 3;
+  const int bTh = (tPar.evol_pto == 1) ? 2:3;
   QCD::qcd_param  bPar;
   QCD::parse_input(bTh, bPar);
 
+  const std::string scalearg = argc == 5 ? argv[4]:"";
+  const bool bMW =  scalearg=="MW" ? true:false; const double MW = atof(tPar.thMap["MW"].c_str()); 
+  const bool bMZ =  scalearg=="MZ" ? true:false; const double MZ = atof(tPar.thMap["MZ"].c_str()); 
+  const bool bMT =  scalearg=="MT" ? true:false; const double MT = atof(tPar.thMap["mt"].c_str()); 
+  const bool bfixed = bMW || bMZ || bMT; const double fixed = bMW ? MW:(bMZ ? MZ:(bMT? MT:0));
+  if (bfixed) std::cout << "Using "<<scalearg<<" ("<<fixed<<") as scale" <<std::endl;
 
-  if (tPar.pto != 1 && tPar.pto !=2) 
+  if (tPar.evol_pto != 1 && tPar.evol_pto !=2) 
   {    
     std::cerr << "TheoryID must be either NLO or NNLO for scaling C-factors!" <<std::endl;
     exit(-1);
   }
 
-
-  const std::string ptoString = (tPar.pto == 1) ? "NLO":"NNLO";
+  const std::string ptoString = (tPar.evol_pto == 1) ? "NLO":"NNLO";
 
   const std::string cFacName = argv[2];
   const std::string cFacPath = dataPath() + "/"+ptoString+"CFAC/CF_QCD_"+cFacName+".dat";
@@ -56,7 +61,7 @@ int main(int argc, char* argv[]) {
 
   const std::string setName = argv[3];
   const std::string cDataPath = dataPath() + "/commondata/DATA_"+setName+".dat";
-  const std::string sysTypePath = dataPath() + "/commondata/systypes/SYSTYPE_"+setName+"_0.dat";
+  const std::string sysTypePath = dataPath() + "/commondata/systypes/SYSTYPE_"+setName+"_DEFAULT.dat";
 
   // Read CommonData 
   NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(cDataPath, sysTypePath);
@@ -66,8 +71,16 @@ int main(int argc, char* argv[]) {
 
   // Read Cfactors
   double* cFac = new double[cd.GetNData()];
+  double* cFacERR = new double[cd.GetNData()];
   std::ifstream instream(cFacPath.c_str());
   std::ofstream outstream(cFacOut.c_str());
+
+
+  if (instream.good() == false)
+  {
+    std::cerr << "Bad stream: " <<cFacPath.c_str()<<std::endl;
+    exit(-1);
+  }
 
   for (int i=0; i< 9; i++)
   {
@@ -77,31 +90,31 @@ int main(int argc, char* argv[]) {
       outstream << dum<<" -> Converted to alpha_s: " << tPar.thMap["alphas"]<< endl;
     else
       outstream << dum<<endl;
-
   }
 
   for (int i=0; i< cd.GetNData(); i++)
   {
-    std::string dum; stringstream cvrt;
+    std::string dum; 
     getline(instream,dum);
-    cvrt << dum;
-    cvrt >> cFac[i];
+    const vector<double> tokens = dsplit(dum);
+    cFac[i] = tokens[0];
+    cFacERR[i] = tokens[1];
   }
   // alphas_0
-  QCD::initQCD(bPar, DIS::getQ2max(cd));
+  QCD::initQCD(bPar, std::max(fixed,DIS::getQ2max(cd)));
   for (int i=0; i< cd.GetNData(); i++)
-    alphas_0[i] = QCD::alphas( std::sqrt(cd.GetKinematics(i,1)));
+    alphas_0[i] = QCD::alphas( bfixed ? fixed:std::sqrt(cd.GetKinematics(i,1)));
 
   // alphas_1
   QCD::initQCD(tPar, DIS::getQ2max(cd));
   for (int i=0; i< cd.GetNData(); i++)
-    alphas_1[i] = QCD::alphas( std::sqrt(cd.GetKinematics(i,1)));
+    alphas_1[i] = QCD::alphas( bfixed ? fixed:std::sqrt(cd.GetKinematics(i,1)));
 
   std::cout <<std::setw(8)<< "Scale"<<"\t"<< std::setw(8)<< "OldCFAC" << "\t"<<std::setw(8)<<"NewCFAC"<<std::endl;
   for (int i=0; i< cd.GetNData(); i++)
   {
     const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i], tPar.pto);
-    outstream << fac1 <<endl;
+    outstream << fac1 <<"\t"<<cFacERR[i]<<endl;
 
     // Print to screen
     std::cout << std::setw(8)

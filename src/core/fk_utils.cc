@@ -124,15 +124,6 @@ void setupDir(int const& theoryID)
   mkdir((theoryDir.str() + "fastkernel/").c_str(),0777);
 }
 
-std::string getOutputFilename(int const& theoryID, std::string const& gridname)
-{
-  // Final output filename
-  stringstream fname;
-  fname << resultsPath()<<"theory_" << theoryID<<"/subgrids/";
-  const std::string outname = fname.str() + "FK_"+gridname+".dat";
-  return outname;
-}
-
 void DisplayHR()
 {
   cout << Colour::FG_YELLOW;

@@ -33,15 +33,16 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
   
-  if (argc!=3)
+  if (argc!=4)
   {
-    cout << "Usage: "<<argv[0]<<" <database id> <theory id>"<<endl;
+    cout << "Usage: "<<argv[0]<<" <source=app/dis> <database id> <theory id>"<<endl;
     exit(1);
   }
 
   // APPLgrid and theory indices
-  const int iDB = atoi(argv[1]);
-  const int iTh = atoi(argv[2]);
+  const string source = argv[1];
+  const int iDB = atoi(argv[2]);
+  const int iTh = atoi(argv[3]);
   setupDir(iTh);
 
   // Parse parameters
@@ -49,7 +50,7 @@ int main(int argc, char* argv[]) {
 
   NNPDF::SetVerbosity(0); appl::setVerbose(false);
   NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
-  NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", "app_subgrids");
+  NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", source+"_subgrids");
 
   // Read grid information
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]) {
   FKTarget table(grid_db, target); table.ReadSubGrids(subgrid_db);
 
   // // Initialise QCD
-  QCD::initQCD(par, table.GetQ2max());
+  QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
   QCD::initEvolgrid(table.GetNX(), table.GetXmin());  DisplayHR();
 
   // Initialise empty mFK table

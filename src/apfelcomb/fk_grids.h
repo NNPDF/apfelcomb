@@ -30,14 +30,15 @@ public:
 	enum Source { APP, DIS, DYP, NSR };
 
 	virtual void Splash( ostream& ) const; 				//!< Write table information to stream
-	void ReadSubGrids(NNPDF::IndexDB const& db);	//!< Read information on subgrids from database
+	void ReadSubGrids(NNPDF::IndexDB const& db);		//!< Read information on subgrids from database
 
-	double GetQ2max() const;								//!< Return maximum Q2-value used in this FK grid
+	double GetQ2max() const;							//!< Return maximum Q2-value used in this FK grid
 	double GetXmin() const;								//!< Return minimum x-value used in this FK grid
 	double GetComputeXmin() const;						//!< Return minimal x-value used in computation of this observable (if different to above)
-	int    GetNX() const {return nx;};				//!< Return number of x-points in the target table
+	int    GetNX() const {return nx;};					//!< Return number of x-points in the target table
+	bool   GetPositivity() const {return positivity;};	//!< Return number of x-points in the target table
 
-	void SetFKHeader(NNPDF::FKHeader&) const;					//!< Set the parameters in an FK header
+	void SetFKHeader(NNPDF::FKHeader&) const;							//!< Set the parameters in an FK header
 	vector<double> Compute(QCD::qcd_param const&) const;				//!< Compute the full FK table predictions
 	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const; 	//!< Perform the FK combination
 

@@ -93,8 +93,8 @@ int main(int argc, char* argv[]) {
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDt,"fktarget");
   const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
   const double nx = NNPDF::dbquery<int>(grid_db,target,"nx");
+  const bool positivity = NNPDF::dbquery<bool>(grid_db,target,"positivity");
   const std::string setname =  NNPDF::dbquery<string>(grid_db,target,"setname");
-  const bool positivity = NNPDF::dbquery<bool>(subgrid_db,iDt,"positivity");
 
   // Fix positivity observables to NLO and disable TMCs
   if (positivity)
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
   }
 
   // Setup directory
-  setupDir(iTh, setname);
+  setupDir(iTh);
   const std::string commonfile = dataPath() + "commondata/DATA_" + setname + ".dat"; //!< Path for the commondata file
   const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat"; //!< Path for the SYSTYPE file
    
