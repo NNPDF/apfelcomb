@@ -99,7 +99,6 @@ int main(int argc, char* argv[]) {
     const vector<double> tokens = dsplit(dum);
     cFac[i] = tokens[0];
     cFacERR[i] = tokens[1];
-    std::cout << cFac[i] <<"  "<<cFacERR[i]<<std::endl;
   }
   // alphas_0
   QCD::initQCD(bPar, std::max(fixed,DIS::getQ2max(cd)));
