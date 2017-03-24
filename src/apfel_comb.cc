@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 
   cout  << setw(10) << left << "<idat>"
         << setw(15) << left << "<FK>"
-        << setw(15) << left << "<APPLgrid>"
+        << setw(15) << left << "<Source>"
         << setw(15) << left << "<Rel.Err>"
         << endl;
 
