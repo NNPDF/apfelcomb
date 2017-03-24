@@ -37,6 +37,9 @@ namespace QCD
   static double QM = 0; // Maximum scale  QM
   static double QC = 0; // Cached scale   QC
 
+  static double xiF = 1;
+  static double xiR = 1;
+
   // Set modes
   void setDISmode(bool const& mode) {DIS_mode=mode;};
   void setFTDYmode(bool const& mode) {FTDY_mode=mode;};
@@ -131,6 +134,9 @@ namespace QCD
     // Set scale variation parameters
     param.xiF = atof(param.thMap["XIF"].c_str());
     param.xiR = atof(param.thMap["XIR"].c_str());
+
+    xiF = param.xiF;
+    xiR = param.xiR;
 
     cout << "                FastKernel Grid Combination                 "<<endl;
     cout << "    - TheoryID: "<<param.thID << endl;
@@ -422,7 +428,7 @@ namespace QCD
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta)
   {
     // Out of range
-    if (Q < Q0) return 0;
+    if (std::min(xiF*Q,xiR*Q) < Q0) return 0;
 
     // Recalculate if not cached
     if (Q != QC || FKObs.compare(obs) != 0)
@@ -442,7 +448,7 @@ namespace QCD
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y)
   {
     // Out of range
-    if (Q < Q0) return 0;
+    if (std::min(xiF*Q,xiR*Q) < Q0) return 0;
 
     // Recalculate if not cached
     if (Q != QC || FKObs.compare(obs) != 0)
