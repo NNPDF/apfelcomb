@@ -112,6 +112,10 @@ namespace QCD
     // Fetch settings map
     theoryDB.ExtractMap(param.thID, APFEL::kValues, param.thMap);
 
+    // Scale variation
+    param.xiF = atof(param.thMap["XIF"].c_str());
+    param.xiR = atof(param.thMap["XIR"].c_str());
+
     // Set perturbative order and initial scale
     param.Q0 = atof(param.thMap["Q0"].c_str());
     param.evol_pto = atoi(param.thMap["PTO"].c_str());
@@ -130,13 +134,6 @@ namespace QCD
     {
       param.pto = param.evol_pto + 1;
     }
-
-    // Set scale variation parameters
-    param.xiF = atof(param.thMap["XIF"].c_str());
-    param.xiR = atof(param.thMap["XIR"].c_str());
-
-    xiF = param.xiF;
-    xiR = param.xiR;
 
     cout << "                FastKernel Grid Combination                 "<<endl;
     cout << "    - TheoryID: "<<param.thID << endl;
@@ -184,6 +181,10 @@ namespace QCD
     QCD::Q0 = par.Q0;
     QCD::QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
     APFEL::SetQLimits( Q0, QM );
+
+    // Set scale variation parameters
+    QCD::xiF = par.xiF;
+    QCD::xiR = par.xiR;
 
     // Truncated Epsilon
     APFEL::SetEpsilonTruncation(1E-1);

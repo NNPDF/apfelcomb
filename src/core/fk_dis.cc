@@ -49,9 +49,12 @@ namespace DIS
       param.thMap["TMC"] = '0'; 
       param.thMap["PTO"] = to_string(std::min(param.evol_pto,(size_t)1)); 
       param.evol_pto = std::min(param.evol_pto,(size_t)1);
+      param.thMap["XIF"] = '1';
+      param.thMap["XIR"] = '1';
 
       std::cout<< "****** POSITIVITY OBSERVABLE ******"<<std::endl;
       std::cout<< "Limiting PTO to NLO, disabling TMCs"<<std::endl;
+      std::cout<< "Setting xi_F and xi_R to 1         "<<std::endl;
       std::cout<< "***********************************"<<std::endl;
     }
 
