@@ -87,9 +87,12 @@ int main(int argc, char* argv[]) {
     par.thMap["TMC"] = '0'; 
     par.thMap["PTO"] = to_string(std::min(par.evol_pto,(size_t)1)); 
     par.evol_pto = std::min(par.evol_pto,(size_t)1);
+    par.thMap["XIF"] = '1'; par.xiF = 1;
+    par.thMap["XIR"] = '1'; par.xiR = 1;
 
     std::cout<< "****** POSITIVITY OBSERVABLE ******"<<std::endl;
     std::cout<< "Limiting PTO to NLO, disabling TMCs"<<std::endl;
+    std::cout<< "Setting xi_F and xi_R to 1         "<<std::endl;
     std::cout<< "***********************************"<<std::endl;
   }
 
