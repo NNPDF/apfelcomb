@@ -1,13 +1,10 @@
 
 #include "apfelcomb/fk_ftdy.h"
 #include "apfelcomb/fk_qcd.h"
-
-#include <sys/time.h>
+#include "apfelcomb/fk_utils.h"
 
 #include <NNPDF/common.h>
 #include <NNPDF/commondata.h>
-#include <NNPDF/utils.h>
-#include "NNPDF/nnpdfdb.h"
 
 #include "APFEL/APFEL.h"
 
@@ -17,55 +14,57 @@ using NNPDF::FKHeader;
 namespace FTDY
 {
 
-  // *********************** FKHeader population ************************
-
-  void set_params(QCD::qcd_param const& par, std::string const& gridname, std::string const& setname, int const& ndata, NNPDF::FKHeader& FK)
+  size_t SubGrid::GetNdat() const 
   {
-    std::stringstream desc;
-    desc  <<  "-----------------------------------------------------------"<<std::endl
-          <<  " FK_"<<gridname<<".dat"<<std::endl
-          <<  "-----------------------------------------------------------";
-
-    FK.AddTag(FKHeader::BLOB, "GridDesc", desc.str());
-    FK.AddTag(FKHeader::GRIDINFO, "SETNAME", setname);
-    FK.AddTag(FKHeader::GRIDINFO, "NDATA", ndata);
-    FK.AddTag(FKHeader::GRIDINFO, "HADRONIC", true);
-
-    // Full flavourmap
-    stringstream fMapHeader;
-    for (int i=0; i<14; i++)
-    {
-      for (int i=0; i<14; i++)
-        fMapHeader << "1 ";
-      fMapHeader<<std::endl;
-    }
-    FK.AddTag(FKHeader::BLOB, "FlavourMap", fMapHeader.str());
-
-    // Set QCD parameters
-    QCD::set_params(par, FK);
+    return parent.GetCommonData().GetNData();
   }
 
-  // Populate FK table
-  void computeGrid(QCD::qcd_param const& par, NNPDF::CommonData const& cd)
+  double SubGrid::GetQ2max() const
+  {
+    const NNPDF::CommonData& g = parent.GetCommonData();
+    double q2max = 0;
+    for (int i=0; i<g.GetNData(); i++)
+     q2max = fmax(q2max, g.GetKinematics(i,1));
+    return q2max;
+  }
+
+  double SubGrid::GetXmin() const
+  {
+    const NNPDF::CommonData& g = parent.GetCommonData();
+    double xmin = 1.0;
+    for (int i=0; i<g.GetNData(); i++)
+    {
+      const double y     = g.GetKinematics(i, 0);
+      const double m2    = g.GetKinematics(i, 1);
+      const double sshad = g.GetKinematics(i, 2);
+      const double STAUdat = sqrt(m2)/sshad;
+      xmin = min(xmin, STAUdat * exp(-y));
+    }
+    return xmin;
+  }
+
+
+  void SubGrid::Compute(QCD::qcd_param const& par, vector<double>& xsec) const
+  {
+   for (double& i : xsec) i = 0;
+  }
+
+
+  void SubGrid::Splash(ostream& o) const
+  {
+    FKSubGrid::Splash(o);
+  }
+
+  void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* FK) const
   {
     int flmap[196];
+    const NNPDF::CommonData& cd = parent.GetCommonData();
     const std::string hcxfile = "data/FTDY/"+cd.GetSetName()+".hcx";
-
-    // Setup required directories
-    stringstream theoryDir;
-    theoryDir << resultsPath()<<"theory_" << par.thID<<"/subgrids/";
-
-    APFEL::ComputeFKTables(hcxfile, theoryDir.str().c_str(), par.Q0, flmap);
-  }
-
-  // Populate FK table
-  void processFK(QCD::qcd_param const& par, NNPDF::CommonData const& cd, std::string const& fkname, NNPDF::FKGenerator* fk)
-  {
-    stringstream theoryDir;
-    theoryDir << resultsPath()<<"theory_" << par.thID<<"/subgrids/";
-    const std::string filename = theoryDir.str() + "FK_"+fkname+".dat";
+    const std::string path = setupDir(par.thID, "ftdy_temp_"+to_string(id)+'/');
+    APFEL::ComputeFKTables(hcxfile, path.c_str(), par.Q0, flmap);
 
     // Read written table
+    const std::string filename = path + "FK_"+parent.GetTargetName()+".dat";
     std::fstream f; f.open(filename.c_str(), std::ios::in);
     
     if (f.fail()) {
@@ -76,8 +75,7 @@ namespace FTDY
     std::string line;
     while(getline(f,line))
     {
-      std::vector<NNPDF::real> linesplit;
-      NNPDF::rsplit(linesplit,line);
+      const std::vector<double> linesplit = dsplit(line);
 
       const int d = linesplit[0];
       const int i = linesplit[1];
@@ -87,44 +85,15 @@ namespace FTDY
       for (size_t k=0; k<14; k++) // loop over flavour 1
         for (size_t l=0; l<14; l++) // loop over flavour 2
         {
-          fk->Fill( d-1, i, j, k, l, linesplit[idx] );
+          FK->Fill( d-1, i, j, k, l, linesplit[idx] );
           idx=idx+1;
         }
     }
 
     f.close();
     remove(filename.c_str());
-  }
 
-
-  // Get minimum x value
-  double getXmin(const NNPDF::CommonData& g)
-  {
-    double xmin = 1.0;
-    
-    for (int i=0; i<g.GetNData(); i++)
-    {
-      const double y     = g.GetKinematics(i, 0);
-      const double m2    = g.GetKinematics(i, 1);
-      const double sshad = g.GetKinematics(i, 2);
-      
-      const double STAUdat = sqrt(m2)/sshad;
-    
-      xmin = fmin(xmin, STAUdat * exp(-y));
-    }
-    
-    return xmin;
-  }
-
-  // Get the maximum scale of an applgrid
-  double getQ2max(const NNPDF::CommonData& g)
-  {
-    double q2max = 0;
-    
-    for (int i=0; i<g.GetNData(); i++)
-     q2max = fmax(q2max, g.GetKinematics(i,1));
-    
-    return q2max;
+    return;
   }
 
 }

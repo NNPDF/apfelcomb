@@ -42,6 +42,7 @@ public:
 	vector<double> Compute(QCD::qcd_param const&) const;				//!< Compute the full FK table predictions
 	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const; 	//!< Perform the FK combination
 
+	string GetTargetName() 		const {return name;};
 	string GetSetName() 		const {return setname;};
 	string GetDescription() 	const {return description;};
 	NNPDF::CommonData const& GetCommonData() const {return data;};

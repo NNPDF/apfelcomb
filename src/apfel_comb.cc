@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
   
   if (argc!=4)
   {
-    cout << "Usage: "<<argv[0]<<" <source=app/dis> <database id> <theory id>"<<endl;
+    cout << "Usage: "<<argv[0]<<" <source=app/dis/dyp> <database id> <theory id>"<<endl;
     exit(1);
   }
 

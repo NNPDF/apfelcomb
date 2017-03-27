@@ -112,7 +112,7 @@ vector<double> dsplit(string in)
 
 // ************ Theory Dir **************************
 
-void setupDir(int const& theoryID)
+std::string setupDir(int const& theoryID)
 {
   // Setup required directories
   stringstream theoryDir;
@@ -122,6 +122,16 @@ void setupDir(int const& theoryID)
   mkdir(theoryDir.str().c_str(),0777);
   mkdir((theoryDir.str() + "subgrids/").c_str(),0777);
   mkdir((theoryDir.str() + "fastkernel/").c_str(),0777);
+  return theoryDir.str();
+}
+
+std::string setupDir(int const& theoryID, std::string const& extradir)
+{
+  setupDir(theoryID);
+  stringstream theoryDir;
+  theoryDir << resultsPath()<<"theory_" << theoryID<<"/";
+  mkdir((theoryDir.str() + extradir).c_str(),0777);
+  return theoryDir.str() + extradir;
 }
 
 void DisplayHR()

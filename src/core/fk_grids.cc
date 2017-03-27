@@ -12,6 +12,7 @@
 
 #include "apfelcomb/fk_appl.h"
 #include "apfelcomb/fk_dis.h"
+#include "apfelcomb/fk_ftdy.h"
 
 #include <chrono>
 #include <ctime>
@@ -79,6 +80,8 @@ void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 				components.insert(pair<int, FKSubGrid*>(i, new DIS::SubGrid(*this, db, i)));
 				break;
 			case DYP:
+				components.insert(pair<int, FKSubGrid*>(i, new FTDY::SubGrid(*this, db, i)));
+				break;
 			case NSR:
 				cerr << "ERROR: Cannot handle source" <<endl;
 				exit(-1);
