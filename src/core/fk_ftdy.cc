@@ -7,6 +7,7 @@
 #include <NNPDF/commondata.h>
 
 #include "APFEL/APFEL.h"
+#include <unistd.h>
 
 using namespace std;
 using NNPDF::FKHeader;
@@ -91,8 +92,16 @@ namespace FTDY
     }
 
     f.close();
-    remove(filename.c_str());
-
+    if (cd.GetSetName() == "DYE886R")
+    {
+      remove((path+"FK_DYE886R_P.dat").c_str());
+      remove((path+"FK_DYE886R_D.dat").c_str());
+    }
+    else
+    {
+      remove(filename.c_str());
+    }
+    rmdir(path.c_str());
     return;
   }
 

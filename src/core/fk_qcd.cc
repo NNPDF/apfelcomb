@@ -27,7 +27,6 @@ namespace QCD
 {
 
   // Set static DIS mode
-  static bool DIS_mode = false;  
   static bool FTDY_mode = false;
   static bool SIA_mode = false;
 
@@ -38,7 +37,6 @@ namespace QCD
   static double QC = 0; // Cached scale   QC
 
   // Set modes
-  void setDISmode(bool const& mode) {DIS_mode=mode;};
   void setFTDYmode(bool const& mode) {FTDY_mode=mode;};
   void setSIAmode(bool const& mode) {SIA_mode=mode;};
 
@@ -182,26 +180,7 @@ namespace QCD
 
     return;
   }
-
- // Initialise APFEL for evolution factors
-  void initTruthGrid(qcd_param const& par, const double& xmin)
-  {
-    // Initialise
-    APFEL::SetFastEvolution(false);
-    APFEL::LockGrids(false);
-    APFEL::EnableEvolutionOperator(true); 
-
-    if ( fabs(par.xiF - 1.0) > 1E-5)
-      APFEL::SetQLimits( 1.0, std::max(15000., QM) );
-    else
-      APFEL::SetQLimits( Q0, QM );
-
-    // Start APFEL
-    APFEL::InitializeAPFEL_DIS();
-  
-    return;
-  }
-  
+ 
   // Initialise APFEL for evolution factors
   // Note here nx is the number of x-points to be output to the Fk table
   // Therefore it doesn't include x=1. This is added manually in this function
@@ -255,10 +234,7 @@ namespace QCD
     APFEL::EnableWelcomeMessage(false);
 
     // Start APFEL
-    // if (DIS_mode)
-      APFEL::InitializeAPFEL_DIS();
-    // else
-      // APFEL::InitializeAPFEL();
+    APFEL::InitializeAPFEL_DIS();
 
     // Needed to join the grids
     APFEL::EvolveAPFEL(Q0,Q0);

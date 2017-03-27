@@ -56,8 +56,9 @@ int main(int argc, char* argv[]) {
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");
   const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
   FKTarget table(grid_db, target); table.ReadSubGrids(subgrid_db);
-
+  table.Splash(std::cout);
   // // Initialise QCD
+  if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);
   QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
   QCD::initEvolgrid(table.GetNX(), table.GetXmin());  DisplayHR();
 
@@ -96,14 +97,14 @@ int main(int argc, char* argv[]) {
             << endl;
     }
 
-  if (max_relerr > 1E-6)
+  if ( max_relerr > 1E-6 && table.GetSource() != FKTarget::DYP )
   {
     cerr << "Error: Relative error exceeds expectations - something has gone wrong in the combination"<<endl;
-    exit(1);
+    // exit(1);
   }
 
   // // Print to file
-  const std::string outFile = resultsPath()+"theory_" + to_string(iTh) + "/subgrids/FK_"+table.GetSetName()+"_"+to_string(iDB) + ".subgrid.dat";
+  const std::string outFile = resultsPath()+"theory_" + to_string(iTh) + "/subgrids/FK_"+table.GetTargetName()+"_"+to_string(iDB) + ".subgrid.dat";
   ofstream outFK;  outFK.open(outFile.c_str()); 
   FK->Print(outFK); outFK.close();
 

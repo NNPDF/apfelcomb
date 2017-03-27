@@ -27,7 +27,7 @@ class FKTarget
 public:
 	FKTarget(NNPDF::IndexDB const& db, int const& targetID);
 	~FKTarget(){};
-	enum Source { APP, DIS, DYP, NSR };
+	enum source { APP, DIS, DYP, NSR };
 
 	virtual void Splash( ostream& ) const; 				//!< Write table information to stream
 	void ReadSubGrids(NNPDF::IndexDB const& db);		//!< Read information on subgrids from database
@@ -37,7 +37,7 @@ public:
 	double GetComputeXmin() const;						//!< Return minimal x-value used in computation of this observable (if different to above)
 	int    GetNX() const {return nx;};					//!< Return number of x-points in the target table
 	bool   GetPositivity() const {return positivity;};	//!< Return number of x-points in the target table
-
+	source GetSource() const {return subgrid_source;};	//!< Returns the type of subgrid source
 	void SetFKHeader(NNPDF::FKHeader&) const;							//!< Set the parameters in an FK header
 	vector<double> Compute(QCD::qcd_param const&) const;				//!< Compute the full FK table predictions
 	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const; 	//!< Perform the FK combination
@@ -53,14 +53,14 @@ private:
 	const string 	name;			//!< Name of the FK target
 	const string 	setname;		//!< Parent dataset name
 	const string 	description;	//!< FK table description
-	const Source 	subgrid_source;	//!< Source of subgrids (APP/DIS/DYP)
+	const source 	subgrid_source;	//!< Source of subgrids (APP/DIS/DYP)
 	const bool		positivity;		//!< Positivity observable flag
 	const int 		nx;				//!< Number of x-points in the interpolation grid
 	const NNPDF::CommonData data;	// Reference data file
 
 	map<int,FKSubGrid*> components;	//!< Subgrid components
 
-	Source parse_source(std::string const&); //!< Returns the appropriate enum for the strings "APP/DIS/DYP"
+	source parse_source(std::string const&); //!< Returns the appropriate enum for the strings "APP/DIS/DYP"
 };
 
 

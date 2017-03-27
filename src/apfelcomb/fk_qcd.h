@@ -105,9 +105,6 @@ namespace QCD
   void initEvolgrid(const int& nx, const double& xmin);
   void initPDF(std::string const& setname, int const& i);
 
-  void initNNPDF30Grid(); // Initialise NNPDF30 style x-grid for test purposes
-  void initTruthGrid(qcd_param const& par, const double& xmin); // Initialise very large evolution grid for test purposes
-
   // APFEL PDF access functions
   void evolpdf(const double& x, const double& Q, double* pdf);
   void evolpdf_applgrid(const double& x, const double& Q, double* pdf); // Version for applgrid (no photon)
@@ -123,7 +120,6 @@ namespace QCD
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y);
   
   // mode setters
-  void setDISmode(bool const& mode);
   void setFTDYmode(bool const& mode);
   void setSIAmode(bool const& mode);
 }

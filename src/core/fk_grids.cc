@@ -59,7 +59,7 @@ void FKTarget::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* FK) const
 } 
 
 
-FKTarget::Source FKTarget::parse_source(string const& ss)
+FKTarget::source FKTarget::parse_source(string const& ss)
 {
   if (ss.compare("APP") == 0) return FKTarget::APP;
   if (ss.compare("DIS") == 0) return FKTarget::DIS;
