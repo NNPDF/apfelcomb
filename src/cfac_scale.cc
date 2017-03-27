@@ -21,6 +21,14 @@
 
 using namespace std;
 
+double getQ2Max_CommonData(NNPDF::CommonData const& cd)
+{
+  double q2max = 0;
+  for (int i=0; i<cd.GetNData(); i++)
+   q2max = fmax(q2max, cd.GetKinematics(i,1));
+  return q2max;
+}
+
 int main(int argc, char* argv[]) {
   
   if ( argc != 4 && argc != 5 )
@@ -101,19 +109,19 @@ int main(int argc, char* argv[]) {
     cFacERR[i] = tokens[1];
   }
   // alphas_0
-  QCD::initQCD(bPar, std::max(fixed,DIS::getQ2max(cd)));
+  QCD::initQCD(bPar, false, std::max(fixed, getQ2Max_CommonData(cd)));
   for (int i=0; i< cd.GetNData(); i++)
     alphas_0[i] = QCD::alphas( bfixed ? fixed:std::sqrt(cd.GetKinematics(i,1)));
 
   // alphas_1
-  QCD::initQCD(tPar, DIS::getQ2max(cd));
+  QCD::initQCD(tPar, false, getQ2Max_CommonData(cd));
   for (int i=0; i< cd.GetNData(); i++)
     alphas_1[i] = QCD::alphas( bfixed ? fixed:std::sqrt(cd.GetKinematics(i,1)));
 
   std::cout <<std::setw(8)<< "Scale"<<"\t"<< std::setw(8)<< "OldCFAC" << "\t"<<std::setw(8)<<"NewCFAC"<<std::endl;
   for (int i=0; i< cd.GetNData(); i++)
   {
-    const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i], tPar.pto);
+    const double fac1 = 1.0 + (cFac[i]-1.0)*pow(alphas_1[i]/alphas_0[i], tPar.evol_pto);
     outstream << fac1 <<"\t"<<cFacERR[i]<<endl;
 
     // Print to screen

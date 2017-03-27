@@ -4,7 +4,7 @@ CXXFLAGS = 	$(PRJCXXFLAGS)
 LDLIBS   =  ./src/libac_core.a $(PRJLDFLAGS)
 
 VPATH=./src
-MAIN = apfel_comb 
+MAIN = apfel_comb src/cfac_scale
 DEV = grid_analyser
 #ftdy_hcx
 
