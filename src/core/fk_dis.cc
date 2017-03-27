@@ -76,7 +76,6 @@ namespace DIS
       const double Q = sqrt(cd.GetKinematics(d,1));
       const double y = cd.GetKinematics(d,2);
 
-      // (For the moment) skip data with Q<Q0
       if (min(par.xiF, par.xiR)*Q < par.Q0)
         continue;
 

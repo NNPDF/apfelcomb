@@ -210,6 +210,8 @@ namespace QCD
     // Reset cache
     QC = 0;
     double* xg = new double[nx+1];
+    std::cout << " Initialising  "<< nx << " points starting from x = " << xmin <<std::endl; 
+
 
     // Special requirements for FTDY in APFEL
     if (FTDY_mode)
