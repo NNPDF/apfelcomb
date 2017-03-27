@@ -53,7 +53,10 @@ namespace DIS
       const double Q = sqrt(cd.GetKinematics(i,1));
       const double y = cd.GetKinematics(i,2);
 
-      xsec[i] = nrmdat*QCD::disobs(process, x, Q, y);
+      if (min(par.xiF, par.xiR)*Q >= par.Q0)
+        xsec[i] = nrmdat*QCD::disobs(process, x, Q, y);
+      else
+        xsec[i] = 0;
       StatusUpdate(t1, ((double)i+1)/(double)cd.GetNData(), cout );
     }
   }
@@ -74,7 +77,7 @@ namespace DIS
       const double y = cd.GetKinematics(d,2);
 
       // (For the moment) skip data with Q<Q0
-      if (Q < par.Q0)
+      if (min(par.xiF, par.xiR)*Q < par.Q0)
         continue;
 
       for(size_t ix=0; ix<FK->GetNx(); ix++) 

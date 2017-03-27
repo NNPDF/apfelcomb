@@ -153,7 +153,11 @@ namespace QCD
   {
     // Disable TMCs in positivity observables
     if (positivity)
+    {
       par.thMap["TMC"] = '0'; 
+      par.thMap["XIF"] = '1'; par.xiF = 1; 
+      par.thMap["XIR"] = '1'; par.xiR = 1;
+    }
 
     APFEL::SetParam(par.thMap);
 
