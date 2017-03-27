@@ -19,142 +19,99 @@
 
 using namespace std;
 
-//   double computeTargetPrecision(std::vector<int> const& targetPoints, NNPDF::CommonData const& cd)
-//   {
-//     double targetPrec = std::numeric_limits<double>::infinity();
-//     for (int i : targetPoints)
-//       if (abs(cd.GetUncE(i)/cd.GetData(i)) > 1E-5)
-//         targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/5.0);
-//     if (targetPrec == std::numeric_limits<double>::infinity())
-//       for (int i : targetPoints)
-//         targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);  
-//     if (targetPrec == std::numeric_limits<double>::infinity())
-//     {
-//       targetPrec = 0.001;
-//       std::cout << "WARNING: NO ERROR AVAILABLE, SETTING TO PERMILLE ACCURACY" <<std::endl;
-//     }
-//     return targetPrec;
-//   }
+double trgPrec(int const& i, NNPDF::CommonData const& cd)
+{
+  double targetPrec = std::numeric_limits<double>::infinity();
+  if (abs(cd.GetUncE(i)/cd.GetData(i)) > 1E-5)
+    targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/5.0);
+  if (targetPrec == std::numeric_limits<double>::infinity())
+    targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);  
+  if (targetPrec == std::numeric_limits<double>::infinity())
+  {
+    targetPrec = 0.001;
+    std::cout << "WARNING: NO ERROR AVAILABLE, SETTING TO PERMILLE ACCURACY" <<std::endl;
+  }
+  return targetPrec;
+}
 
 
 int main(int argc, char* argv[]) {
   
   if (argc!=3)
   {
-    cout << "Usage: appl_comb <database id> <theory id>"<<endl;
+    cout << "Usage: "<<argv[0]<<" <grid id> <theory id>"<<endl;
     exit(1);
   }
 
-  Splash();
-  
   // APPLgrid and theory indices
   const int iDB = atoi(argv[1]);
   const int iTh = atoi(argv[2]);
+  setupDir(iTh);
 
   // Parse parameters
-  APP::appl_param par;
-  QCD::parse_input(iTh, par);
-  APP::parse_input(iDB, par);
-  par.datamap = APP::parse_map(par.common_subgrids, iDB);
-  APP::grid sourceGrid(par);
+  Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
 
+  NNPDF::SetVerbosity(0); appl::setVerbose(false);
+  NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
+  const string source = "app";
+  NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", source+"_subgrids");
 
-  const std::string commonfile = dataPath() + "commondata/DATA_" + par.setname + ".dat"; 
-  const std::string sysfile    = dataPath() + "commondata/systypes/SYSTYPE_" + par.setname + "_DEFAULT.dat";  
-  const NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(commonfile, sysfile);
-  
-  // Initialise QCD
-  QCD::initQCD(par, APP::getQ2max(sourceGrid.g));
-  QCD::initTruthGrid(par, APP::getXmin(sourceGrid.g,false)); 
-  const std::string testPDF = "NNPDF30_nlo_as_0118.LHgrid";
-  cout <<endl<< "--  Calculating truth values *************************************"<<endl;
-  
-  // Compute with applgrid interface (at NLO)
-  int pto = par.pto-1;
-  if (par.ptmin == 1)
-    pto = -1;
-  
-  const int iCheck = 100;
-  vector< vector<double > > truth;
-  for (size_t n=0; n<iCheck; n++)
+  // Read grid information
+  FKTarget table(grid_db, iDB); table.ReadSubGrids(subgrid_db);
+
+  // // Initialise QCD
+  QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
+  // QCD::initPDF("NNPDF30_nlo_as_0118.LHgrid",3);
+
+  DisplayHR();
+  cout << "                     Testing Predictions"<<endl;
+
+  // Compute 'ideal' predictions
+  double maxdiff = 1; int nx = 10;
+  vector<double> xsec_prev(table.GetCommonData().GetNData(), std::numeric_limits<double>::infinity());
+  while (maxdiff >= 1)
   {
-    QCD::initPDF(testPDF, n);
-    vector<double> itruth  = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
-    truth.push_back(itruth);
+    QCD::initEvolgrid(nx+=5, table.GetXmin());
+    const vector<double> xsec_test = table.Compute(par);
+
+    double maxdiff = 0;
+    for (int i=0; i<xsec_prev.size(); i++)
+      maxdiff = max(maxdiff, abs((xsec_prev[i] - xsec_test[i])/xsec_test[i])/trgPrec(i, table.GetCommonData()));
+    xsec_prev = xsec_test;
+    std::cout << "  - MAXDIFF: " <<maxdiff<<std::endl;
   }
-  
-  cout <<endl<< "--  Calculating minimum grid size *************************************"<<endl;
 
-  // // Targets and xmin
-  const double xmin = APP::parse_xmin(par.common_subgrids);
 
-  // // Output to file
-  stringstream historyfile;
-  historyfile << "./res/opt/ID_"<<iDB<<".hist";
-  ofstream histout(historyfile.str().c_str());
-  histout << par.setname <<"\t XMIN: "<<xmin<<endl;
-  
-  int n, maxn;
-  double max, max0;
-  for (n=15; n<100; n+=5)
-  {
-    QCD::initEvolgrid(n,xmin);
+  // cout << "                        Verification                  "<<endl;
+  // DisplayHR();
+  // APFELPDFSet apfelPDF;
+  // const vector<double> xsec = table.Compute(par);
+  // const NNPDF::ThPredictions theory(&apfelPDF, FK);
 
-    max0 = 0.0;
-    max = 0.0;
-    maxn = 0;
-    for (int imem=0; imem<truth.size(); imem++)
-    {
-      QCD::initPDF(testPDF, imem);
-      const vector<double> xsec  = sourceGrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto );
-      vector<double> diff;
-      
-      size_t ibin=0;
-      for (size_t o=0; o<sourceGrid.g->Nobs(); o++)
-        if (par.mask[o])
-        {
-          diff.push_back(abs((truth[imem][o] - xsec[o])/truth[imem][o]));
-          ibin++;
-        }
+  // cout  << setw(10) << left << "<idat>"
+  //       << setw(15) << left << "<FK>"
+  //       << setw(15) << left << "<Source>"
+  //       << setw(15) << left << "<Rel.Err>"
+  //       << endl;
 
-      for (int i=0; i<par.ndata; i++)
-      {
-        const double truthpred = truth[imem][par.maskmap[i]];
-        const double testpred = xsec[par.maskmap[i]];
-        const double rel_err = abs((truthpred-testpred)/testpred);
-        const double targetPrec = APP::computeTargetPrecision(par.datamap[i], cd);
-        diff.push_back(rel_err/targetPrec);
-      }
-      
-      if (imem == 0)
-        max0 = *std::max_element(diff.begin(), diff.end());
-      max = std::max(max,*std::max_element(diff.begin(), diff.end()));
+  // double max_relerr = 0;
+  // for (auto targets : table.GetSubgrid(iDB)->GetDataMap())
+  //   for (int i : targets)
+  //   {
+  //     const double applpred = xsec[i];
+  //     const double FKpred  = theory.GetObsCV(i);
+  //     const double rel_err = abs((FKpred-applpred)/applpred);
+  //     max_relerr = max(max_relerr, rel_err);
+  //     cout  << setw(10) << left << i
+  //           << setw(15) << left << FKpred
+  //           << setw(15) << left << applpred
+  //           << setw(15) << left << rel_err
+  //           << endl;
+  //   }
+  
+  cout << "                      OptGrid Complete "<<endl;
+  DisplayHR();
 
-      if ( max > 1.0) // Threshold already breached
-      {
-        maxn = imem;
-        break;
-      }
-    }
-
-    cout << "NX: "<<n<<"  MAX_0: "<<max0<<"  MAXERR: "<<max<< " ("<<maxn<<")"<<endl;
-    histout<< n<<" \t "<<max0<<" \t "<<max<< " ("<<maxn<<")"<<endl;
-    
-    if (max < 1.0)
-      break;
-  }
-  
-  histout.close();
-  
-  // Output to file
-  stringstream targetfile;
-  targetfile << "./res/opt/ID_"<<iDB<<".dat";
-  ofstream datout(targetfile.str().c_str());
-  datout << par.setname <<"\t\t XMIN: "<<xmin<<"\t\t NX: "<< n << "\t\t MAX_0: "<<max0<<"\t\t MAXERR: "<<max<<endl;
-  datout.close();
-  
-  cout <<endl<< "--  OptGrid Complete **********************************"<<endl;
-  
   exit(0);
 }
 

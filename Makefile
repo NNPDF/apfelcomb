@@ -5,7 +5,7 @@ LDLIBS   =  ./src/libac_core.a $(PRJLDFLAGS)
 
 VPATH=./src
 MAIN = apfel_comb src/cfac_scale
-DEV = grid_analyser
+DEV = appl_optgrid
 #ftdy_hcx
 
 .PHONY: all dev core clean
