@@ -96,10 +96,10 @@ int main(int argc, char* argv[]) {
             << endl;
     }
 
-  if ( max_relerr > 1E-6 && table.GetSource() != FKTarget::DYP )
+  if ( max_relerr > 1E-5 && table.GetSource() != FKTarget::DYP )
   {
     cerr << "Error: Relative error exceeds expectations - something has gone wrong in the combination"<<endl;
-    // exit(1);
+    exit(1);
   }
 
   // // Print to file
