@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
   NNPDF::FKGenerator* FK = new NNPDF::FKGenerator( IO );
 
   // Compute FK table
-  table.GetSubgrid(iDB)->Combine(par, FK);
+  table.GetSubgrid(iDB)->Combine(par, FK); FK->Finalise();
 
   cout << "                        Verification                  "<<endl;
   DisplayHR();
