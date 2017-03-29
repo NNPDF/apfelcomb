@@ -29,7 +29,7 @@ namespace DIS
   double SubGrid::GetXmin() const
   {
     const NNPDF::CommonData& g = parent.GetCommonData();
-    const double M2proton = pow(APFEL::GetProtonMass(),2);
+    const double M2proton = 0.938; // GeV - should ideally be taken from APFEL
 
     double ximin = 1.0;
     for (int i=0; i<g.GetNData(); i++)
