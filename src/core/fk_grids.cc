@@ -143,7 +143,10 @@ double FKTarget::GetQ2max() const
 {
 	double q2max = 0;
 	for (auto subgrid: components)
+	{
+		std::cout << subgrid.first <<"  " << subgrid.second->GetQ2max() <<endl;
 		q2max = max(q2max, subgrid.second->GetQ2max());
+	}
 	return q2max;
 }
 
