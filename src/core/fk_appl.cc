@@ -153,7 +153,7 @@ namespace APP
   {
     // Find maximum required scale
     double Q2max = 0;
-    for(int i=0; i<applgrid.g->nloops(); i++)  // pto
+    for(int i=0; i<2; i++)  // pto
       for (int j=0; j<applgrid.g->Nobs(); j++) // bin
       {
         appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
