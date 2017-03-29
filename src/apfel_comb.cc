@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");
   const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
   FKTarget table(grid_db, target); table.ReadSubGrids(subgrid_db);
-  table.Splash(std::cout);
+
   // // Initialise QCD
   if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);
   QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
