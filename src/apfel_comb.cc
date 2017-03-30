@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
   // // Initialise QCD
   if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);
   QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
-  QCD::initEvolgrid(table.GetNX(), table.GetXmin());  DisplayHR();
+  QCD::initEvolgrid(table.GetNX(), table.GetXmin());
 
   // Initialise empty mFK table
   NNPDF::FKHeader FKhead; table.SetFKHeader(FKhead); QCD::set_params(par, FKhead);
@@ -67,10 +67,10 @@ int main(int argc, char* argv[]) {
   NNPDF::FKGenerator* FK = new NNPDF::FKGenerator( IO );
 
   // Compute FK table
+  DisplayHR();  cout << "                        Combination                  "<<endl;
   table.GetSubgrid(iDB)->Combine(par, FK); FK->Finalise();
-
-  cout << "                        Verification                  "<<endl;
-  DisplayHR();
+  
+  DisplayHR();  cout << "                        Verification                  "<<endl;
   APFELPDFSet apfelPDF;
   const vector<double> xsec = table.Compute(par);
   const NNPDF::ThPredictions theory(&apfelPDF, FK);
@@ -104,8 +104,7 @@ int main(int argc, char* argv[]) {
 
   // // Print to file
   const std::string outFile = resultsPath()+"theory_" + to_string(iTh) + "/subgrids/FK_"+table.GetTargetName()+"_"+to_string(iDB) + ".subgrid.dat";
-  ofstream outFK;  outFK.open(outFile.c_str()); 
-  FK->Print(outFK); outFK.close();
+  FK->Print(outFile, true);
 
   DisplayHR();
   NNPDF::FKTable *impFK = new NNPDF::FKTable(outFile);
