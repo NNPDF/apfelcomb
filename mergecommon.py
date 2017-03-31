@@ -40,7 +40,7 @@ def mergegrid(target, source, thID, cur):
         mergeConstituents = mergeConstituents + constituent + ' '
 
     if complete_subgrids == True:
-        os.system("FKmerge2 " + mergeConstituents+' > '+ mergeTarget)  
+        os.system("FKmerge2 " +mergeTarget + ' ' + mergeConstituents)  
         print(target + bcolors.OKGREEN + " successfully generated!" + bcolors.ENDC)
     else:
         print(target + bcolors.FAIL + " generation failed!" + bcolors.ENDC)

@@ -116,27 +116,7 @@ void FKTarget::SetFKHeader(NNPDF::FKHeader& FK) const
 	FK.AddTag(FKHeader::GRIDINFO, "NDATA", data.GetNData());
 	FK.AddTag(FKHeader::VERSIONS, "APPLrepo", applCommit() );
 	FK.AddTag(FKHeader::GRIDINFO, "HADRONIC", subgrid_source != DIS);
-
-	// Full flavourmap
-	stringstream fMapHeader;
-
-	if (subgrid_source == DIS)
-	{
-		for (int i=0; i<14; i++)
-			fMapHeader <<"1 ";
-		fMapHeader<<endl;
-	}
-	else
-	{
-		for (int i=0; i<14; i++)
-		{
-			for (int i=0; i<14; i++)
-			  fMapHeader << "1 ";
-			fMapHeader<<endl;
-		}
-	}
-
-	FK.AddTag(FKHeader::BLOB, "FlavourMap", fMapHeader.str());
+	FK.ResetFlavourMap();
 }
 
 double FKTarget::GetQ2max() const
