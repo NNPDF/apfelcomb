@@ -307,8 +307,10 @@ namespace QCD
       QC = Q;
     }
     
+    // Fuzzy x
+    const double fx = fabs(x-APFEL::xGrid(0))/x < 1E-6 ? APFEL::xGrid(0):x;    
     for (int i=-7; i<7; i++)
-      pdf[i+7]= (i==-7 ? 0:APFEL::xPDF(i,x));
+      pdf[i+7]= (i==-7 ? 0:APFEL::xPDF(i,fx));
   }
 
   // APFEL strong coupling
