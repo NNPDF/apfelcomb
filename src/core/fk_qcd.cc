@@ -86,12 +86,6 @@ namespace QCD
 
   void parse_input(int innum, qcd_param& param)
   {
-    // First of all, ensure that libnnpdf is compiled in safe mode
-    #ifdef SSE_CONV
-      cout << "Error: libnnpdf must be compliled in safe mode for use with apfelcomb"<<endl;
-      exit(-1);
-    #endif
-
     // Theory index
     param.thID = innum;
 
