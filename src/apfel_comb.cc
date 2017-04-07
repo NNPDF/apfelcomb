@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 
   // Parse parameters
   Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
-  NNPDF::SetVerbosity(0); appl::setVerbose(false);
+  NNPDF::SetVerbosity(0); 
   NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
   NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", source+"_subgrids");
 
