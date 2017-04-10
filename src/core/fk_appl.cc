@@ -79,16 +79,6 @@ namespace APP
       std::swap(pdf[6+i], pdf[6-i]);
   }
 
-  // EvolutionOperator rotator from APFEL to APPLgrid flavour basis - accounting for ppbar rotation
-  void EvolutionOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* a)
-  {
-    for(int i=0; i<13; i++)
-      a[ppbar ? 12-i:i] = QCD::EvolutionOperator(xi, xo, i + 1, fi, Q);
-    if (applgrid_nfl == 14)
-      a[13] = QCD::EvolutionOperator(xi, xo, 0, fi, Q);
-    return;
-  }
-
   // ********************************* Kinematics Helpers *************************************
 
   // Returns the minimum and maximum x-grid points for a specified subgrid slice.
@@ -309,12 +299,12 @@ namespace APP
           {
             for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
             {
-              EvolutionOperator(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+              QCD::EvolutionOperator(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
               if (vary_fac) QCD::DerivativeOperator(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
             }
             for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
             {
-              EvolutionOperator(ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+              QCD::EvolutionOperator(ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
               if (vary_fac) QCD::DerivativeOperator(ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
             }
           }
