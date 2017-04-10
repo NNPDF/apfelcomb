@@ -292,12 +292,10 @@ namespace QCD
   // fi    - input flavour (in APFEL evolution basis)
   // Q     - scale of the final evolved PDF
   // a     - array in output flavour fo (APPLgrid flavour basis) of evolution operators
-  void EvolutionOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* a)
+  double EvolutionOperator(const int& xi, const double& xo, const int fo, const int& fi, const double& Q)
   {
     updateEvol(Q);
-    for(int i=0; i<13; i++)
-      a[ppbar ? 12-i:i] = APFEL::ExternalEvolutionOperator("Ev2Ph",i-6,fi,xo,xi);
-    return;
+    return APFEL::ExternalEvolutionOperator("Ev2Ph",fo-7,fi,xo,xi);
   }
 
   // LO Evolved PDF derivative operator

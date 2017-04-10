@@ -111,7 +111,7 @@ namespace QCD
   double beta0();
   
   // PDF Operators
-  void EvolutionOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double*);
+  double EvolutionOperator(const int& xi, const double& xo, const int f0, const int& fi, const double& Q);
   void DerivativeOperator(const bool& ppbar, const int& beta, const double& alpha, const int& j, const double& Q, double* a);
 
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta);
