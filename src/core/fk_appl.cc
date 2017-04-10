@@ -25,39 +25,58 @@ namespace APP
   const int applgrid_nfl = 13;
   #endif
 
-  vector<std::string> splitpdf ( std::string const& str )
-  {
-    vector<std::string> outvec;
-    std::stringstream ss(str);
-    std::string s;
 
-    while (getline(ss, s, ':')) 
-      outvec.push_back(s);
-    return outvec;
+// // ********************* Evolution factors ******************************
+
+  class EvolutionFactors
+  {
+  public:
+    EvolutionFactors(const int nxin, const int nxout):
+    b1(applgrid_nfl),
+    b2(applgrid_nfl*14),
+    b3(applgrid_nfl*14*nxin),
+    data(new double[nxout*b3]) 
+    {
+      for (int i=0; i<nxout*b3; i++)
+        data[i] = 0;
+    };
+    ~EvolutionFactors() {delete[] data;};
+
+    double* operator()(int const& ox, int const& ix, int const& fi ) {return data+b3*ox+b2*ix+b1*fi;};
+    const double* operator()(int const& ox, int const& ix, int const& fi ) const {return data+b3*ox+b2*ix+b1*fi;};
+  private:
+    const int b1;
+    const int b2;
+    const int b3;
+    double* data;
+  };
+
+
+// ********************************* Basis rotation helpers *************************************
+
+    // Rotates APFEL flavour basis into APPLgrid flavour basis (photon moves from 0 to 1)
+  void evolpdf_applgrid(const double& x, const double& Q, double* pdf)
+  {
+    // A nice trick of APPLgrid is to request PDF x-values smaller than are actually used
+    if (x<APFEL::xGrid(0))
+    {
+      for (int i=-6; i<7; i++)
+        pdf[i+6]=0;
+      return;
+    }
+
+    double *APFEL_basis = new double[14]; 
+    QCD::evolpdf(x, Q, APFEL_basis);
+
+    for (int i=0; i<13; i++)
+      pdf[i]=APFEL_basis[i+1];
+    if (applgrid_nfl == 14)
+      pdf[13] = APFEL_basis[0];
+
+    delete[] APFEL_basis;
   }
 
-  vector<int> SubGrid::parse_maskmap(string const& mask)
-  {
-    const vector<string> masksplit = ssplit(mask);
-    vector<int> _maskmap;
-    for (size_t i=0; i<masksplit.size(); i++)
-      if ((bool) atoi(masksplit[i].c_str()))
-        _maskmap.push_back(i);
-    return _maskmap;
-  }
-
-  void SubGrid::Splash(ostream& o) const
-  {
-    FKSubGrid::Splash(o);
-    o << "- APPLgrid: " << applfile << endl
-      << "- PTMin: "    << ptmin    << endl
-      << "- fnlobin: "  << fnlobin  << endl
-      << "- PDFWeight: "<< pdfwgt   << endl
-      << "- ppbar: "    << ppbar    << endl
-      << endl;
-  }
-
-// ********************************* Kinematics Helpers *************************************
+  // ********************************* Kinematics Helpers *************************************
 
   // Returns the minimum and maximum x-grid points for a specified subgrid slice.
   // igrid is the requested subgrid, nsubproc the number of subprocesses held within igrid.
@@ -108,92 +127,8 @@ namespace APP
     return limits;
   }
 
-  // Return the minimum x used in the subgrid
-  double SubGrid::GetXmin() const
-  { 
-    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
-    double xmin = 1.0;
-    for(int i=0; i<nloops; i++) 
-      for (int j=0; j<applgrid.g->Nobs(); j++)
-      {
-        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
-        const size_t nsubproc = applgrid.g->subProcesses(i);
 
-          for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
-          {
-            const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
-            if (l1.first <= l1.second)
-            {
-              xmin = min(xmin, igrid->fx(igrid->gety1(l1.first)));
-              xmin = min(xmin, igrid->fx(igrid->gety1(l1.second)));
-            }
-            const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
-            if (l2.first <= l2.second)
-            {
-              xmin = min(xmin, igrid->fx(igrid->gety2(l2.first)));
-              xmin = min(xmin, igrid->fx(igrid->gety2(l2.second)));
-            }
-          }
-        }
-    return xmin;
-  };        
-
-  double SubGrid::GetComputeXmin() const  
-  { 
-    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
-    double xmin = 1.0;
-    for(int i=0; i<nloops; i++) 
-      for (int j=0; j<applgrid.g->Nobs(); j++)
-      {
-        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
-        xmin = min(xmin, igrid->fx(igrid->gety1(0)));
-        xmin = min(xmin, igrid->fx(igrid->gety1(igrid->Ny1()-1)));
-        xmin = min(xmin, igrid->fx(igrid->gety2(0)));
-        xmin = min(xmin, igrid->fx(igrid->gety2(igrid->Ny2()-1)));
-      }
-    
-    return xmin;
-  };         
-
-  // Get the maximum scale of an applgrid
-  double SubGrid::GetQ2max() const
-  {
-    // Find maximum required scale
-    double Q2max = 0;
-    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
-    for(int i=0; i<nloops; i++)  // pto
-      for (int j=0; j<applgrid.g->Nobs(); j++) // bin
-      {
-        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
-        Q2max = max(Q2max, igrid->getQ2max());
-      }
-    return Q2max;
-  }
-
- // ******************* APPLGrid convolutions ******************************
-  void SubGrid::Compute(qcd_param const& par, vector<double>& results) const
-  {
-    if (ppbar == true && par.xiF != 1)
-      std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
-    if (par.evol_pto == 2)
-      std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
-
-    // Compute with applgrid interface
-    const int pto = (ptmin == 1) ? -1: min(par.evol_pto,(size_t)1);
-    vector<double> xsec;
-    if ( ppbar == true && par.xiF == 1)
-      xsec = applgrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
-    else
-      xsec = applgrid.g->vconvolute( QCD::evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
-    for (double& obs : xsec)
-      obs *= nrmdat;
-
-    // Relate back to results
-    for (int i=0; i<maskmap.size(); i++)
-      for (int const& j : datamap[i])
-        results[j] += xsec[maskmap[i]];
-  }
-
+  // ********************************* Combination Helpers *************************************
 
   // Translates 'loop' order to appl::grid index
   // This is specifically in order to translate aMC@NLO-like four-part grids
@@ -210,8 +145,12 @@ namespace APP
   // Returns the APPLgrid PDF object associated with the ith subgrid of g
   appl::appl_pdf* get_appl_pdf( const appl::grid *g, int const& i )
   {
+    // Split PDF string
     const std::string pdfnames = g->getGenpdf();
-    std::vector<std::string> pdfvec = splitpdf( pdfnames );
+    std::vector<std::string> pdfvec;
+    std::stringstream ss(pdfnames); std::string s;
+    while (getline(ss, s, ':')) pdfvec.push_back(s);
+
     const size_t isubproc = pdfvec.size() == 1 ? 0:i;
     return appl::appl_pdf::getpdf( pdfvec[isubproc] );
   }
@@ -264,32 +203,33 @@ namespace APP
   } 
 
 
-// // ********************* Evolution factors ******************************
+ // *********************************** APPLGrid convolutions **************************************
 
-  class EvolutionFactors
+  void SubGrid::Compute(qcd_param const& par, vector<double>& results) const
   {
-  public:
-    EvolutionFactors(const int nxin, const int nxout):
-    b1(applgrid_nfl),
-    b2(applgrid_nfl*14),
-    b3(applgrid_nfl*14*nxin),
-    data(new double[nxout*b3]) 
-    {
-      for (int i=0; i<nxout*b3; i++)
-        data[i] = 0;
-    };
-    ~EvolutionFactors() {delete[] data;};
+    if (ppbar == true && par.xiF != 1)
+      std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
+    if (par.evol_pto == 2)
+      std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
 
-    double* operator()(int const& ox, int const& ix, int const& fi ) {return data+b3*ox+b2*ix+b1*fi;};
-    const double* operator()(int const& ox, int const& ix, int const& fi ) const {return data+b3*ox+b2*ix+b1*fi;};
-  private:
-    const int b1;
-    const int b2;
-    const int b3;
-    double* data;
-  };
+    // Compute with applgrid interface
+    const int pto = (ptmin == 1) ? -1: min(par.evol_pto,(size_t)1);
+    vector<double> xsec;
+    if ( ppbar == true && par.xiF == 1)
+      xsec = applgrid.g->vconvolute( evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
+    else
+      xsec = applgrid.g->vconvolute( evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
+    for (double& obs : xsec)
+      obs *= nrmdat;
 
-//   // ******************* FK Table computation ****************************
+    // Relate back to results
+    for (int i=0; i<maskmap.size(); i++)
+      for (int const& j : datamap[i])
+        results[j] += xsec[maskmap[i]];
+  }
+
+
+//  *************************************** FK Table computation ********************************************
 
   void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* fk) const
   { 
@@ -423,6 +363,94 @@ namespace APP
       } // /pto
     } // /data    
     return;
+  }
+
+  //  *************************************** Metadata methods ********************************************
+
+
+  void SubGrid::Splash(ostream& o) const
+  {
+    FKSubGrid::Splash(o);
+    o << "- APPLgrid: " << applfile << endl
+      << "- PTMin: "    << ptmin    << endl
+      << "- fnlobin: "  << fnlobin  << endl
+      << "- PDFWeight: "<< pdfwgt   << endl
+      << "- ppbar: "    << ppbar    << endl
+      << endl;
+  }
+
+    // Get the maximum scale of an applgrid
+  double SubGrid::GetQ2max() const
+  {
+    // Find maximum required scale
+    double Q2max = 0;
+    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
+    for(int i=0; i<nloops; i++)  // pto
+      for (int j=0; j<applgrid.g->Nobs(); j++) // bin
+      {
+        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
+        Q2max = max(Q2max, igrid->getQ2max());
+      }
+    return Q2max;
+  }
+
+
+  // Return the minimum x used in the subgrid
+  double SubGrid::GetXmin() const
+  { 
+    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
+    double xmin = 1.0;
+    for(int i=0; i<nloops; i++) 
+      for (int j=0; j<applgrid.g->Nobs(); j++)
+      {
+        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
+        const size_t nsubproc = applgrid.g->subProcesses(i);
+
+          for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
+          {
+            const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
+            if (l1.first <= l1.second)
+            {
+              xmin = min(xmin, igrid->fx(igrid->gety1(l1.first)));
+              xmin = min(xmin, igrid->fx(igrid->gety1(l1.second)));
+            }
+            const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
+            if (l2.first <= l2.second)
+            {
+              xmin = min(xmin, igrid->fx(igrid->gety2(l2.first)));
+              xmin = min(xmin, igrid->fx(igrid->gety2(l2.second)));
+            }
+          }
+        }
+    return xmin;
+  };        
+
+  double SubGrid::GetComputeXmin() const  
+  { 
+    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
+    double xmin = 1.0;
+    for(int i=0; i<nloops; i++) 
+      for (int j=0; j<applgrid.g->Nobs(); j++)
+      {
+        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
+        xmin = min(xmin, igrid->fx(igrid->gety1(0)));
+        xmin = min(xmin, igrid->fx(igrid->gety1(igrid->Ny1()-1)));
+        xmin = min(xmin, igrid->fx(igrid->gety2(0)));
+        xmin = min(xmin, igrid->fx(igrid->gety2(igrid->Ny2()-1)));
+      }
+    
+    return xmin;
+  };         
+
+
+  vector<int> SubGrid::parse_maskmap(string const& mask)
+  {
+    const vector<string> masksplit = ssplit(mask);
+    vector<int> _maskmap;
+    for (size_t i=0; i<masksplit.size(); i++)
+      if ((bool) atoi(masksplit[i].c_str()))
+        _maskmap.push_back(i);
+    return _maskmap;
   }
 
 }
