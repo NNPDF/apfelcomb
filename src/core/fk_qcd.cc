@@ -259,18 +259,8 @@ namespace QCD
   // APFEL PDF return
   void evolpdf(const double& x, const double& Q, double* pdf)
   {
-    // Recalculate if not cached
-    if (Q != QC)
-    {
-      if (fabs(Q-Q0) < 1E-7) // Fuzzy comp
-        APFEL::EvolveAPFEL(Q0,Q0);
-      else
-        APFEL::EvolveAPFEL(Q0,Q);
-      QC = Q;
-    }
-    
-    // Fuzzy x
-    const double fx = fabs(x-APFEL::xGrid(0))/x < 1E-6 ? APFEL::xGrid(0):x;    
+    updateEvol(Q);
+    const double fx = fabs(x-APFEL::xGrid(0))/x < 1E-6 ? APFEL::xGrid(0):x;  // Fuzzy x
     for (int i=-7; i<7; i++)
       pdf[i+7]= (i==-7 ? APFEL::xgamma(fx):APFEL::xPDF(i,fx));
   }
@@ -290,7 +280,6 @@ namespace QCD
     for (int i=-6; i<7; i++)
       pdf[-i+6]=APFEL::xPDF(i,x);
   }
-
 
 
   // APFEL strong coupling

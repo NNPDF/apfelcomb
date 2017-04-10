@@ -107,7 +107,7 @@ namespace QCD
 
   // APFEL PDF access functions
   void evolpdf(const double& x, const double& Q, double* pdf);
-  void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf); // Version for applgrid (no photon) with antiproton pdfs
+  void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf); // Version for applgrid (no photon) with antiproton pdfs]
   double alphas(const double& Q);
   double beta0();
   

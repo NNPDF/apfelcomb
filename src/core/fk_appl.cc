@@ -51,19 +51,14 @@ namespace APP
     double* data;
   };
 
-
 // ********************************* Basis rotation helpers *************************************
 
-    // Rotates APFEL flavour basis into APPLgrid flavour basis (photon moves from 0 to 1)
+  // Rotates APFEL flavour basis into APPLgrid flavour basis (photon moves from 0 to 1)
   void evolpdf_applgrid(const double& x, const double& Q, double* pdf)
   {
-    // A nice trick of APPLgrid is to request PDF x-values smaller than are actually used
-    if (x<APFEL::xGrid(0))
-    {
-      for (int i=-6; i<7; i++)
-        pdf[i+6]=0;
-      return;
-    }
+    for (int i=0; i<applgrid_nfl; i++) pdf[i]=0;
+    if (x<APFEL::xGrid(0))  // A nice trick of APPLgrid is to request PDF x-values smaller than are actually used
+      return;    
 
     double *APFEL_basis = new double[14]; 
     QCD::evolpdf(x, Q, APFEL_basis);
@@ -74,6 +69,14 @@ namespace APP
       pdf[13] = APFEL_basis[0];
 
     delete[] APFEL_basis;
+  }
+
+  // antiproton version of evolpdf_applgrid, swaps q<->qbar
+  void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf)
+  {
+    evolpdf_applgrid(x,Q,pdf);
+    for (int i=0; i<6; i++)
+      std::swap(pdf[i], pdf[i+7]);
   }
 
   // ********************************* Kinematics Helpers *************************************
