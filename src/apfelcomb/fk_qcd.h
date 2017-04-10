@@ -27,15 +27,14 @@ namespace QCD
 
   // APFELCOMB basis is the same as the APFEL basis
 
-  // (APFEL) Evolution basis
+  // Evolution basis
   //  γ, Σ, g, V, V3, V8, V15, V24, V35, T3, T8, T15, T24, T35
 
   // Flavour basis (-7 to 6)
   //  γ, TB, BB, CB, SB, UB, DB, G, D, U, S, C, B, T
 
-  // Additionally fk_appl.cc implements
-  // APPLgrid basis (0 to 12/13)
-  //  TB, BB, CB, SB, UB, DB, G, D, U, S, C, B, T, (γ)
+  // APPLgrid basis (0 to 12)
+  //  TB, BB, CB, SB, UB, DB, G, D, U, S, C, B, T
 
   // Rotation matrix from LHA to EVLN
   static const double REVLN2LHA[14][14] = {
