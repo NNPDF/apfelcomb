@@ -292,11 +292,13 @@ namespace QCD
   // fi    - input flavour (in APFEL evolution basis)
   // Q     - scale of the final evolved PDF
   // a     - array in output flavour fo (APPLgrid flavour basis) of evolution operators
-  void EvolutionOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* a)
+  void EvolutionOperator(const bool& ppbar, const bool& photon, const int& xi, const double& xo, const int& fi, const double& Q, double* a)
   {
     updateEvol(Q);
     for(int i=0; i<13; i++)
       a[ppbar ? 12-i:i] = APFEL::ExternalEvolutionOperator("Ev2Ph",i-6,fi,xo,xi);
+    if (photon)
+      a[13] = APFEL::ExternalEvolutionOperator("Ev2Ph",-7,fi,xo,xi);
     return;
   }
 
@@ -311,8 +313,15 @@ namespace QCD
   // fi    - input flavour (in APFEL evolution basis)
   // Q     - scale at which the derivative is evaluated
   // da    - array in output flavour fo (APPLgrid flavour basis) of derivative operators
-  void DerivativeOperator(const bool& ppbar, const int& xi, const double& xo, const int& fi, const double& Q, double* da)
+  void DerivativeOperator(const bool& ppbar, const bool& photon, const int& xi, const double& xo, const int& fi, const double& Q, double* da)
   {
+
+    if (photon)
+    {
+      std::cerr << "Calling DerivativeOperator with photon enabled: this is not supported" <<std::endl;
+      exit(-1);
+    }
+
     const int pt = 0;
     const int nf = 5;
     updateEvol(Q);

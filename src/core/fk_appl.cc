@@ -240,7 +240,7 @@ namespace APP
       std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
 
     if (applgrid_nfl == 14)
-      std::cout << "WARNING: Combining with photon channel in APPLgrid" <<std::endl;
+      std::cout << "WARNING: Combining with photon channel in APPLgrid" <<std::endl;    
 
     // APPLgrid pointer
     const appl::grid* g = applgrid.g;
@@ -299,13 +299,13 @@ namespace APP
           {
             for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
             {
-              QCD::EvolutionOperator(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
-              if (vary_fac) QCD::DerivativeOperator(false, ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+              QCD::EvolutionOperator(false,applgrid_nfl==14,ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
+              if (vary_fac) QCD::DerivativeOperator(false,applgrid_nfl==14,ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
             }
             for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
             {
-              QCD::EvolutionOperator(ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-              if (vary_fac) QCD::DerivativeOperator(ppbar, ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
+              QCD::EvolutionOperator(ppbar,applgrid_nfl==14,ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
+              if (vary_fac) QCD::DerivativeOperator(ppbar,applgrid_nfl==14,ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
             }
           }
 
