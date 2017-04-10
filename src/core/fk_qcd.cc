@@ -296,7 +296,7 @@ namespace QCD
   {
     updateEvol(Q);
     for(int i=0; i<13; i++)
-      a[ppbar ? 12-i:i] = APFEL::ExternalEvolutionOperator(std::string("Ev2Ph"),i-6,fi,xo,xi);
+      a[ppbar ? 12-i:i] = APFEL::ExternalEvolutionOperator("Ev2Ph",i-6,fi,xo,xi);
     return;
   }
 
@@ -326,7 +326,7 @@ namespace QCD
       const double xd = APFEL::xGrid(ixd);
         for(int fd=0; fd<14; fd++)
         {
-          const double A = APFEL::ExternalEvolutionOperator(std::string("Ev2Ev"), fd, fi, xd, xi);
+          const double A = APFEL::ExternalEvolutionOperator("Ev2Ev", fd, fi, xd, xi);
           for(int fo=0; fo<13; fo++)
             da[ppbar ? 12-fo:fo] += 0.5*APFEL::ExternalSplittingFunctions(fo-6,fd)*A;  // 0.5 due to APFEL expansion parameter
         }
