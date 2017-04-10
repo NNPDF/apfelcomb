@@ -261,26 +261,10 @@ namespace QCD
   {
     updateEvol(Q);
     const double fx = fabs(x-APFEL::xGrid(0))/x < 1E-6 ? APFEL::xGrid(0):x;  // Fuzzy x
-    for (int i=-7; i<7; i++)
-      pdf[i+7]= (i==-7 ? APFEL::xgamma(fx):APFEL::xPDF(i,fx));
-  }
-
-  // APFEL PDF return for APPLgrid (no photon!) - antiproton version
-  void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf)
-  {
-    // A nice trick of APPLgrid is to request PDF x-values smaller than
-    // are actually used
-    if (x<APFEL::xGrid(0))
-    {
-      for (int i=-6; i<7; i++)
-        pdf[i+6]=0;
-      return;
-    }
-    updateEvol(Q);
+    pdf[0] = APFEL::xgamma(fx);
     for (int i=-6; i<7; i++)
-      pdf[-i+6]=APFEL::xPDF(i,x);
+      pdf[i+7]= APFEL::xPDF(i,fx);
   }
-
 
   // APFEL strong coupling
   double alphas(const double& Q)

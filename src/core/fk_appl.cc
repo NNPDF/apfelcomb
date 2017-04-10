@@ -53,14 +53,14 @@ namespace APP
 
 // ********************************* Basis rotation helpers *************************************
 
-  // Rotates APFEL flavour basis into APPLgrid flavour basis (photon moves from 0 to 1)
+  // Rotates APFEL flavour basis into APPLgrid flavour basis (photon moves from 0 to 13)
   void evolpdf_applgrid(const double& x, const double& Q, double* pdf)
   {
     for (int i=0; i<applgrid_nfl; i++) pdf[i]=0;
     if (x<APFEL::xGrid(0))  // A nice trick of APPLgrid is to request PDF x-values smaller than are actually used
       return;    
 
-    double *APFEL_basis = new double[14]; 
+    double *APFEL_basis = new double[14](); 
     QCD::evolpdf(x, Q, APFEL_basis);
 
     for (int i=0; i<13; i++)
@@ -75,8 +75,8 @@ namespace APP
   void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf)
   {
     evolpdf_applgrid(x,Q,pdf);
-    for (int i=0; i<6; i++)
-      std::swap(pdf[i], pdf[i+7]);
+    for (int i=1; i<7; i++)
+      std::swap(pdf[6+i], pdf[6-i]);
   }
 
   // ********************************* Kinematics Helpers *************************************
@@ -219,7 +219,7 @@ namespace APP
     const int pto = (ptmin == 1) ? -1: min(par.evol_pto,(size_t)1);
     vector<double> xsec;
     if ( ppbar == true && par.xiF == 1)
-      xsec = applgrid.g->vconvolute( evolpdf_applgrid, QCD::evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
+      xsec = applgrid.g->vconvolute( evolpdf_applgrid, evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
     else
       xsec = applgrid.g->vconvolute( evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
     for (double& obs : xsec)
