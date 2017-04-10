@@ -76,9 +76,9 @@ namespace QCD
     if (param.Q0 > APFEL::HeavyQuarkThreshold(5)) afl.push_back(7); // V24
     if (param.Q0 > APFEL::HeavyQuarkThreshold(6)) afl.push_back(8); // V35
 
-    if (param.Q0 > APFEL::HeavyQuarkThreshold(4)) afl.push_back(11); // V15
-    if (param.Q0 > APFEL::HeavyQuarkThreshold(5)) afl.push_back(12); // V24
-    if (param.Q0 > APFEL::HeavyQuarkThreshold(6)) afl.push_back(13); // V35   
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(4)) afl.push_back(11); // T15
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(5)) afl.push_back(12); // T24
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(6)) afl.push_back(13); // T35   
     return afl;
   }
 
@@ -304,7 +304,7 @@ namespace QCD
     // Fuzzy x
     const double fx = fabs(x-APFEL::xGrid(0))/x < 1E-6 ? APFEL::xGrid(0):x;    
     for (int i=-7; i<7; i++)
-      pdf[i+7]= (i==-7 ? 0:APFEL::xPDF(i,fx));
+      pdf[i+7]= (i==-7 ? APFEL::xgamma(fx):APFEL::xPDF(i,fx));
   }
 
   // APFEL strong coupling

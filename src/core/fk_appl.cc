@@ -19,6 +19,11 @@ using NNPDF::FKHeader;
 
 namespace APP
 {
+  #ifdef __APPL_PHOTON
+  const int applgrid_nfl = 14;
+  #else
+  const int applgrid_nfl = 13;
+  #endif
 
   vector<std::string> splitpdf ( std::string const& str )
   {
@@ -106,8 +111,9 @@ namespace APP
   // Return the minimum x used in the subgrid
   double SubGrid::GetXmin() const
   { 
+    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
     double xmin = 1.0;
-    for(int i=0; i<=applgrid.g->nloops(); i++) 
+    for(int i=0; i<nloops; i++) 
       for (int j=0; j<applgrid.g->Nobs(); j++)
       {
         appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
@@ -134,8 +140,9 @@ namespace APP
 
   double SubGrid::GetComputeXmin() const  
   { 
+    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
     double xmin = 1.0;
-    for(int i=0; i<=applgrid.g->nloops(); i++) 
+    for(int i=0; i<nloops; i++) 
       for (int j=0; j<applgrid.g->Nobs(); j++)
       {
         appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
@@ -153,7 +160,8 @@ namespace APP
   {
     // Find maximum required scale
     double Q2max = 0;
-    for(int i=0; i<2; i++)  // pto
+    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
+    for(int i=0; i<nloops; i++)  // pto
       for (int j=0; j<applgrid.g->Nobs(); j++) // bin
       {
         appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
@@ -262,9 +270,9 @@ namespace APP
   {
   public:
     EvolutionFactors(const int nxin, const int nxout):
-    b1(13),
-    b2(13*14),
-    b3(13*14*nxin),
+    b1(applgrid_nfl),
+    b2(applgrid_nfl*14),
+    b3(applgrid_nfl*14*nxin),
     data(new double[nxout*b3]) 
     {
       for (int i=0; i<nxout*b3; i++)
@@ -287,6 +295,9 @@ namespace APP
   { 
     if (par.evol_pto == 2)
       std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
+
+    if (applgrid_nfl == 14)
+      std::cout << "WARNING: Combining with photon channel in APPLgrid" <<std::endl;
 
     // APPLgrid pointer
     const appl::grid* g = applgrid.g;
