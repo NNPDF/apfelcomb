@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import print_function
 import sqlite3 as lite
 import sys,os
 from subprocess import call
@@ -31,18 +32,18 @@ def mergegrid(target, source, thID, cur):
 
     mergeTarget = ftargetPath+"FK_"+target+".dat"
     mergeConstituents = ''
-    complete_subgrids = True
+    missing_subgrids = []
     for subgrid in subgrids:
         constituent = subgridPath+"FK_"+target+"_"+str(subgrid[0])+".subgrid.dat"
         if os.path.isfile(constituent) != True: 
+            missing_subgrids.append(subgrid[0])
             print(" -   Missing subgrid: " + str(subgrid[0]))
-            complete_subgrids = False
         mergeConstituents = mergeConstituents + constituent + ' '
 
-    if complete_subgrids == True:
+    if len(missing_subgrids) == 0:
         os.system("FKmerge2 " +mergeTarget + ' ' + mergeConstituents)  
         print(target + bcolors.OKGREEN + " successfully generated!" + bcolors.ENDC)
     else:
         print(target + bcolors.FAIL + " generation failed!" + bcolors.ENDC)
-
+    return missing_subgrids
     # print mergeConstituents

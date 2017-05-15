@@ -24,13 +24,15 @@ try:
     
     cur.execute('SELECT name, source FROM grids ORDER BY id' )
     grids = cur.fetchall()
-    if len(grids) == 1:
-        print("Error: no grids found!")
-        exit(-1)
+    missing_tables = []
     for grid in grids:
-        mergegrid(grid[0], grid[1], theoryID, cur)
-   
+        missing = mergegrid(grid[0], grid[1], theoryID, cur)
+        for table in missing:
+            missing_tables.append({'source': grid[1].lower(), 'table':table})
     
+    for tab in missing_tables:
+        print(tab['source']+' '+str(tab['table'])) 
+
 except lite.Error, e:
     print("Error %s:" % e.args[0])
     sys.exit(1)
