@@ -8,9 +8,10 @@ def infoSplash():
     print('Usage: ' + sys.argv[0] + " [run script]")
     exit(-1)
 
-if len(sys.argv) != 2:
+if len(sys.argv) != 3:
     infoSplash()
 theoryID = sys.argv[1]
+runScript = sys.argv[2]
 
 currentPath = os.path.dirname(os.path.realpath(__file__))
 sqlite3Path = currentPath+'/db/apfelcomb.db'
@@ -25,10 +26,13 @@ try:
     cur.execute('SELECT name, source FROM grids ORDER BY id' )
     grids = cur.fetchall()
     for grid in grids:
-        subgrids = get_subgrids(grid[1], grid[0], cur)
-        missing  = get_missing(subgrids, theoryID, grid[0])
+        source = grid[1]
+        target = grid[0]
+        subgrids = get_subgrids(source, target, cur)
+        missing  = get_missing(subgrids, theoryID, target)
         for table in missing:
-            print grid[1].lower(), table, theoryID 
+            runcmd = runScript+' '+source.lower()+" "+str(table) + " " + str(theoryID)
+            os.system(runcmd)
 
 except lite.Error, e:
     print("Error %s:" % e.args[0])
