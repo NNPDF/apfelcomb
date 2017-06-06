@@ -1,11 +1,11 @@
 #!/usr/bin/python
-from mergecommon import mergegrid
+from mergecommon import *
 import sqlite3 as lite
 import sys,os
 from subprocess import call
 
 def infoSplash():
-    print('Usage: ' + sys.argv[0] + " <theoryID>")
+    print('Usage: ' + sys.argv[0] + " [run script]")
     exit(-1)
 
 if len(sys.argv) != 2:
@@ -25,7 +25,10 @@ try:
     cur.execute('SELECT name, source FROM grids ORDER BY id' )
     grids = cur.fetchall()
     for grid in grids:
-        mergegrid(grid[0], grid[1], theoryID, cur)
+        subgrids = get_subgrids(grid[1], grid[0], cur)
+        missing  = get_missing(subgrids, theoryID, grid[0])
+        for table in missing:
+            print grid[1].lower(), table, theoryID 
 
 except lite.Error, e:
     print("Error %s:" % e.args[0])
