@@ -93,10 +93,7 @@ namespace QCD
     NNPDF::IndexDB theoryDB(dataPath()+"theory.db", "theoryIndex");
     const int entries =theoryDB.GetNEntries();
     if (innum < 0 || innum > entries)
-    {
-      cerr << "Error: theory ID ("<<innum<<") must be between 0 and "<<entries-1<<endl;
-      exit(-1);
-    }
+      cerr << "Warning: theory ID ("<<innum<<") should be between 0 and "<<entries-1<<endl;
 
     // Fetch settings map
     theoryDB.ExtractMap(param.thID, APFEL::kValues, param.thMap);
