@@ -21,7 +21,7 @@ con = None
 try:
     # Setup sql connection
     con = lite.connect(sqlite3Path)
-    cur = con.cursor()    
+    cur = con.cursor()
     
     cur.execute('SELECT name, source FROM grids ORDER BY id' )
     grids = cur.fetchall()
