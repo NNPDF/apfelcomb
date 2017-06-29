@@ -20,7 +20,7 @@
 
     virtual ~APFELPDFSet() {};   //!< Destructor
 
-    virtual void GetPDF(NNPDF::real x, NNPDF::real Q2, int n, NNPDF::real* pdf) const
+    virtual void GetPDF(const NNPDF::real x, const NNPDF::real Q2, const int n, NNPDF::real* pdf) const
     {
       double* LHA = new double[14];
     	QCD::evolpdf(x,sqrt(Q2),LHA);
