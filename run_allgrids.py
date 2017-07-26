@@ -32,6 +32,7 @@ try:
         missing  = get_missing(subgrids, theoryID, target)
         for table in missing:
             runcmd = runScript+' '+source.lower()+" "+str(table) + " " + str(theoryID)
+   			print(target + ' ' + str(table))
             os.system(runcmd)
 
 except lite.Error, e:
