@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
   const std::string cFacName = argv[2];
   const std::string cFacPath = dataPath() + "/"+ptoString+"CFAC/CF_QCD_"+cFacName+".dat";
-  const std::string cFacOut  = dataPath() + "/theory_" + to_string(tTh) + "/cfactor/CF_QCD_"+cFacName+".dat";
+  const std::string cFacOut  = resultsPath() + "/theory_" + to_string(tTh) + "/cfactor/CF_QCD_"+cFacName+".dat";
 
   const std::string setName = argv[3];
   const std::string cDataPath = dataPath() + "/commondata/DATA_"+setName+".dat";

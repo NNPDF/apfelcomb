@@ -5,7 +5,7 @@ import sys,os
 from subprocess import call
 
 def infoSplash():
-    print('Usage: ' + sys.argv[0] + " [run script]")
+    print('Usage: ' + sys.argv[0] + " [theoryID] [run script]")
     exit(-1)
 
 if len(sys.argv) != 3:
