@@ -103,8 +103,9 @@ void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 	// Verify basic subgrid properties:
 	if (lastNdat != data.GetNData())
 	{
+		std::cerr << "****************************************************************************"<<std::endl;
 		std::cerr << "Parsing Error: Total of subgrid datapoints (" << lastNdat <<" ) does not equal commondata points (" <<data.GetNData() << ")"<<std::endl;
-		exit(-1);
+		std::cerr << "****************************************************************************"<<std::endl;
 	}
 }
 
