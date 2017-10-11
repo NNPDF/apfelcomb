@@ -1,109 +1,106 @@
-# apfelcomb
-Generates FK tables for NNPDF fits.
+# APFELcomb 
+The APFELcomb project consists of a set of tools for the generation
+of FK tables, which provide the mechanism for computing predictions
+from theory in the NNPDF framework. Broadly speaking this is acheived
+by taking DGLAP evolution kernels from `APFEL` and combining them with
+interpolated parton-level observable kernels of various forms.
 
-## Project summary and aim
+The mechanism behind APFELcomb is documented in [1605.02070].
+The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/'.
 
-The aim of `apfelcomb` is to provide a set of tools for the generation
-of FK tables / APFELgrid tables for DIS, DYP and Hadronic processes.
+## Prerequisites
+APFELcomb depends on the following libraries
 
-These tools are linked to the `libnnpdf` API for the
-data/kinematics/process elaboration, `APFEL` for the evolution
-kernels, and `nnpdfcpp` for the theory definitions in
-`data/theory.db`. Each dataset is configurable via databases located
-in the `db` folder.
+* APFEL
+- github.com/scarrazza/apfel.git
+* libnnpdf
+- github.com/NNPDF/libnnpdf
+* APPLgrid 1.4.70-nnpdf (not the public version)
+- github.com/NNPDF/external/applgrid-1.4.70-nnpdf
 
-### Release and Tag policy
+And datafiles from
+* nnpdfcpp
+- github.com/NNPDF/nnpdfcpp
+* nnpdf-applgrids
+- github.com/NNPDF/applgrids
 
-The library is tagged and released when a major and stable status is achieved. 
-Tags and releases do not necessarily follows the NNPDF releases.
+## Compilation and setup 
 
-### Code development policy/rules
+Compilation flags and various paths are defined in `Makefile.inc`.
+These are mostly inferred from package-config files with the exception of
 
-Developers must never commit code structure modifications to master. The development pattern should follow these rules:
-- Open an issue explaining your bug or feature request. If you report a bug, post information to reproduce it.
-- The resolution of issues must be performed in a new branch through a pull request.
-- If you have already a local version of the code that you would like to merge in the master, open a pull request.
-- The pull request must be reviewed by at least 2 core developers.
+- RESULTS_PATH (default ./results)
+  Defines the path results are written to
+- DATA_PATH (default ../nnpdfcpp/data)
+  Defines the path to the COMMONDATA repository
+- APPL_PATH (default ../applgrids)
+  Defines the path to the nnpdf-applgrid repository
+- DB_PATH (default ./db)
+  Defines the path to the APFELcomb database
 
-### Code style
+The defaults are configured assuming that both the nnpdfcpp and applgrid repositories are
+located at `../`.
 
-Uses C++11 features.
-
-### Continuous integration (CI)
-
-CI is actually not implemented in the current repository.
-
-### Testing
-
-Testing is actually not implemented in the current repository.
-
-## Installation
-
-`apfelcomb` depends on the following libraries:
-
-- APFEL
-- libnnpdf
-
-### Prerequisites
-
-* Download and compile latest version of APFEL trunk
+With these paths set, compiling the APFELgrid code should be as simple as
 ```Shell
-git clone https://github.com/scarrazza/apfel.git
-./configure --prefix=/your/location/
 make
-make clean
 ```
-* Add paths to your .bashrc
 
-### Install libnnpdf
+## Structure and generation process
+
+Each FK table is generated piecewise in one or more `subgrids`. The subgrids
+implemented in APFELcomb can be displayed by running the script
 
 ```Shell
-cd /nnpdfcpp/trunk/libnnpdf/
-# Configure and install
-./configure --prefix=/your/location --enable-safemode
-# (Note the latest option is necessary)
-make
-make install
+./scripts/disp_grids.py
 ```
-* Add paths to your .bashrc
 
-### APPLgrid database
-* For each new observable add info on APPLgrid to the applgrid.db in the /nnpdfcpp/trunk/apfelcomb directory. All entries are trivial but three
-- maxprec = maximum relative precision of data in the new dataset
-- xmin = this is obtained by running
+Typically DIS and FKGenerator Drell-Yan tables are made of only one subgrid, whereas
+FK tables generated from APPLgrids have one subgrid per APPLgrid file. How subgrids
+are merged into grids, and the generation parameters of each subgrid, is specified in
+the `db/apfelcomb.db` database.
+
+Generating an individual subgrid is performed by running
+
 ```Shell
-  ./appl_gridinfo <APPLGRID_location>
+./apfel_comb <source=app/dis/dyp> <subgrid id> <theory id>
 ```
-- nxpt = this is obtained by running
+
+where <app/dis/dyp> specifies whether the subgrid is in the applgrid, DIS or DYP subgrid categories in the database,
+<subgrid id> is the corresponding ID in that database (visible in the disp\_grids script) and <theory id> specifies
+the NNPDF theory index desired (the entry in nnpdfcpp/data/theory.db). As an example:
+
 ```Shell
-  ./appl_optgrid <entry number in the database> <entry number in the theory database>
+./apfel_comb app 500 65 
 ```
-(The theory database.nb is in /data/theory.db. For example 11 is the
-entry for NLO as=0.118 FONLLB...)  Nxpt is the minimum number of
-points in the FK grid to obtain a max precision better than the
-precision of the data.  NB: if two tables need to be merged nxpt must
-be the same
+Will generate the subgrid for CDFZRAP and theory 65 (NNPDF3.1 NNLO perturbative charm). The resulting FK subgrid
+will be written out to 
 
-### GENFK scripts
-* For each new set, you need to add a corresponding genFK script into the /genFK_scripts/ folder
-  In this script you should perform any post-processing required (merging FK tables, normalising, etc).
-  Minimally this script should perform a check that the FK table file is present.
-  Lots of examples are provided in /genFK_scripts/
-
-### Running APFELcomb
-* Once the applgrid.db is all set, run
 ```Shell
-./appl_comb <entry number in the database> <entry number in the theory database>
+$RESULTS\_PATH/theory\_<theoryID>/subgrids/FK\_<setname>\_<subgridID>.dat.
 ```
-* In a short time you should get your FK tables
 
-## Documentation
+Once all the relevant subgrids for the desired dataset(s) are generated, you should run
 
-### Code documentation
+```Shell
+./merge_allgrids.py <theory id>
+```
 
-The code is documented with Doxygen, if you find methods or classes
-not fully documented open a issue request.
+which will loop over all datasets and attempt to merge their subgrids into a complete FK table. The resulting final
+FK table should be stored at
 
-### Layout documentation
+```Shell
+$RESULTS\_PATH/theory\_<theoryID>/fastkernel/FK\_<setname>.dat.
+```
 
-For specifications about data please check the `nnpdfcpp` repository in `data/doc`.
+### Helper scripts
+
+TODO
+
+### C-factor scaling
+
+TODO
+
+### Implementing a new dataset
+
+TODO
