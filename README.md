@@ -11,31 +11,26 @@ The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/'
 ## Prerequisites
 APFELcomb depends on the following libraries
 
-* APFEL
-- github.com/scarrazza/apfel.git
-* libnnpdf
-- github.com/NNPDF/libnnpdf
-* APPLgrid 1.4.70-nnpdf (not the public version)
-- github.com/NNPDF/external/applgrid-1.4.70-nnpdf
+* **APFEL** *github.com/scarrazza/apfel.git*
+* **libnnpdf** *github.com/NNPDF/libnnpdf*
+* **APPLgrid 1.4.70-nnpdf** *github.com/NNPDF/external/applgrid-1.4.70-nnpdf*
 
 And datafiles from
-* nnpdfcpp
-- github.com/NNPDF/nnpdfcpp
-* nnpdf-applgrids
-- github.com/NNPDF/applgrids
+* **nnpdfcpp** *github.com/NNPDF/nnpdfcpp*
+* **nnpdf-applgrids** *github.com/NNPDF/applgrids*
 
 ## Compilation and setup 
 
 Compilation flags and various paths are defined in `Makefile.inc`.
 These are mostly inferred from package-config files with the exception of
 
-- RESULTS_PATH (default ./results)
+- **RESULTS_PATH** *(default ./results)*
   Defines the path results are written to
-- DATA_PATH (default ../nnpdfcpp/data)
+- **DATA_PATH** *(default ../nnpdfcpp/data)*
   Defines the path to the COMMONDATA repository
-- APPL_PATH (default ../applgrids)
+- **APPL_PATH** *(default ../applgrids)*
   Defines the path to the nnpdf-applgrid repository
-- DB_PATH (default ./db)
+- **DB_PATH** *(default ./db)*
   Defines the path to the APFELcomb database
 
 The defaults are configured assuming that both the nnpdfcpp and applgrid repositories are
