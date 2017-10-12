@@ -5,9 +5,9 @@ from theory in the NNPDF framework. Broadly speaking this is acheived
 by taking DGLAP evolution kernels from `APFEL` and combining them with
 interpolated parton-level observable kernels of various forms.
 
-The mechanism behind APFELcomb is documented in [1605.02070].
+The mechanism behind APFELcomb is documented in `[1605.02070]`.
 
-The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/'.
+The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/`.
 
 ## Prerequisites
 APFELcomb depends on the following libraries
@@ -63,7 +63,7 @@ Generating an individual subgrid is performed by running
 ```
 
 where `<app/dis/dyp>` specifies whether the subgrid is in the applgrid, DIS or DYP subgrid categories in the database,
-`<subgrid id>` is the corresponding ID in that database (visible in the disp\_grids script) and `<theory id>` specifies
+`<subgrid id>` is the corresponding ID in that database (visible in the `disp\_grids` script) and `<theory id>` specifies
 the desired NNPDF theory index (the entry in nnpdfcpp/data/theory.db). As an example:
 
 ```Shell
@@ -73,7 +73,7 @@ Will generate the subgrid for CDFZRAP and theory 65 (NNPDF3.1 NNLO perturbative 
 will be written out to 
 
 ```Shell
-$RESULTS_PATH/theory_<theoryID>/subgrids/FK_<setname>_<subgridID>.dat.
+$RESULTS_PATH/theory_<theory id>/subgrids/FK_<setname>_<subgrid id>.dat.
 ```
 
 Once all the relevant subgrids for the desired dataset(s) are generated, you should run
@@ -86,7 +86,7 @@ which will loop over all datasets and attempt to merge their subgrids into a com
 FK table should be stored at
 
 ```Shell
-$RESULTS_PATH/theory_<theoryID>/fastkernel/FK_<setname>.dat.
+$RESULTS_PATH/theory_<theory id>/fastkernel/FK_<setname>.dat.
 ```
 ### Implementing a new FK table
 
@@ -147,7 +147,7 @@ that the ordering of the corresponding W+/W-/Z subgrids in id matches the orderi
 
 ### Implementing a new DIS or DYP subgrid 
 
-New DIS or DYP subgrids should be entered respectively into the `dis_subgrids` or `dyp_subgrids` tables of the apfelcomb database.
+New DIS or DYP subgrids should be entered respectively into the `dis\_subgrids` or `dyp\_subgrids` tables of the apfelcomb database.
 Typically only one subgrid is needed per DIS or DYP FK table. Each subgrid entry has the following fields:
 
 - **id**	- The primary key identifier of the subgrid
@@ -159,15 +159,51 @@ For DIS there is one additional field:
 
 ### Operators
 
-TODO
+Subgrid operators are used to provide certain subgrid-wide transformations that can be useful in certain circumstances.
+They are formed by a key-value pair with syntax:
+
+```Shell
+<KEY>:<VALUE>
+```
+If using multiple operators, they should be comma-separated. Currently these operators are implemented:
+
+- \*:*V* - Duplicate the subgrid datapoint (there must be only one for this operator) *V* times.
+- +:*V*  - Increment the starting datapoint index of this subgrid by *V*.
+- N:*V*  - Normalise all datapoints in this subgrid by *V*.
+
+The \* operator is typically used for normalised cross-sections, where the total cross-section computation (a single datapoint)
+must be duplicated N\_dat times to correspond to the size of the COMMONDATA file. The + operator is typically used to compensate
+for missing subgrids, for example when a COMMONDATA file begins with several datapoints that cannot yet be computed from theory,
+the + operator can be used to 'skip' those points. The N operator is used to perform unit conversions or the like.
+
+### Compound files and C-factors
+
+If your new dataset is a compound observable (that is, theory predictions are a function of more than one FK-product) then you
+should write a corresponding COMPOUND file as described in the data specifications at `nnpdfcpp/data/doc/`. This compound
+file should be stored in the APFELcomb repository under the `compound` directory.
+
+C-factors should be in the format once again specified in `nnpdfcpp/data/doc/`, and stored in the nnpdfcpp repo under
+the `nnpdfcpp/data/N*LOCFAC/` directory.
 
 ### Helper scripts
 
-TODO
+Several helper scripts are provided to make using APFELcomb easier (particuarly when generating a full set of FK tables for a particular theory).
+- `scripts/disp_grids.py` displays a full list of APPLgrid, DIS or DYP subgrids implemented in APFELcomb.
+- `run_allgrids.py [theoryID] [job script]` scans the results directory and submits jobs for all missing subgrids for the specified theory.
+- `test_submit.py` is an example [job script] to be used for run\_allgrids.py. These scripts specify how jobs are launched on a given cluster.
+- `hydra_submit.py` is the [job script] for the HYDRA cluster in Oxford.
+- `merge_allgrids.py [theoryID]` merges all subgrids in the results directory for a specified theory into final FK tables. This does not delete subgrids.
+- `finalise.sh [theoryID]` runs C-factor scaling, copies COMPOUND files, deletes the subgrids, and finally compresses the result into a theory.tgz file ready for upload.
 
-### C-factor scaling
 
-TODO
+### Generating a complete theory
 
-
-TODO
+The general workflow for generating a complete version of theory 53 on the hydra cluster is then.
+```Shell
+./run_allgrids.py 53 hydra_submit.py # Submit all APFELcomb subgrid-jobs
+# Once all subgrid jobs have successfully finished
+./merge_allgrids.py 53 # Merge subgrids into FK tables
+# If merging is successful
+./finalise.sh 53
+# Results in a final theory at ./results/theory_53.tgz
+```
