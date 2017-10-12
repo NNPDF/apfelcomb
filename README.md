@@ -93,17 +93,17 @@ $RESULTS_PATH/theory_<theoryID>/fastkernel/FK_<setname>.dat.
 To implement a new FK table you must first add a corresponding entry into the apfelcomb database under the `grids` table.
 These entries are comprised of the following fields.
 
-- **id**		- The primary key identifier of the FK table
-- **setname**		- The COMMONDATA SetName of the corresponding dataset
-- **name**		- The name of the FK table
-- **description**	- A one-line description of the FK table
-- **nx**		- The number of x-grid interpolation points
-- **positivity**	- A flag specifying if the FK table is a positivity set
-- **source**		- Specifies if the corresponding subgrids are [APP/DIS/DYP]
+- **id**		- The primary key identifier of the FK table.
+- **setname**		- The COMMONDATA SetName of the corresponding dataset.
+- **name**		- The name of the FK table.
+- **description**	- A one-line description of the FK table.
+- **nx**		- The number of x-grid interpolation points.
+- **positivity**	- A flag specifying if the FK table is a positivity set.
+- **source**		- Specifies if the corresponding subgrids are [APP/DIS/DYP].
 
 Here it is important to note that setname and name may be different in the case of compound observables such
 as ratios, where multiple FK tables are required to compute predictions for a single dataset. The `nx` parameter
-specified the interpolation accuracy of the dataset (this must currently be tuned by hand). The `positiviy` parameter
+specifies the interpolation accuracy of the dataset (this must currently be tuned by hand). The `positivity` parameter
 restricts the observable to NLO matrix elements and disables target-mass corrections.
 
 Once this entry is complete, you must move on to adding entries in the corresponding subgrid table.
@@ -124,9 +124,42 @@ The entries have the following fields:
 - **mask**	- A boolean mask, specifiying which APPLgrid entries should be considered datapoints.
 - **operators** - A list of operators to handle certain special cases (see below).
 
-MOREDESCRIPTIONHERE
+Here the mask should have as many entries as APPLgrid bins and each boolean value should be separated by
+a space. For example, for an applgrid with five bins where we want to exclude the penultimate bin, the mask
+would be:
+
+```
+1 1 1 0 1
+```
+The applgrid filename assumes that the grid can be found at
+
+```Shell
+$APPL_PATH/<setname>/<applgrid>
+```
+where `APPL\_PATH` is defined in Makefile.am, `<setname>` is the corresponding COMMONDATA SetName specified in the grids table,
+and `<applgrid>` is specified in the field described above.
+
+#Important note
+If your FK table consists of more than one subgrid to be merged into a single table, then the ordering
+of the subgrids in their subgrid **id** is vital. The `merge\_allgrids.py` script will merge the subgrids
+in order of their **id**. So if you are constructing an FK table for a merged W+/W-/Z dataset, it is crucial
+that the ordering of the corresponding W+/W-/Z subgrids in id matches the ordering in COMMONDATA.
+
+### Implementing a new DIS or DYP subgrid 
+
+New DIS or DYP subgrids should be entered respectively into the `dis_subgrids` or `dyp_subgrids` tables of the apfelcomb database.
+Typically only one subgrid is needed per DIS or DYP FK table. Each subgrid entry has the following fields:
+
+- **id**	- The primary key identifier of the subgrid
+- **fktarget**	- The name of the FK table this subgrid belongs to
+- **operators** - A list of operators to handle certain special cases (see below).
+
+For DIS there is one additional field:
+- **process**	- The process string of the observable (e.g DIS\_F2P, see APFEL)
 
 ### Operators
+
+TODO
 
 ### Helper scripts
 
