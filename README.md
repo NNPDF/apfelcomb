@@ -88,6 +88,45 @@ FK table should be stored at
 ```Shell
 $RESULTS_PATH/theory_<theoryID>/fastkernel/FK_<setname>.dat.
 ```
+### Implementing a new FK table
+
+To implement a new FK table you must first add a corresponding entry into the apfelcomb database under the `grids` table.
+These entries are comprised of the following fields.
+
+- **id**		- The primary key identifier of the FK table
+- **setname**		- The COMMONDATA SetName of the corresponding dataset
+- **name**		- The name of the FK table
+- **description**	- A one-line description of the FK table
+- **nx**		- The number of x-grid interpolation points
+- **positivity**	- A flag specifying if the FK table is a positivity set
+- **source**		- Specifies if the corresponding subgrids are [APP/DIS/DYP]
+
+Here it is important to note that setname and name may be different in the case of compound observables such
+as ratios, where multiple FK tables are required to compute predictions for a single dataset. The `nx` parameter
+specified the interpolation accuracy of the dataset (this must currently be tuned by hand). The `positiviy` parameter
+restricts the observable to NLO matrix elements and disables target-mass corrections.
+
+Once this entry is complete, you must move on to adding entries in the corresponding subgrid table.
+
+### Implementing a new APPLgrid subgrid 
+
+To add a new APPLgrid-based subgrid, you must add a corresponding entry into the `app\_subgrids` table of the
+apfelcomb database. One entry should be added for each APPLgrid making up the final target FK table.
+The entries have the following fields:
+
+- **id** 	- The primary key identifier of the subgrid. 
+- **fktarget**	- The name of the FK table this subgrid belongs to. 
+- **applgrid**	- The filename of the corresponding APPLgrid.
+- **fnlobin**   - The fastNLO index if the table is a fastNLO grid, or -1 if not.
+- **ptmin**	- The minimum perturbative order (1 when the LO is zero, 0 if not).
+- **pdfwgt**	- A boolean flag, 1 if the APPLgrid has PDF weighting, 0 if not.
+- **ppbar**	- A boolean flag, 1 if the APPLgrid should be transformed to ppbar beams, 0 if not.
+- **mask**	- A boolean mask, specifiying which APPLgrid entries should be considered datapoints.
+- **operators** - A list of operators to handle certain special cases (see below).
+
+MOREDESCRIPTIONHERE
+
+### Operators
 
 ### Helper scripts
 
@@ -97,6 +136,5 @@ TODO
 
 TODO
 
-### Implementing a new dataset
 
 TODO
