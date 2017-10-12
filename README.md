@@ -150,12 +150,12 @@ The applgrid filename assumes that the grid can be found at
 ```Shell
 $APPL_PATH/<setname>/<applgrid>
 ```
-where `APPL\_PATH` is defined in Makefile.am, `<setname>` is the corresponding COMMONDATA SetName specified in the grids table,
+where `APPL_PATH` is defined in Makefile.am, `<setname>` is the corresponding COMMONDATA SetName specified in the grids table,
 and `<applgrid>` is specified in the field described above.
 
 ### Implementing a new DIS or DYP subgrid 
 
-New DIS or DYP subgrids should be entered respectively into the `dis\_subgrids` or `dyp\_subgrids` tables of the apfelcomb database.
+New DIS or DYP subgrids should be entered respectively into the `dis_subgrids` or `dyp_subgrids` tables of the apfelcomb database.
 Typically only one subgrid is needed per DIS or DYP FK table. Each subgrid entry has the following fields:
 
 - **id**	- The primary key identifier of the subgrid
@@ -167,7 +167,7 @@ For DIS there is one additional field:
 
 ### Important note on subgrid ordering
 If your FK table consists of more than one subgrid to be merged into a single table, then the ordering
-of the subgrids in their subgrid **id** is vital. The `merge\_allgrids.py` script will merge the subgrids
+of the subgrids in their subgrid **id** is vital. The `merge_allgrids.py` script will merge the subgrids
 in order of their **id**. So if you are constructing an FK table for a merged W+/W-/Z dataset, it is crucial
 that the ordering of the corresponding W+/W-/Z subgrids in id matches the ordering in COMMONDATA.
 
