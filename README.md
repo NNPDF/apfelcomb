@@ -9,6 +9,20 @@ The mechanism behind APFELcomb is documented in `[1605.02070]`.
 
 The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/`.
 
+**Table of Contents**
+- [APFELcomb](#apfelcomb)
+  - [Prerequisites](#prerequisites)
+  - [Compilation and setup](#compilation-and-setup)
+  - [Structure and generation process](#structure-and-generation-process)
+  - [Implementing a new FK table](#implementing-a-new-fk-table)
+    - [Implementing a new APPLgrid subgrid](#implementing-a-new-applgrid-subgrid)
+    - [Implementing a new DIS or DYP subgrid](#implementing-a-new-dis-or-dyp-subgrid)
+    - [Important note on subgrid ordering](#important-note-on-subgrid-ordering)
+    - [Operators](#operators)
+    - [Compound files and C-factors](#compound-files-and-c-factors)
+  - [Helper scripts](#helper-scripts)
+  - [Generating a complete theory](#generating-a-complete-theory)
+
 ## Prerequisites
 APFELcomb depends on the following libraries
 
@@ -88,7 +102,7 @@ FK table should be stored at
 ```Shell
 $RESULTS_PATH/theory_<theory id>/fastkernel/FK_<setname>.dat.
 ```
-### Implementing a new FK table
+## Implementing a new FK table
 
 To implement a new FK table you must first add a corresponding entry into the apfelcomb database under the `grids` table.
 These entries are comprised of the following fields.
@@ -139,12 +153,6 @@ $APPL_PATH/<setname>/<applgrid>
 where `APPL\_PATH` is defined in Makefile.am, `<setname>` is the corresponding COMMONDATA SetName specified in the grids table,
 and `<applgrid>` is specified in the field described above.
 
-#Important note
-If your FK table consists of more than one subgrid to be merged into a single table, then the ordering
-of the subgrids in their subgrid **id** is vital. The `merge\_allgrids.py` script will merge the subgrids
-in order of their **id**. So if you are constructing an FK table for a merged W+/W-/Z dataset, it is crucial
-that the ordering of the corresponding W+/W-/Z subgrids in id matches the ordering in COMMONDATA.
-
 ### Implementing a new DIS or DYP subgrid 
 
 New DIS or DYP subgrids should be entered respectively into the `dis\_subgrids` or `dyp\_subgrids` tables of the apfelcomb database.
@@ -156,6 +164,12 @@ Typically only one subgrid is needed per DIS or DYP FK table. Each subgrid entry
 
 For DIS there is one additional field:
 - **process**	- The process string of the observable (e.g DIS\_F2P, see APFEL)
+
+### Important note on subgrid ordering
+If your FK table consists of more than one subgrid to be merged into a single table, then the ordering
+of the subgrids in their subgrid **id** is vital. The `merge\_allgrids.py` script will merge the subgrids
+in order of their **id**. So if you are constructing an FK table for a merged W+/W-/Z dataset, it is crucial
+that the ordering of the corresponding W+/W-/Z subgrids in id matches the ordering in COMMONDATA.
 
 ### Operators
 
@@ -185,7 +199,7 @@ file should be stored in the APFELcomb repository under the `compound` directory
 C-factors should be in the format once again specified in `nnpdfcpp/data/doc/`, and stored in the nnpdfcpp repo under
 the `nnpdfcpp/data/N*LOCFAC/` directory.
 
-### Helper scripts
+## Helper scripts
 
 Several helper scripts are provided to make using APFELcomb easier (particuarly when generating a full set of FK tables for a particular theory).
 - `scripts/disp_grids.py` displays a full list of APPLgrid, DIS or DYP subgrids implemented in APFELcomb.
@@ -196,7 +210,7 @@ Several helper scripts are provided to make using APFELcomb easier (particuarly 
 - `finalise.sh [theoryID]` runs C-factor scaling, copies COMPOUND files, deletes the subgrids, and finally compresses the result into a theory.tgz file ready for upload.
 
 
-### Generating a complete theory
+## Generating a complete theory
 
 The general workflow for generating a complete version of theory 53 on the hydra cluster is then.
 ```Shell
