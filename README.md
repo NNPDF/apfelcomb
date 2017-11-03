@@ -10,19 +10,18 @@ The mechanism behind APFELcomb is documented in `[1605.02070]`.
 The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/`.
 
 **Table of Contents**
-- [APFELcomb](#apfelcomb)
-  - [Prerequisites](#prerequisites)
-  - [Compilation and setup](#compilation-and-setup)
-  - [Structure and generation process](#structure-and-generation-process)
-  - [Implementing a new FK table](#implementing-a-new-fk-table)
-    - [Implementing a new APPLgrid subgrid](#implementing-a-new-applgrid-subgrid)
-    - [Implementing a new DIS or DYP subgrid](#implementing-a-new-dis-or-dyp-subgrid)
-    - [Subgrid operators](#subgrid-operators)
-    - [Compound files and C-factors](#compound-files-and-c-factors)
-    - [Important note on subgrid ordering](#important-note-on-subgrid-ordering)
-    - [Important note on committing changes](#important-note-on-committing-changes)
-  - [Helper scripts](#helper-scripts)
-  - [Generating a complete theory](#generating-a-complete-theory)
+- [Prerequisites](#prerequisites)
+- [Compilation and setup](#compilation-and-setup)
+- [Structure and generation process](#structure-and-generation-process)
+- [Implementing a new FK table](#implementing-a-new-fk-table)
+  - [Implementing a new APPLgrid subgrid](#implementing-a-new-applgrid-subgrid)
+  - [Implementing a new DIS or DYP subgrid](#implementing-a-new-dis-or-dyp-subgrid)
+  - [Subgrid operators](#subgrid-operators)
+  - [Compound files and C-factors](#compound-files-and-c-factors)
+  - [Important note on subgrid ordering](#important-note-on-subgrid-ordering)
+  - [Important note on committing changes](#important-note-on-committing-changes)
+- [Helper scripts](#helper-scripts)
+- [Generating a complete theory](#generating-a-complete-theory)
 
 ## Prerequisites
 APFELcomb depends on the following libraries

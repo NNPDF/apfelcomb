@@ -5,12 +5,11 @@ LDLIBS   =  ./src/libac_core.a $(PRJLDFLAGS)
 
 VPATH=./src
 MAIN = apfel_comb src/cfac_scale 
-DEV = appl_optgrid
-#ftdy_hcx
+DEV = appl_optgrid ftdy_hcx
 
 .PHONY: all dev core clean
 	
-all: core $(MAIN)
+all: core $(MAIN) db
 dev: core $(DEV)
 
 core:
@@ -19,6 +18,9 @@ core:
 clean:
 	-$(RM) -f $(MAIN) $(DEV)
 	@$(MAKE) clean -C src/core
+
+db:
+	./db/generate_database.sh
 
 force_look:
 	true
