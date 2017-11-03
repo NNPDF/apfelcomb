@@ -200,6 +200,9 @@ If you have made a modification to the apfelcomb.db database, once you are happy
 plain-text dump file at `db/apfelcomb.dat`. This file must then be committed. It is important to note that the binary
 sqlite database is not stored in the repository.
 
+A helper script is provided to do this. If you want to convert your binary database to the text dump, run
+`db/generate_dump.sh` and then commit the resulting `apfelcomb.dat` file.
+
 ## Helper scripts
 
 Several helper scripts are provided to make using APFELcomb easier (particuarly when generating a full set of FK tables for a particular theory).

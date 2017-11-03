@@ -1,0 +1,2 @@
+REMEMBER TO COMMIT YOUR CHANGES HERE TO THE **DUMP FILE**
+This can be done by running ./generate_dump.sh which will export your binary .db file to the text .dat file
