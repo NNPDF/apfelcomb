@@ -1,7 +1,7 @@
 # APFELcomb 
 The APFELcomb project consists of a set of tools for the generation
 of FK tables, which provide the mechanism for computing predictions
-from theory in the NNPDF framework. Broadly speaking this is acheived
+from theory in the NNPDF framework. Broadly speaking this is achieved
 by taking DGLAP evolution kernels from `APFEL` and combining them with
 interpolated parton-level observable kernels of various forms.
 
@@ -30,7 +30,7 @@ APFELcomb depends on the following libraries
 * **libnnpdf** *github.com/NNPDF/libnnpdf*
 * **APPLgrid 1.4.70-nnpdf** *github.com/NNPDF/external/applgrid-1.4.70-nnpdf*
 
-And datafiles from
+And data files from
 * **nnpdfcpp** *github.com/NNPDF/nnpdfcpp*
 * **nnpdf-applgrids** *github.com/NNPDF/applgrids*
 
@@ -51,7 +51,7 @@ These are mostly inferred from package-config files with the exception of
 The defaults are configured assuming that both the nnpdfcpp and applgrid repositories are
 located at `../`
 
-With these paths set, compiling the APFELgrid code should be as simple as
+With these paths set, compiling the APFELcomb code should be as simple as
 ```Shell
 make
 ```
@@ -68,7 +68,10 @@ implemented in APFELcomb can be displayed by running the script
 Typically DIS and FKGenerator Drell-Yan tables are made of only one subgrid, whereas
 FK tables generated from APPLgrids have one subgrid per APPLgrid file. How subgrids
 are merged into grids, and the generation parameters of each subgrid, is specified in
-the `db/apfelcomb.db` database.
+the `db/apfelcomb.db` database. The database itself is not stored in the repository,
+but it is built from the sqlite dump at `db/apfelcomb.dat`. This is done automatically
+by the APFELcomb makefile.
+
 
 Generating an individual subgrid is performed by running
 
@@ -189,6 +192,11 @@ The \* operator is typically used for normalised cross-sections, where the total
 must be duplicated N\_dat times to correspond to the size of the COMMONDATA file. The + operator is typically used to compensate
 for missing subgrids, for example when a COMMONDATA file begins with several datapoints that cannot yet be computed from theory,
 the + operator can be used to 'skip' those points. The N operator is used to perform unit conversions or the like.
+
+### Important note on committing changes
+If you have made a modification to the apfelcomb.db database, once you are happy with it you *must* export it to the 
+plain-text dump file at `db/apfelcomb.dat`. This file must then be committed. It is important to note that the binary
+sqlite database is not stored in the repository.
 
 ### Compound files and C-factors
 
