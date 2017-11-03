@@ -17,8 +17,9 @@ The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/`
   - [Implementing a new FK table](#implementing-a-new-fk-table)
     - [Implementing a new APPLgrid subgrid](#implementing-a-new-applgrid-subgrid)
     - [Implementing a new DIS or DYP subgrid](#implementing-a-new-dis-or-dyp-subgrid)
+    - [Subgrid operators](#subgrid-operators)
     - [Important note on subgrid ordering](#important-note-on-subgrid-ordering)
-    - [Operators](#operators)
+    - [Important note on committing changes](#important-note-on-committing-changes)
     - [Compound files and C-factors](#compound-files-and-c-factors)
   - [Helper scripts](#helper-scripts)
   - [Generating a complete theory](#generating-a-complete-theory)
@@ -168,13 +169,7 @@ Typically only one subgrid is needed per DIS or DYP FK table. Each subgrid entry
 For DIS there is one additional field:
 - **process**	- The process string of the observable (e.g DIS\_F2P, see APFEL)
 
-### Important note on subgrid ordering
-If your FK table consists of more than one subgrid to be merged into a single table, then the ordering
-of the subgrids in their subgrid **id** is vital. The `merge_allgrids.py` script will merge the subgrids
-in order of their **id**. So if you are constructing an FK table for a merged W+/W-/Z dataset, it is crucial
-that the ordering of the corresponding W+/W-/Z subgrids in id matches the ordering in COMMONDATA.
-
-### Operators
+### Subgrid operators
 
 Subgrid operators are used to provide certain subgrid-wide transformations that can be useful in certain circumstances.
 They are formed by a key-value pair with syntax:
@@ -192,6 +187,12 @@ The \* operator is typically used for normalised cross-sections, where the total
 must be duplicated N\_dat times to correspond to the size of the COMMONDATA file. The + operator is typically used to compensate
 for missing subgrids, for example when a COMMONDATA file begins with several datapoints that cannot yet be computed from theory,
 the + operator can be used to 'skip' those points. The N operator is used to perform unit conversions or the like.
+
+### Important note on subgrid ordering
+If your FK table consists of more than one subgrid to be merged into a single table, then the ordering
+of the subgrids in their subgrid **id** is vital. The `merge_allgrids.py` script will merge the subgrids
+in order of their **id**. So if you are constructing an FK table for a merged W+/W-/Z dataset, it is crucial
+that the ordering of the corresponding W+/W-/Z subgrids in id matches the ordering in COMMONDATA.
 
 ### Important note on committing changes
 If you have made a modification to the apfelcomb.db database, once you are happy with it you *must* export it to the 
