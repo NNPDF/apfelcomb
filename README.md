@@ -18,9 +18,9 @@ The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/`
     - [Implementing a new APPLgrid subgrid](#implementing-a-new-applgrid-subgrid)
     - [Implementing a new DIS or DYP subgrid](#implementing-a-new-dis-or-dyp-subgrid)
     - [Subgrid operators](#subgrid-operators)
+    - [Compound files and C-factors](#compound-files-and-c-factors)
     - [Important note on subgrid ordering](#important-note-on-subgrid-ordering)
     - [Important note on committing changes](#important-note-on-committing-changes)
-    - [Compound files and C-factors](#compound-files-and-c-factors)
   - [Helper scripts](#helper-scripts)
   - [Generating a complete theory](#generating-a-complete-theory)
 
@@ -36,7 +36,6 @@ And data files from
 * **nnpdf-applgrids** *github.com/NNPDF/applgrids*
 
 ## Compilation and setup 
-
 Compilation flags and various paths are defined in `Makefile.inc`.
 These are mostly inferred from package-config files with the exception of
 
@@ -58,7 +57,6 @@ make
 ```
 
 ## Structure and generation process
-
 Each FK table is generated piecewise in one or more `subgrids`. The subgrids
 implemented in APFELcomb can be displayed by running the script
 
@@ -107,7 +105,6 @@ FK table should be stored at
 $RESULTS_PATH/theory_<theory id>/fastkernel/FK_<setname>.dat.
 ```
 ## Implementing a new FK table
-
 To implement a new FK table you must first add a corresponding entry into the apfelcomb database under the `grids` table.
 These entries are comprised of the following fields.
 
@@ -127,7 +124,6 @@ restricts the observable to NLO matrix elements and disables target-mass correct
 Once this entry is complete, you must move on to adding entries in the corresponding subgrid table.
 
 ### Implementing a new APPLgrid subgrid 
-
 To add a new APPLgrid-based subgrid, you must add a corresponding entry into the `app\_subgrids` table of the
 apfelcomb database. One entry should be added for each APPLgrid making up the final target FK table.
 The entries have the following fields:
@@ -158,7 +154,6 @@ where `APPL_PATH` is defined in Makefile.am, `<setname>` is the corresponding CO
 and `<applgrid>` is specified in the field described above.
 
 ### Implementing a new DIS or DYP subgrid 
-
 New DIS or DYP subgrids should be entered respectively into the `dis_subgrids` or `dyp_subgrids` tables of the apfelcomb database.
 Typically only one subgrid is needed per DIS or DYP FK table. Each subgrid entry has the following fields:
 
@@ -170,7 +165,6 @@ For DIS there is one additional field:
 - **process**	- The process string of the observable (e.g DIS\_F2P, see APFEL)
 
 ### Subgrid operators
-
 Subgrid operators are used to provide certain subgrid-wide transformations that can be useful in certain circumstances.
 They are formed by a key-value pair with syntax:
 
@@ -188,6 +182,14 @@ must be duplicated N\_dat times to correspond to the size of the COMMONDATA file
 for missing subgrids, for example when a COMMONDATA file begins with several datapoints that cannot yet be computed from theory,
 the + operator can be used to 'skip' those points. The N operator is used to perform unit conversions or the like.
 
+### Compound files and C-factors
+If your new dataset is a compound observable (that is, theory predictions are a function of more than one FK-product) then you
+should write a corresponding COMPOUND file as described in the data specifications at `nnpdfcpp/data/doc/`. This compound
+file should be stored in the APFELcomb repository under the `compound` directory.
+
+C-factors should be in the format once again specified in `nnpdfcpp/data/doc/`, and stored in the nnpdfcpp repo under
+the `nnpdfcpp/data/N*LOCFAC/` directory.
+
 ### Important note on subgrid ordering
 If your FK table consists of more than one subgrid to be merged into a single table, then the ordering
 of the subgrids in their subgrid **id** is vital. The `merge_allgrids.py` script will merge the subgrids
@@ -198,15 +200,6 @@ that the ordering of the corresponding W+/W-/Z subgrids in id matches the orderi
 If you have made a modification to the apfelcomb.db database, once you are happy with it you *must* export it to the 
 plain-text dump file at `db/apfelcomb.dat`. This file must then be committed. It is important to note that the binary
 sqlite database is not stored in the repository.
-
-### Compound files and C-factors
-
-If your new dataset is a compound observable (that is, theory predictions are a function of more than one FK-product) then you
-should write a corresponding COMPOUND file as described in the data specifications at `nnpdfcpp/data/doc/`. This compound
-file should be stored in the APFELcomb repository under the `compound` directory.
-
-C-factors should be in the format once again specified in `nnpdfcpp/data/doc/`, and stored in the nnpdfcpp repo under
-the `nnpdfcpp/data/N*LOCFAC/` directory.
 
 ## Helper scripts
 
