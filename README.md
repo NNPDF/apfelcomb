@@ -108,14 +108,14 @@ To implement a new FK table you must first add a corresponding entry into the ap
 These entries are comprised of the following fields.
 
 - **id**		- The primary key identifier of the FK table.
-- **setname**		- The COMMONDATA SetName of the corresponding dataset.
+- **setname**		- The COMMONDATA set name of the corresponding dataset.
 - **name**		- The name of the FK table.
 - **description**	- A one-line description of the FK table.
 - **nx**		- The number of x-grid interpolation points.
 - **positivity**	- A flag specifying if the FK table is a positivity set.
 - **source**		- Specifies if the corresponding subgrids are [APP/DIS/DYP].
 
-Here it is important to note that setname and name may be different in the case of compound observables such
+Here it is important to note that *setname* and *name* may be different in the case of compound observables such
 as ratios, where multiple FK tables are required to compute predictions for a single dataset. The `nx` parameter
 specifies the interpolation accuracy of the dataset (this must currently be tuned by hand). The `positivity` parameter
 restricts the observable to NLO matrix elements and disables target-mass corrections.
@@ -133,8 +133,8 @@ The entries have the following fields:
 - **fnlobin**   - The fastNLO index if the table is a fastNLO grid, or -1 if not.
 - **ptmin**	- The minimum perturbative order (1 when the LO is zero, 0 if not).
 - **pdfwgt**	- A boolean flag, 1 if the APPLgrid has PDF weighting, 0 if not.
-- **ppbar**	- A boolean flag, 1 if the APPLgrid should be transformed to ppbar beams, 0 if not.
-- **mask**	- A boolean mask, specifiying which APPLgrid entries should be considered datapoints.
+- **ppbar**	- A boolean flag, 1 if the APPLgrid should be transformed to *ppbar* beams, 0 if not.
+- **mask**	- A boolean mask, specifying which APPLgrid entries should be considered data points.
 - **operators** - A list of operators to handle certain special cases (see below).
 
 Here the mask should have as many entries as APPLgrid bins and each boolean value should be separated by
@@ -149,7 +149,7 @@ The applgrid filename assumes that the grid can be found at
 ```Shell
 $APPL_PATH/<setname>/<applgrid>
 ```
-where `APPL_PATH` is defined in Makefile.am, `<setname>` is the corresponding COMMONDATA SetName specified in the grids table,
+where `APPL_PATH` is defined in Makefile.am, `<setname>` is the corresponding COMMONDATA set name specified in the grids table,
 and `<applgrid>` is specified in the field described above.
 
 ### Implementing a new DIS or DYP subgrid 
@@ -172,13 +172,13 @@ They are formed by a key-value pair with syntax:
 ```
 If using multiple operators, they should be comma-separated. Currently these operators are implemented:
 
-- \*:*V* - Duplicate the subgrid datapoint (there must be only one for this operator) *V* times.
-- +:*V*  - Increment the starting datapoint index of this subgrid by *V*.
-- N:*V*  - Normalise all datapoints in this subgrid by *V*.
+- \*:*V* - Duplicate the subgrid data point (there must be only one for this operator) *V* times.
+- +:*V*  - Increment the starting data point index of this subgrid by *V*.
+- N:*V*  - Normalise all data points in this subgrid by *V*.
 
-The \* operator is typically used for normalised cross-sections, where the total cross-section computation (a single datapoint)
-must be duplicated N\_dat times to correspond to the size of the COMMONDATA file. The + operator is typically used to compensate
-for missing subgrids, for example when a COMMONDATA file begins with several datapoints that cannot yet be computed from theory,
+The \* operator is typically used for normalised cross-sections, where the total cross-section computation (a single data point)
+must be duplicated *N\_dat* times to correspond to the size of the COMMONDATA file. The + operator is typically used to compensate
+for missing subgrids, for example when a COMMONDATA file begins with several data points that cannot yet be computed from theory,
 the + operator can be used to 'skip' those points. The N operator is used to perform unit conversions or the like.
 
 ### Compound files and C-factors
@@ -205,10 +205,10 @@ A helper script is provided to do this. If you want to convert your binary datab
 
 ## Helper scripts
 
-Several helper scripts are provided to make using APFELcomb easier (particuarly when generating a full set of FK tables for a particular theory).
+Several helper scripts are provided to make using APFELcomb easier (particularly when generating a full set of FK tables for a particular theory).
 - `scripts/disp_grids.py` displays a full list of APPLgrid, DIS or DYP subgrids implemented in APFELcomb.
 - `run_allgrids.py [theoryID] [job script]` scans the results directory and submits jobs for all missing subgrids for the specified theory.
-- `test_submit.py` is an example [job script] to be used for run\_allgrids.py. These scripts specify how jobs are launched on a given cluster.
+- `test_submit.py` is an example [job script] to be used for `run\_allgrids.py`. These scripts specify how jobs are launched on a given cluster.
 - `hydra_submit.py` is the [job script] for the HYDRA cluster in Oxford.
 - `merge_allgrids.py [theoryID]` merges all subgrids in the results directory for a specified theory into final FK tables. This does not delete subgrids.
 - `finalise.sh [theoryID]` runs C-factor scaling, copies COMPOUND files, deletes the subgrids, and finally compresses the result into a theory.tgz file ready for upload.
