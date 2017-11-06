@@ -115,7 +115,7 @@ These entries are comprised of the following fields.
 - **positivity**	- A flag specifying if the FK table is a positivity set.
 - **source**		- Specifies if the corresponding subgrids are [APP/DIS/DYP].
 
-Here it is important to note that *setname* and *name* may be different in the case of compound observables such
+Here it is important to note that **setname** and **name** may be different in the case of compound observables such
 as ratios, where multiple FK tables are required to compute predictions for a single dataset. The `nx` parameter
 specifies the interpolation accuracy of the dataset (this must currently be tuned by hand). The `positivity` parameter
 restricts the observable to NLO matrix elements and disables target-mass corrections.
