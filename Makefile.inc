@@ -17,7 +17,7 @@ ALLDIR= $(RESULTSDIR) $(APPLGRIDDIR) $(DATABASEDIR)
 
 # root
 ROOTINCS = $(shell root-config --cflags) 
-ROOTLIBS = $(shell root-config --libs) 
+ROOTLIBS = $(shell root-config --glibs) 
 
 # APFEL
 APFELINCS = $(shell apfel-config --cppflags) 
