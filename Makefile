@@ -9,7 +9,7 @@ DEV = appl_optgrid ftdy_hcx
 
 .PHONY: all dev core clean
 	
-all: core $(MAIN) db
+all: core $(MAIN) database
 dev: core $(DEV)
 
 core:
@@ -19,7 +19,7 @@ clean:
 	-$(RM) -f $(MAIN) $(DEV)
 	@$(MAKE) clean -C src/core
 
-db:
+database:
 	./db/generate_database.sh
 
 force_look:
