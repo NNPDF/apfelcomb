@@ -218,7 +218,7 @@ Several helper scripts are provided to make using APFELcomb easier (particularly
 
 The general workflow for generating a complete version of theory 53 on the hydra cluster is then.
 ```Shell
-./run_allgrids.py 53 hydra_submit.py # Submit all APFELcomb subgrid-jobs
+./run_allgrids.py 53 ./hydra_submit.sh # Submit all APFELcomb subgrid-jobs
 # Once all subgrid jobs have successfully finished
 ./merge_allgrids.py 53 # Merge subgrids into FK tables
 # If merging is successful
