@@ -70,7 +70,7 @@ namespace DIS
   {
     const time_point t1 = std::chrono::system_clock::now();
     const NNPDF::CommonData& cd = parent.GetCommonData();
-    for (size_t d=0; d<cd.GetNData(); d++)
+    for (int d=0; d<cd.GetNData(); d++)
     {
       const double x = cd.GetKinematics(d,0);
       const double Q = sqrt(cd.GetKinematics(d,1));
@@ -79,7 +79,7 @@ namespace DIS
       if (min(par.xiF, par.xiR)*Q < par.Q0)
         continue;
 
-      for(size_t ix=0; ix<FK->GetNx(); ix++) 
+      for(int ix=0; ix<FK->GetNx(); ix++) 
         for(int ifl=0; ifl<14; ifl++) 
           FK->Fill(d, ix, ifl, nrmdat*QCD::diskernel(process, x, Q, y, ifl, ix) );
       StatusUpdate(t1, ((double)d+1)/(double)cd.GetNData(), cout );

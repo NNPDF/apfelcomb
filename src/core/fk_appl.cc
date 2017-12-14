@@ -190,7 +190,7 @@ namespace APP
     // Counter
     int nElm = 0;
     for (auto bin : maskmap )
-      for (size_t pto=min_pto; pto<=max_pto; pto++) 
+      for (int pto=min_pto; pto<=max_pto; pto++) 
       {
         const int gidx = get_grid_idx(g, pto); // APPLgrid grid index
         const appl::igrid *igrid = g->weightgrid(gidx, bin);
@@ -226,7 +226,7 @@ namespace APP
       obs *= nrmdat;
 
     // Relate back to results
-    for (int i=0; i<maskmap.size(); i++)
+    for (size_t i=0; i<maskmap.size(); i++)
       for (int const& j : datamap[i])
         results[j] += xsec[maskmap[i]];
   }
@@ -294,7 +294,7 @@ namespace APP
           const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);  
           const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);  
 
-          for (size_t ix = 0; ix < nxin; ix++)
+          for (int ix = 0; ix < nxin; ix++)
           for (size_t fl : afl)
           {
             for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
@@ -324,8 +324,8 @@ namespace APP
               const double pdfnrm = pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
               const double norm = pdfnrm*compute_wgt_norm(g, bin, pto+ptmin, as, x1, x2)*nrmdat;
 
-              for (size_t i=0; i<nxin; i++)    // Loop over input pdf x1
-                for (size_t j=0; j<nxin; j++)  // Loop over input pdf x2
+              for (int i=0; i<nxin; i++)    // Loop over input pdf x1
+                for (int j=0; j<nxin; j++)  // Loop over input pdf x2
                   for (size_t k : afl)         // loop over flavour 1
                     for (size_t l : afl)       // loop over flavour 2
                     {
