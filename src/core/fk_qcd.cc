@@ -29,6 +29,7 @@ namespace QCD
   // Set static DIS mode
   static bool FTDY_mode = false;
   static bool SIA_mode = false;
+  static bool HOPPET_COMPATIBILITY = false;
 
   static std::string FKObs; //!< Cached FK observable
   
@@ -153,7 +154,14 @@ namespace QCD
     // Init Q0
     QCD::Q0 = par.Q0;
     QCD::QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
-    APFEL::SetQLimits( Q0, QM );
+    if ( fabs(par.xiF - 1.0) > 1E-6) 
+        HOPPET_COMPATIBILITY = true;
+    else
+        HOPPET_COMPATIBILITY = false;
+    if (HOPPET_COMPATIBILITY)
+        APFEL::SetQLimits( Q0, 15000 );
+    else
+        APFEL::SetQLimits( Q0, QM );
 
     APFEL::SetEpsilonTruncation(1E-1);
     APFEL::SetFastEvolution(false);
@@ -210,10 +218,12 @@ namespace QCD
     
     // Just in case of numerical trouble
     xg[nx] = 1;
-    
-    // Set scale limits
-    APFEL::SetQLimits( Q0, QM );
 
+    if (HOPPET_COMPATIBILITY)
+        APFEL::SetQLimits( Q0, 15000 );
+    else
+        APFEL::SetQLimits( Q0, QM );
+    
     // Set evolution operator parameters
     APFEL::SetFastEvolution(false);
     APFEL::LockGrids(false);
