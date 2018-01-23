@@ -13,6 +13,7 @@
 #include "apfelcomb/fk_appl.h"
 #include "apfelcomb/fk_dis.h"
 #include "apfelcomb/fk_ftdy.h"
+#include "apfelcomb/fk_sia.h"
 
 #include <chrono>
 #include <ctime>
@@ -64,6 +65,7 @@ FKTarget::source FKTarget::parse_source(string const& ss)
   if (ss.compare("APP") == 0) return FKTarget::APP;
   if (ss.compare("DIS") == 0) return FKTarget::DIS;
   if (ss.compare("DYP") == 0) return FKTarget::DYP;
+  if (ss.compare("SIA") == 0) return FKTarget::SIA;
   return FKTarget::NSR;
 }
 
@@ -81,6 +83,9 @@ void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 				break;
 			case DYP:
 				components.insert(pair<int, FKSubGrid*>(i, new FTDY::SubGrid(*this, db, i)));
+				break;
+			case SIA:
+				components.insert(pair<int, FKSubGrid*>(i, new DIS::SubGrid(*this, db, i)));
 				break;
 			case NSR:
 				cerr << "ERROR: Cannot handle source" <<endl;

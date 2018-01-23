@@ -25,29 +25,29 @@ namespace DIS
 	class SubGrid: public FKSubGrid
 	{
 	public:
-	void Compute(QCD::qcd_param const&, vector<double>&) const;			//!< Compute APPLgrid results mapped to Commondata
-	void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const;		//!< Perform the FK combination on a subgrid
+	  void Compute(QCD::qcd_param const&, vector<double>&) const;	       	//!< Compute APPLgrid results mapped to Commondata
+	  void Combine(QCD::qcd_param const&, NNPDF::FKGenerator*) const;		//!< Perform the FK combination on a subgrid
 	private:
-		friend class ::FKTarget;
-		SubGrid(FKTarget const& parent, NNPDF::IndexDB const& db, int const& iDB):
-		FKSubGrid(parent, iDB, NNPDF::dbquery<string>(db, iDB, "operators")),
+	  friend class ::FKTarget;
+	SubGrid(FKTarget const& parent, NNPDF::IndexDB const& db, int const& iDB):
+	  FKSubGrid(parent, iDB, NNPDF::dbquery<string>(db, iDB, "operators")),
 	    process(NNPDF::dbquery<string>(db,iDB,"process"))
-		{
-			if (incdat != 0 || muldat != 1)
-			{
-				cerr << "Error: DIS grids do not support operators other than normalisation" << endl;
-				exit(-1);
-			}
-		};
-
-		void Splash(ostream&) 	const;	//!< Print metadata to stream
-		size_t GetNdat() 		const;	//!< Return number of datapoints in subgrid
-		double GetQ2max() 		const;	//!< Return maximum scale used in a subgrid
-		double GetXmin() 		const;	//!< Return minimum x-value used in this sub grid
-
-		// **********************************************************
-
-		const string process;			//!< Process string of the observable
+	      {
+		if (incdat != 0 || muldat != 1)
+		  {
+		    cerr << "Error: DIS grids do not support operators other than normalisation" << endl;
+		    exit(-1);
+		  }
+	      };
+	  
+	  void Splash(ostream&) 	        const;	//!< Print metadata to stream
+	  size_t GetNdat() 		const;	//!< Return number of datapoints in subgrid
+	  double GetQ2max() 		const;	//!< Return maximum scale used in a subgrid
+	  double GetXmin() 		const;	//!< Return minimum x-value used in this sub grid
+	  
+	  // **********************************************************
+	  
+	  const string process;			//!< Process string of the observable
 	};
 }
 

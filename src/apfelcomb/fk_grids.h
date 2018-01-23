@@ -27,7 +27,7 @@ class FKTarget
 public:
 	FKTarget(NNPDF::IndexDB const& db, int const& targetID);
 	~FKTarget(){};
-	enum source { APP, DIS, DYP, NSR };
+	enum source { APP, DIS, SIA, DYP, NSR };
 
 	virtual void Splash( ostream& ) const; 				//!< Write table information to stream
 	void ReadSubGrids(NNPDF::IndexDB const& db);		//!< Read information on subgrids from database
@@ -53,14 +53,14 @@ private:
 	const string 	name;			//!< Name of the FK target
 	const string 	setname;		//!< Parent dataset name
 	const string 	description;	//!< FK table description
-	const source 	subgrid_source;	//!< Source of subgrids (APP/DIS/DYP)
+	const source 	subgrid_source;	//!< Source of subgrids (APP/DIS/DYP/SIA)
 	const bool		positivity;		//!< Positivity observable flag
 	const int 		nx;				//!< Number of x-points in the interpolation grid
 	const NNPDF::CommonData data;	// Reference data file
 
 	map<int,FKSubGrid*> components;	//!< Subgrid components
 
-	source parse_source(std::string const&); //!< Returns the appropriate enum for the strings "APP/DIS/DYP"
+	source parse_source(std::string const&); //!< Returns the appropriate enum for the strings "APP/DIS/DYP/SIA"
 };
 
 

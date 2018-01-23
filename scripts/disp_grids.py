@@ -4,7 +4,7 @@ import sqlite3 as lite
 import sys,os
 
 currentPath = os.path.dirname(os.path.realpath(__file__))
-variants = ["app_subgrids", "dis_subgrids", "dyp_subgrids"]
+variants = ["app_subgrids", "dis_subgrids", "dyp_subgrids", "sia_subgrids"]
 # Attempt to find tablulate
 import imp
 try:

@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
 
   // // Initialise QCD
   if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);
+  if (table.GetSource() == FKTarget::SIA) QCD::setSIAmode(true);
   QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
   QCD::initEvolgrid(table.GetNX(), table.GetXmin());
 
@@ -87,6 +88,7 @@ int main(int argc, char* argv[]) {
     {
       const double applpred = xsec[i];
       const double FKpred  = theory.GetObsCV(i);
+      cout << theory.GetObsCV(i) << endl;
       const double rel_err = abs((FKpred-applpred)/applpred);
       max_relerr = max(max_relerr, rel_err);
       cout  << setw(10) << left << i
