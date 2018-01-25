@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
             << endl;
     }
 
-  if ( max_relerr > 1E-2 && table.GetSource() != FKTarget::DYP && table.GetPositivity() == false )
+  if ( max_relerr > 1E-2 && table.GetSource() != FKTarget::DYP && table.GetPositivity() == false  && low_precision == false)
   {
     cerr << "Error: Relative error exceeds expectations - something has gone wrong in the combination"<<endl;
     exit(1);
