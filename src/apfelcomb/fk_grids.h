@@ -25,7 +25,7 @@ namespace NNPDF{
 class FKTarget
 {
 public:
-	FKTarget(NNPDF::IndexDB const& db, int const& targetID);
+	FKTarget(NNPDF::IndexDB const& db, int const& targetID, bool low_precision);
 	~FKTarget(){};
 	enum source { APP, DIS, DYP, NSR };
 

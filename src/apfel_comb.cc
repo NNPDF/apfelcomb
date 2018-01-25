@@ -47,6 +47,8 @@ int main(int argc, char* argv[]) {
 
   // Parse parameters
   Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
+  const bool low_precision = false;
+
   NNPDF::SetVerbosity(0); 
   NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
   NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", source+"_subgrids");
@@ -54,7 +56,7 @@ int main(int argc, char* argv[]) {
   // Read grid information
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");
   const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
-  FKTarget table(grid_db, target); table.ReadSubGrids(subgrid_db);
+  FKTarget table(grid_db, target, low_precision); table.ReadSubGrids(subgrid_db);
 
   // // Initialise QCD
   if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);

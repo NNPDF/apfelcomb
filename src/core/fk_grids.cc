@@ -20,14 +20,14 @@
 using namespace std;
 using namespace NNPDF;
 
-FKTarget::FKTarget(NNPDF::IndexDB const& db, int const& targetID):
+FKTarget::FKTarget(NNPDF::IndexDB const& db, int const& targetID, bool low_precision):
 id(targetID),
 name(dbquery<string>(db,id,"name")),
 setname(dbquery<string>(db,id,"setname")),
 description(dbquery<string>(db,id,"description")),
 subgrid_source(parse_source(dbquery<string>(db,id,"source"))),
 positivity(dbquery<bool>(db,id,"positivity")),
-nx(dbquery<int>(db,id,"nx")),
+nx( low_precision ? 20:dbquery<int>(db,id,"nx")), // Set all x-grids to 20 points if low_precision is set
 data(CommonData::ReadFile(dataPath() + "commondata/DATA_" + setname + ".dat", dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat"))
 {
 };
