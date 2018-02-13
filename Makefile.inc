@@ -33,8 +33,8 @@ APPLINCS = -I$(shell applgrid-config --prefix)/include
 APPLCLIBS = -L$(shell applgrid-config --prefix)/lib -lAPPLgrid 
 
 # libnnpdf
-NNPDFINCLUDE= $(shell nnpdf-config --cppflags)
-NNPDFLIBS= $(shell nnpdf-config --ldflags)
+NNPDFINCLUDE=$(shell pkg-config nnpdf --cflags)
+NNPDFLIBS=$(shell pkg-config nnpdf --libs)
 
 # gsl
 GSLINCLUDE=$(shell gsl-config --cflags)
