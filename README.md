@@ -27,11 +27,10 @@ The various data formats used in APFELcomb are described in `nnpdfcpp/data/doc/`
 APFELcomb depends on the following libraries
 
 * **APFEL** *github.com/scarrazza/apfel.git*
-* **libnnpdf** *github.com/NNPDF/libnnpdf*
+* **nnpdf** *github.com/NNPDF/nnpdf*
 * **APPLgrid 1.4.70-nnpdf** *github.com/NNPDF/external/applgrid-1.4.70-nnpdf*
 
 And data files from
-* **nnpdfcpp** *github.com/NNPDF/nnpdfcpp*
 * **nnpdf-applgrids** *github.com/NNPDF/applgrids*
 
 ## Compilation and setup 
@@ -40,8 +39,6 @@ These are mostly inferred from package-config files with the exception of
 
 - **RESULTS_PATH** *(default ./results)*
   Defines the path results are written to.
-- **DATA_PATH** *(default ../nnpdfcpp/data)*
-  Defines the path to the COMMONDATA repository.
 - **APPL_PATH** *(default ../applgrids)*
   Defines the path to the nnpdf-applgrid repository.
 - **DB_PATH** *(default ./db)*
