@@ -22,10 +22,6 @@ typedef std::chrono::system_clock::duration time_span;
 #define RESULTS_PATH run/
 #endif
 
-#ifndef DATA_PATH
-#define DATA_PATH data/
-#endif
-
 #ifndef APPL_PATH
 #define APPL_PATH ./
 #endif
@@ -56,7 +52,7 @@ namespace Colour {
         BG_BLUE     = 44,
         BG_DEFAULT  = 49
     };
-    
+
     std::ostream& operator<<(std::ostream& os, Code code);
 }
 

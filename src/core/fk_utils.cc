@@ -4,9 +4,10 @@
  * *  n.p.hartland@ed.ac.uk 03/12
  */
 
+#include "NNPDF/common.h"
+#include "NNPDF/pathlib.h"
 
 #include "apfelcomb/fk_utils.h"
-#include "NNPDF/common.h"
 
 #include "appl_grid/appl_grid.h"
 #include "appl_grid/appl_igrid.h"
@@ -46,8 +47,7 @@ std::string applPath()
 
 std::string dataPath()
 {
-  std::string dataDir(STR(DATA_PATH));
-  return dataDir;
+  return NNPDF::get_data_path();
 };
 
 std::string resultsPath()
