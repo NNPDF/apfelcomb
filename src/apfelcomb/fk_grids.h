@@ -25,7 +25,7 @@ namespace NNPDF{
 class FKTarget
 {
 public:
-	FKTarget(NNPDF::IndexDB const& db, int const& targetID, bool low_precision);
+	FKTarget(NNPDF::IndexDB const& db, int const& targetID, int const& global_nx);
 	~FKTarget(){};
 	enum source { APP, DIS, DYP, NSR };
 
@@ -105,7 +105,7 @@ protected:
 		stringstream str;
 		const vector<string> tokens = gsplit(operators, ",");
 		if (operators != "")
-		for (auto s:tokens) 
+		for (auto s:tokens)
 		{
 			const vector<string> subtoken = gsplit(s, ":");
 			if (subtoken.size() != 2)

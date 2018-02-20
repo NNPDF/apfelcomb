@@ -32,7 +32,7 @@ using namespace std;
 
 
 int main(int argc, char* argv[]) {
-  
+
   if (argc!=4)
   {
     cout << "Usage: "<<argv[0]<<" <source=app/dis/dyp> <database id> <theory id>"<<endl;
@@ -47,16 +47,15 @@ int main(int argc, char* argv[]) {
 
   // Parse parameters
   Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
-  const bool low_precision = false;
 
-  NNPDF::SetVerbosity(0); 
+  NNPDF::SetVerbosity(0);
   NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
   NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", source+"_subgrids");
 
   // Read grid information
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");
   const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
-  FKTarget table(grid_db, target, low_precision); table.ReadSubGrids(subgrid_db);
+  FKTarget table(grid_db, target, par.global_nx); table.ReadSubGrids(subgrid_db);
 
   // // Initialise QCD
   if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);
@@ -71,7 +70,7 @@ int main(int argc, char* argv[]) {
   // Compute FK table
   DisplayHR();  cout << "                        Combination                  "<<endl;
   table.GetSubgrid(iDB)->Combine(par, FK); FK->Finalise();
-  
+
   DisplayHR();  cout << "                        Verification                  "<<endl;
   APFELPDFSet apfelPDF;
   const vector<double> xsec = table.Compute(par);
@@ -98,7 +97,7 @@ int main(int argc, char* argv[]) {
             << endl;
     }
 
-  if ( max_relerr > 1E-2 && table.GetSource() != FKTarget::DYP && table.GetPositivity() == false  && low_precision == false)
+  if ( max_relerr > 1E-2 && table.GetSource() != FKTarget::DYP && table.GetPositivity() == false )
   {
     cerr << "Error: Relative error exceeds expectations - something has gone wrong in the combination"<<endl;
     exit(1);
@@ -127,7 +126,7 @@ int main(int argc, char* argv[]) {
   //  // --  Cleanup ************************************************************
 
   delete FK;
-  
+
   cout << "                      APPLComb Complete "<<endl;
   DisplayHR();
   exit(0);

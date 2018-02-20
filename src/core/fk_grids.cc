@@ -20,14 +20,14 @@
 using namespace std;
 using namespace NNPDF;
 
-FKTarget::FKTarget(NNPDF::IndexDB const& db, int const& targetID, bool low_precision):
+FKTarget::FKTarget(NNPDF::IndexDB const& db, int const& targetID, int const& global_nx):
 id(targetID),
 name(dbquery<string>(db,id,"name")),
 setname(dbquery<string>(db,id,"setname")),
 description(dbquery<string>(db,id,"description")),
 subgrid_source(parse_source(dbquery<string>(db,id,"source"))),
 positivity(dbquery<bool>(db,id,"positivity")),
-nx( low_precision ? 20:dbquery<int>(db,id,"nx")), // Set all x-grids to 20 points if low_precision is set
+nx( global_nx > 0 ? global_nx:dbquery<int>(db,id,"nx")), // Set all x-grids to the same number of points if global_nx is set
 data(CommonData::ReadFile(dataPath() + "commondata/DATA_" + setname + ".dat", dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat"))
 {
 };
@@ -54,9 +54,9 @@ vector<double> FKTarget::Compute(qcd_param const& par) const
 
 void FKTarget::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* FK) const
 {
-	for (auto subgrid : components) 
+	for (auto subgrid : components)
 		subgrid.second->Combine(par, FK);
-} 
+}
 
 
 FKTarget::source FKTarget::parse_source(string const& ss)
@@ -70,7 +70,7 @@ FKTarget::source FKTarget::parse_source(string const& ss)
 void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 {
 	const std::vector<int> subgridIDs = NNPDF::dbmatch(db, "fktarget", name);
-	for (int i : subgridIDs) 
+	for (int i : subgridIDs)
 		switch(subgrid_source)
 		{
 			case APP:
@@ -88,7 +88,7 @@ void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 		}
 
 	// Compute subgrid maps
-	int lastNdat = 0; 
+	int lastNdat = 0;
     for (auto imap: components)
     {
     	FKSubGrid* subgrid = imap.second;

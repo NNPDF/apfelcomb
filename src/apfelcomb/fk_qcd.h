@@ -8,7 +8,7 @@
 
 #include "APFEL/APFEL.h"
 #include "APFEL/APFELdev.h"
- 
+
 #include "NNPDF/common.h"
 
 namespace appl{
@@ -53,7 +53,7 @@ namespace QCD
     { 0,  1/12.0,  0,   1/12.0,       0,        0,          0, -12/120.0,   2/120.0,       0,       0,         0, -12/120.0, 2/120.0 },
     { 0,  1/12.0,  0,   1/12.0,       0,        0,          0,         0,   -1/12.0,       0,       0,         0,         0, -1/12.0 }
   };
-  
+
   // Rotation matrix from EVLN to LHA
   static const double RLHA2EVLN[14][14] = {
     { 1, 0,   0,  0,  0,  0,  0, 0,  0, 0,  0,  0,  0, 0  },
@@ -72,17 +72,17 @@ namespace QCD
     { 0, -5,  1,  1,  1,  1,  1, 0,  1, 1,  1,  1,  1, -5 }
   };
 
-  
+
   // Basis transforms
   void LHA2EVLN ( const double* LHA, NNPDF::real* EVLN );
   void EVLN2LHA ( const double* EVLN, NNPDF::real* LHA );
-  
+
   // ***************************************************************
   // ********************** Parameters *****************************
 
   // QCD data struct
   class qcd_param
-  {  
+  {
   public:
     size_t thID;      //!< Theory ID
     std::map<std::string, std::string> thMap; //!< Map of theory parameters obtained from database
@@ -91,6 +91,7 @@ namespace QCD
     double Q0;        //!< Initial Q^2
     double xiF;       //!< mu_F/Q_F
     double xiR;       //!< mu_R/Q_R
+    int    global_nx; //!< Number of x-grid points to use in all grids (default 0)
   };
 
   // Parse theory input
@@ -99,7 +100,7 @@ namespace QCD
   vector<size_t> active_flavours(qcd_param const& param);
 
   // ***************************************************************
-  
+
   // Initialise the APFEL interface
   void initQCD(qcd_param& par, const bool& positivity, const double& Q2max);
   void initEvolgrid(const int& nx, const double& xmin);
@@ -109,14 +110,14 @@ namespace QCD
   void evolpdf(const double& x, const double& Q, double* pdf);
   double alphas(const double& Q);
   double beta0();
-  
+
   // PDF Operators
   void EvolutionOperator (const bool& ppbar, const bool& photon, const int& xi,   const double& xo,    const int& fi, const double& Q, double*);
   void DerivativeOperator(const bool& ppbar, const bool& photon, const int& beta, const double& alpha, const int& j,  const double& Q, double* a);
 
   double diskernel(std::string const& obs, double const& x, double const& Q, double const& y, int const& i, int const& beta);
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y);
-  
+
   // mode setters
   void setFTDYmode(bool const& mode);
   void setSIAmode(bool const& mode);
