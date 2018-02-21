@@ -32,7 +32,7 @@ namespace QCD
   static bool HOPPET_COMPATIBILITY = false;
 
   static std::string FKObs; //!< Cached FK observable
-  
+
   static double Q0 = 0; // Initial scale  Q0
   static double QM = 0; // Maximum scale  QM
   static double QC = 0; // Cached scale   QC
@@ -42,7 +42,7 @@ namespace QCD
   void setSIAmode(bool const& mode) {SIA_mode=mode;};
 
   // *********************** BASIS ROTATION *****************************
-  
+
   // Rotate evolution basis PDFs to flavour basis
   void EVLN2LHA(const double* EVLN, NNPDF::real* LHA)
   {
@@ -53,7 +53,7 @@ namespace QCD
         LHA[i] += REVLN2LHA[i][j]*EVLN[j];
     }
   }
-  
+
   // Rotate flavour basis PDFs to evolution basis
   void LHA2EVLN(const double* LHA, NNPDF::real* EVLN)
   {
@@ -79,7 +79,7 @@ namespace QCD
 
     if (param.Q0 > APFEL::HeavyQuarkThreshold(4)) afl.push_back(11); // T15
     if (param.Q0 > APFEL::HeavyQuarkThreshold(5)) afl.push_back(12); // T24
-    if (param.Q0 > APFEL::HeavyQuarkThreshold(6)) afl.push_back(13); // T35   
+    if (param.Q0 > APFEL::HeavyQuarkThreshold(6)) afl.push_back(13); // T35
     return afl;
   }
 
@@ -106,6 +106,9 @@ namespace QCD
     // Set scale variation parameters
     param.xiF = atof(param.thMap["XIF"].c_str());
     param.xiR = atof(param.thMap["XIR"].c_str());
+
+    // Set number of global x-grid points
+    param.global_nx = NNPDF::dbquery<int>(theoryDB, param.thID,"global_nx");
 
     return;
   }
@@ -135,7 +138,7 @@ namespace QCD
     const std::time_t start_time = std::chrono::system_clock::to_time_t(st);
     FK.AddTag(FKHeader::VERSIONS, "GenTime", ctime(&start_time));
   }
-  
+
   // *********************** EVOLUTON FUNCTIONS *****************************
 
   // Initialise QCD according to parameters
@@ -144,8 +147,8 @@ namespace QCD
     // Disable TMCs in positivity observables
     if (positivity)
     {
-      par.thMap["TMC"] = '0'; 
-      par.thMap["XIF"] = '1'; par.xiF = 1; 
+      par.thMap["TMC"] = '0';
+      par.thMap["XIF"] = '1'; par.xiF = 1;
       par.thMap["XIR"] = '1'; par.xiR = 1;
     }
 
@@ -154,7 +157,7 @@ namespace QCD
     // Init Q0
     QCD::Q0 = par.Q0;
     QCD::QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
-    if ( fabs(par.xiF - 1.0) > 1E-6) 
+    if ( fabs(par.xiF - 1.0) > 1E-6)
         HOPPET_COMPATIBILITY = true;
     else
         HOPPET_COMPATIBILITY = false;
@@ -166,9 +169,9 @@ namespace QCD
     APFEL::SetEpsilonTruncation(1E-1);
     APFEL::SetFastEvolution(false);
     APFEL::LockGrids(false);
-    APFEL::EnableEvolutionOperator(true); 
+    APFEL::EnableEvolutionOperator(true);
 
-    if (SIA_mode) 
+    if (SIA_mode)
     {
       APFEL::SetPDFSet("kretzer");
       APFEL::SetTimeLikeEvolution(true);
@@ -179,7 +182,7 @@ namespace QCD
 
     return;
   }
- 
+
   // Initialise APFEL for evolution factors
   // Note here nx is the number of x-points to be output to the Fk table
   // Therefore it doesn't include x=1. This is added manually in this function
@@ -188,7 +191,7 @@ namespace QCD
     // Reset cache
     QC = 0;
     double* xg = new double[nx+1];
-    std::cout << " Initialising  "<< nx << " points starting from x = " << xmin <<std::endl; 
+    std::cout << " Initialising  "<< nx << " points starting from x = " << xmin <<std::endl;
 
 
     // Special requirements for FTDY in APFEL
@@ -208,14 +211,14 @@ namespace QCD
     }
     else
     { // Normal mode
-      const double ymin = XGrid::appl_fy(0.99*xmin); 
+      const double ymin = XGrid::appl_fy(0.99*xmin);
       const double ymax = XGrid::appl_fy(1.0);
-      
+
       // Populate grid
       for (int i=0; i<=nx; i++)
         xg[i] = XGrid::appl_fx(ymin + ((ymax-ymin)/((double) nx))*i);
     }
-    
+
     // Just in case of numerical trouble
     xg[nx] = 1;
 
@@ -223,13 +226,13 @@ namespace QCD
         APFEL::SetQLimits( Q0, 15000 );
     else
         APFEL::SetQLimits( Q0, QM );
-    
+
     // Set evolution operator parameters
     APFEL::SetFastEvolution(false);
     APFEL::LockGrids(false);
-    APFEL::EnableEvolutionOperator(true); 
-    APFEL::SetNumberOfGrids(1);           
-    APFEL::SetExternalGrid(1,nx,3,xg);  
+    APFEL::EnableEvolutionOperator(true);
+    APFEL::SetNumberOfGrids(1);
+    APFEL::SetExternalGrid(1,nx,3,xg);
 
     // Initialise
     APFEL::EnableWelcomeMessage(false);
@@ -239,12 +242,12 @@ namespace QCD
 
     // Needed to join the grids
     APFEL::EvolveAPFEL(Q0,Q0);
-    
+
     delete[] xg;
     return;
   }
 
-  void initPDF(std::string const& PDFSet, int const& i) 
+  void initPDF(std::string const& PDFSet, int const& i)
   {
     APFEL::SetPDFSet(PDFSet);
     APFEL::SetReplica(i);
@@ -287,7 +290,7 @@ namespace QCD
     const double beta0=(11.*nc-2.*nf)/(6.*twopi);
     return beta0;
   }
-  
+
   // PDF evolution+rotation operator
   // This functions computes the operators A such that
   // PDF(fo,xo,Q) = \sum_xi,fi A(fo,fi,xo,xi)*N(fi,xi,Q_0)
@@ -332,7 +335,7 @@ namespace QCD
     const int pt = 0;
     const int nf = 5;
     updateEvol(Q);
-    
+
     for(int fo=0; fo<13; fo++)
       da[fo] = 0;
 
