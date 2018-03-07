@@ -41,7 +41,7 @@ GSLINCLUDE=$(shell gsl-config --cflags)
 GSLLIBS=$(shell gsl-config --libs)
 
 # additional libraries to be included 
-PRJLDFLAGS = $(LHAPDFLIBS) $(APPLCLIBS) $(ROOTLIBS) $(APFELLIBS) $(NNPDFLIBS) $(GSLLIBS) -lsqlite3 -std=c++14
+PRJLDFLAGS = $(LHAPDFLIBS) $(APPLCLIBS) $(ROOTLIBS) $(APFELLIBS) $(NNPDFLIBS) $(GSLLIBS) -lsqlite3
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
-PRJCXXFLAGS = -Wall -O3 -std=c++14 $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE) $(GSLINCLUDE)
+PRJCXXFLAGS = -Wall -O3   $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE) $(GSLINCLUDE)
