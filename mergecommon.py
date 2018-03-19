@@ -6,7 +6,8 @@ from subprocess import call
 
 source_dict = { 'APP': 'app_subgrids',
                 'DIS': 'dis_subgrids',
-                'DYP': 'dyp_subgrids'}
+                'DYP': 'dyp_subgrids',
+                'SIA': 'sia_subgrids'}
 
 class bcolors:
     HEADER = '\033[95m'

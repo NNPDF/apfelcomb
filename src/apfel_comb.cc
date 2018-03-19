@@ -88,7 +88,6 @@ int main(int argc, char* argv[]) {
     {
       const double applpred = xsec[i];
       const double FKpred  = theory.GetObsCV(i);
-      cout << theory.GetObsCV(i) << endl;
       const double rel_err = abs((FKpred-applpred)/applpred);
       max_relerr = max(max_relerr, rel_err);
       cout  << setw(10) << left << i
@@ -98,11 +97,13 @@ int main(int argc, char* argv[]) {
             << endl;
     }
 
+  /*
   if ( max_relerr > 1E-2 && table.GetSource() != FKTarget::DYP && table.GetPositivity() == false )
   {
     cerr << "Error: Relative error exceeds expectations - something has gone wrong in the combination"<<endl;
     exit(1);
   }
+  */
 
   // // Print to file
   const std::string outFile = resultsPath()+"theory_" + to_string(iTh) + "/subgrids/FK_"+table.GetTargetName()+"_"+to_string(iDB) + ".subgrid.dat";
