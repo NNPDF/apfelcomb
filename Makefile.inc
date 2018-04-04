@@ -5,7 +5,7 @@
 ################################################################################
 
 
-CXX = gcc
+CXX = g++
 SHELL=/bin/bash
 
 # APPLCOMB paths
@@ -43,4 +43,4 @@ GSLLIBS=$(shell gsl-config --libs)
 PRJLDFLAGS = $(LHAPDFLIBS) $(APPLCLIBS) $(ROOTLIBS) $(APFELLIBS) $(NNPDFLIBS) $(GSLLIBS) -lsqlite3
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
-PRJCXXFLAGS = -Wall -O3   $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE) $(GSLINCLUDE)
+PRJCXXFLAGS = -Wall -O3 $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE) $(GSLINCLUDE)
