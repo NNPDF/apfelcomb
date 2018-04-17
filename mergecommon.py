@@ -36,10 +36,10 @@ def get_subgrids(source, target, cur):
 
 def get_missing(subgrids, thID, target):
     missing_subgrids = []
-    subgridPath = get_subgrid_path(thID) 
+    subgridPath = get_subgrid_path(thID)
     for subgrid in subgrids:
         constituent = subgridPath+"FK_"+target+"_"+str(subgrid[0])+".subgrid.dat"
-        if os.path.isfile(constituent) != True: 
+        if os.path.isfile(constituent) != True:
             missing_subgrids.append(subgrid[0])
     return missing_subgrids
 
@@ -61,8 +61,10 @@ def mergegrid(target, source, thID, cur):
     missing_subgrids  = get_missing(subgrids, thID, target)
     mergeConstituents = get_constituents(subgrids, thID, target)
 
-    if len(missing_subgrids) == 0:
-        os.system("FKmerge2 " +mergeTarget + ' ' + mergeConstituents)  
+    if os.path.isfile(mergeTarget) == True:
+        print(target + bcolors.OKGREEN + " is already merged" + bcolors.ENDC)
+    elif len(missing_subgrids) == 0:
+        os.system("FKmerge2 " +mergeTarget + ' ' + mergeConstituents)
         print(target + bcolors.OKGREEN + " successfully generated!" + bcolors.ENDC)
     else:
         for missing in missing_subgrids:
