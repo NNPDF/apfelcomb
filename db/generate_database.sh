@@ -4,3 +4,4 @@ cd $(dirname $0)
 if [ ! -f apfelcomb.db ]; then
     sqlite3 apfelcomb.db < apfelcomb.dat
 fi
+
