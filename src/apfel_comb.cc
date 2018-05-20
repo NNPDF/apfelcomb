@@ -54,7 +54,13 @@ int main(int argc, char* argv[]) {
 
   // Read grid information
   const std::string fktarget = NNPDF::dbquery<string>(subgrid_db,iDB,"fktarget");
-  const int target = NNPDF::dbmatch(grid_db, "name", fktarget)[0];
+  const std::vector<int> grid_matches = NNPDF::dbmatch(grid_db, "name", fktarget);
+
+  if ( fktarget == "" ) // A bit clumsy, doing better would require modifying dbquery to throw an error when no match is found
+    throw std::runtime_error("Cannot find subgrid "+to_string(iDB)+" in apfelcomb database");
+  if ( grid_matches.size() == 0 )
+    throw std::runtime_error("Cannot find FK target "+fktarget+" in apfelcomb database");
+  const int target = grid_matches[0];
   FKTarget table(grid_db, target, par.global_nx); table.ReadSubGrids(subgrid_db);
 
   // // Initialise QCD
