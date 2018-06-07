@@ -25,21 +25,24 @@ using NNPDF::FKHeader;
 
 namespace QCD
 {
-
-  // Set static DIS mode
-  static bool FTDY_mode = false;
-  static bool SIA_mode = false;
-  static bool HOPPET_COMPATIBILITY = false;
-
-  static std::string FKObs; //!< Cached FK observable
-
   static double Q0 = 0; // Initial scale  Q0
   static double QM = 0; // Maximum scale  QM
   static double QC = 0; // Cached scale   QC
 
+  // Required if hadronic scale variations are being performed
+  static bool HOPPET_COMPATIBILITY = false;
+
+  static std::string FKObs; //!< Cached FK observable
+
+  // Process specific modes
+  static bool DIS_mode  = false;
+  static bool FTDY_mode = false;
+  static bool SIA_mode  = false;
+
   // Set modes
+  void setDISmode (bool const& mode) {DIS_mode =mode;};
   void setFTDYmode(bool const& mode) {FTDY_mode=mode;};
-  void setSIAmode(bool const& mode) {SIA_mode=mode;};
+  void setSIAmode (bool const& mode) {SIA_mode =mode;};
 
   // *********************** BASIS ROTATION *****************************
 
@@ -139,7 +142,7 @@ namespace QCD
     FK.AddTag(FKHeader::VERSIONS, "GenTime", ctime(&start_time));
   }
 
-  // *********************** EVOLUTON FUNCTIONS *****************************
+  // *********************** EVOLUTION FUNCTIONS *****************************
 
   // Initialise QCD according to parameters
   void initQCD(qcd_param& par, const bool& positivity, const double& Q2max)
@@ -178,7 +181,10 @@ namespace QCD
     }
 
     // Start APFEL
-    APFEL::InitializeAPFEL_DIS();
+    if (DIS_mode)
+        APFEL::InitializeAPFEL_DIS();
+    else
+        APFEL::InitializeAPFEL();
 
     return;
   }
@@ -242,7 +248,10 @@ namespace QCD
     APFEL::EnableWelcomeMessage(false);
 
     // Start APFEL
-    APFEL::InitializeAPFEL_DIS();
+    if (DIS_mode)
+        APFEL::InitializeAPFEL_DIS();
+    else
+        APFEL::InitializeAPFEL();
 
     // Needed to join the grids
     APFEL::EvolveAPFEL(Q0,Q0);

@@ -119,6 +119,7 @@ namespace QCD
   double disobs(std::string const& obs, double const& x, double const& Q, double const& y);
 
   // mode setters
+  void setDISmode (bool const& mode);
   void setFTDYmode(bool const& mode);
-  void setSIAmode(bool const& mode);
+  void setSIAmode (bool const& mode);
 }
