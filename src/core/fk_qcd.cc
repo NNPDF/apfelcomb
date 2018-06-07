@@ -186,37 +186,41 @@ namespace QCD
   // Initialise APFEL for evolution factors
   // Note here nx is the number of x-points to be output to the Fk table
   // Therefore it doesn't include x=1. This is added manually in this function
-  void initEvolgrid(int const& nx, double const& xmin)
+  // The arguments are the number of desired x-points, the minimum x-value and
+  // the `a` variable used in the grid point distribution (see XGrid::Generator)
+  void initEvolgrid(const int nx, const double xmin, const double a_factor)
   {
     // Reset cache
     QC = 0;
     double* xg = new double[nx+1];
     std::cout << " Initialising  "<< nx << " points starting from x = " << xmin <<std::endl;
 
+    // Initialise x-grid generator
+    const XGrid::Generator xgen(a_factor);
 
     // Special requirements for FTDY in APFEL
     if (FTDY_mode)
     {
       // Requires two x-grid points below x-min
-      xg[0] = 0.9*xmin;
+      xg[0] = 0.90*xmin;
       xg[1] = 0.95*xmin;
 
-      const double ymin = XGrid::appl_fy(xmin);
-      const double ymax = XGrid::appl_fy(1.0);
+      const double ymin = xgen.appl_fy(xmin);
+      const double ymax = xgen.appl_fy(1.0);
 
       // Populate grid
       for (int i=2; i<=nx; i++)
-        xg[i] = XGrid::appl_fx(ymin + ((ymax-ymin)/((double) nx))*(i-2));
+        xg[i] = xgen.appl_fx(ymin + ((ymax-ymin)/((double) nx))*(i-2));
 
     }
     else
     { // Normal mode
-      const double ymin = XGrid::appl_fy(0.99*xmin);
-      const double ymax = XGrid::appl_fy(1.0);
+      const double ymin = xgen.appl_fy(0.99*xmin);
+      const double ymax = xgen.appl_fy(1.0);
 
       // Populate grid
       for (int i=0; i<=nx; i++)
-        xg[i] = XGrid::appl_fx(ymin + ((ymax-ymin)/((double) nx))*i);
+        xg[i] = xgen.appl_fx(ymin + ((ymax-ymin)/((double) nx))*i);
     }
 
     // Just in case of numerical trouble

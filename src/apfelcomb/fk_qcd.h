@@ -103,7 +103,7 @@ namespace QCD
 
   // Initialise the APFEL interface
   void initQCD(qcd_param& par, const bool& positivity, const double& Q2max);
-  void initEvolgrid(const int& nx, const double& xmin);
+  void initEvolgrid(const int nx, const double xmin, const double a_factor = 6);
   void initPDF(std::string const& setname, int const& i);
 
   // APFEL PDF access functions
