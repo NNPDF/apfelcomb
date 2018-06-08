@@ -23,21 +23,21 @@ con = None
 
 try:
     con = lite.connect(currentPath+'/../db/apfelcomb.db')
-    cur = con.cursor()    
+    cur = con.cursor()
     cur.execute('SELECT SQLITE_VERSION()')
     data = cur.fetchone()
-    
+
     for variant in variants:
-        print "********** " + variant + " **********"  
+        print("********** " + variant + " **********")
         cur.execute('SELECT * FROM '+variant+' ORDER BY id' )
         col_names = [cn[0] for cn in cur.description]
         rows = cur.fetchall()
-        print tabulate(rows, headers=col_names)
-    
+        print(tabulate(rows, headers=col_names))
+
 except lite.Error, e:
     print "Error %s:" % e.args[0]
     sys.exit(1)
-    
+
 finally:
     if con:
         con.close()
