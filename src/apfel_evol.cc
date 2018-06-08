@@ -37,7 +37,8 @@ vector<double> generate_xgrid( const int nx,
   return xg;
 };
 
-// Generates a (exp-log) list of nq2 Q2 points between q2min and q2max.
+// Generates a list of nq2 Q2 points between q2min and q2max.
+// Distributed as linear in tau = log( log( Q2 / lambda2 ) )
 vector<double> generate_q2grid( const int nq2,
                                 const double q2min,
                                 const double q2max,
@@ -45,11 +46,12 @@ vector<double> generate_q2grid( const int nq2,
                               )
 {
     vector<double> q2grid;
-    const double lnQmin = log( q2min / lambda2 );
-    const double lnQmax = log( q2max / lambda2 );
+    const double tau_min   = log( log( q2min / lambda2 ));
+    const double tau_max   = log( log( q2max / lambda2 ));
+    const double delta_tau = (tau_max - tau_min) /( (double) nq2 - 1);
 
-    for (int iq2 = 1; iq2 <= nq2; iq2++)
-        q2grid.push_back(lambda2*exp(lnQmin*exp( (iq2-1)/(nq2-1.0) * log(lnQmax/lnQmin))));
+    for (int iq2 = 0; iq2 < nq2; iq2++)
+        q2grid.push_back(lambda2 * exp(exp( tau_min + iq2*delta_tau)));
     return q2grid;
 }
 
@@ -112,7 +114,8 @@ int main(int argc, char* argv[]) { if ( argc != 2 )
 
   const int nx_in   = 195;
   const int nx_out  = 100;
-  const double xmin =1E-9;
+
+  const double xmin = 1E-9;
   const double xmed = 0.1;
   const double xmax = 1.0;
 
@@ -120,13 +123,14 @@ int main(int argc, char* argv[]) { if ( argc != 2 )
   QCD::initQCD(qcdPar, false, Q2Max);
   QCD::initEvolgrid(nx_in, xmin, 30);
 
-  //for (auto i: generate_xgrid(nx, xmin, xmed, xmax))
-  //    std::cout << i << std::endl;
+  // Generate target x-grid
+  const vector<double> xg_out = generate_xgrid(nx_out, xmin, xmed, xmax);
 
-  for (auto i: generate_q2subgrids(qcdPar, 50, Q2Min, Q2Max))
+  // Generate and loop over subgrids
+  for (auto q2_out: generate_q2subgrids(qcdPar, 50, Q2Min, Q2Max))
   {
       std::cout << std::endl;
-      for (auto j : i)
+      for (auto j : q2_out)
         std::cout <<  "  "<< sqrt(j) <<"  " << std::endl;
   }
 
