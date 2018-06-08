@@ -13,6 +13,8 @@
 #include <cstdio>
 #include <map>
 
+#include "apfelcomb/fk_evol.h"
+
 #include "apfelcomb/fk_utils.h"
 #include "apfelcomb/fk_pdf.h"
 #include "apfelcomb/fk_qcd.h"
@@ -126,9 +128,15 @@ int main(int argc, char* argv[]) { if ( argc != 2 )
   // Generate target x-grid
   const vector<double> xg_out = generate_xgrid(nx_out, xmin, xmed, xmax);
 
+
   // Generate and loop over subgrids
   for (auto q2_out: generate_q2subgrids(qcdPar, 50, Q2Min, Q2Max))
   {
+      const int nfl     = 14; // All for now
+      const int npoints = q2_out.size()*nx_out*nfl;
+      const dataInfoRaw subgrid_info = {npoints, 0, "EVOL", "PDF"};
+      const EVL::EvolutionData ed(subgrid_info, xg_out, q2_out);
+
       std::cout << std::endl;
       for (auto j : q2_out)
         std::cout <<  "  "<< sqrt(j) <<"  " << std::endl;
