@@ -30,6 +30,11 @@
 
 using namespace std;
 
+NNPDF::CommonData ReadCommonData(string const& setname)
+{
+    return NNPDF::CommonData::ReadFile(dataPath() + "commondata/DATA_" + setname + ".dat",
+                                       dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat");
+}
 
 int main(int argc, char* argv[]) {
 
@@ -60,8 +65,12 @@ int main(int argc, char* argv[]) {
     throw std::runtime_error("Cannot find subgrid "+to_string(iDB)+" in apfelcomb database");
   if ( grid_matches.size() == 0 )
     throw std::runtime_error("Cannot find FK target "+fktarget+" in apfelcomb database");
+
   const int target = grid_matches[0];
-  FKTarget table(grid_db, target, par.global_nx); table.ReadSubGrids(subgrid_db);
+  const string setname = NNPDF::dbquery<string>(grid_db,target,"name");
+  const NNPDF::CommonData cd = ReadCommonData(setname);
+  FKTarget table(cd, grid_db, target, par.global_nx);
+  table.ReadSubGrids(subgrid_db);
 
   // // Initialise QCD
   if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);
