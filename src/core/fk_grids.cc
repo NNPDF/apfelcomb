@@ -20,7 +20,7 @@
 using namespace std;
 using namespace NNPDF;
 
-FKTarget::FKTarget(CommonData const& cd, NNPDF::IndexDB const& db, int const& targetID, int const& global_nx):
+FKTarget::FKTarget(NNPDF::IndexDB const& db, int const& targetID, int const& global_nx):
 id(targetID),
 name(dbquery<string>(db,id,"name")),
 setname(dbquery<string>(db,id,"setname")),
@@ -28,10 +28,8 @@ description(dbquery<string>(db,id,"description")),
 subgrid_source(parse_source(dbquery<string>(db,id,"source"))),
 positivity(dbquery<bool>(db,id,"positivity")),
 nx( global_nx > 0 ? global_nx:dbquery<int>(db,id,"nx")), // Set all x-grids to the same number of points if global_nx is set
-data(cd)
+data(CommonData::ReadFile(dataPath() + "commondata/DATA_" + setname + ".dat", dataPath() + "commondata/systypes/SYSTYPE_" + setname + "_DEFAULT.dat"))
 {
-    if (cd.GetSetName() != name)
-        throw runtime_error("CommonData set name and database set name do not match");
 };
 
 void FKTarget::Splash(ostream& o) const
