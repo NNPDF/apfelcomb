@@ -18,8 +18,8 @@ namespace EVL
 
         // Fill data kinematics
         int iDat = 0;
-        for (auto x : xgrid)
-            for (auto q2 : q2grid)
+        for (auto q2 : q2grid)
+            for (auto x : xgrid)
                 for (int f=0; f < nf; f++)
                 {
                     fData[iDat] = 0;
