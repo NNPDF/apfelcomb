@@ -65,6 +65,7 @@ int main(int argc, char* argv[]) {
 
   // // Initialise QCD
   if (table.GetSource() == FKTarget::DYP) QCD::setFTDYmode(true);
+  if (table.GetSource() == FKTarget::DIS) QCD::setDISmode(true);
   QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
   QCD::initEvolgrid(table.GetNX(), table.GetXmin());
 

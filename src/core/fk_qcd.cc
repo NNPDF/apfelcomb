@@ -25,21 +25,24 @@ using NNPDF::FKHeader;
 
 namespace QCD
 {
-
-  // Set static DIS mode
-  static bool FTDY_mode = false;
-  static bool SIA_mode = false;
-  static bool HOPPET_COMPATIBILITY = false;
-
-  static std::string FKObs; //!< Cached FK observable
-
   static double Q0 = 0; // Initial scale  Q0
   static double QM = 0; // Maximum scale  QM
   static double QC = 0; // Cached scale   QC
 
+  // Required if hadronic scale variations are being performed
+  static bool HOPPET_COMPATIBILITY = false;
+
+  static std::string FKObs; //!< Cached FK observable
+
+  // Process specific modes
+  static bool DIS_mode  = false;
+  static bool FTDY_mode = false;
+  static bool SIA_mode  = false;
+
   // Set modes
+  void setDISmode (bool const& mode) {DIS_mode =mode;};
   void setFTDYmode(bool const& mode) {FTDY_mode=mode;};
-  void setSIAmode(bool const& mode) {SIA_mode=mode;};
+  void setSIAmode (bool const& mode) {SIA_mode =mode;};
 
   // *********************** BASIS ROTATION *****************************
 
@@ -139,7 +142,7 @@ namespace QCD
     FK.AddTag(FKHeader::VERSIONS, "GenTime", ctime(&start_time));
   }
 
-  // *********************** EVOLUTON FUNCTIONS *****************************
+  // *********************** EVOLUTION FUNCTIONS *****************************
 
   // Initialise QCD according to parameters
   void initQCD(qcd_param& par, const bool& positivity, const double& Q2max)
@@ -178,7 +181,10 @@ namespace QCD
     }
 
     // Start APFEL
-    APFEL::InitializeAPFEL_DIS();
+    if (DIS_mode)
+        APFEL::InitializeAPFEL_DIS();
+    else
+        APFEL::InitializeAPFEL();
 
     return;
   }
@@ -186,37 +192,41 @@ namespace QCD
   // Initialise APFEL for evolution factors
   // Note here nx is the number of x-points to be output to the Fk table
   // Therefore it doesn't include x=1. This is added manually in this function
-  void initEvolgrid(int const& nx, double const& xmin)
+  // The arguments are the number of desired x-points, the minimum x-value and
+  // the `a` variable used in the grid point distribution (see XGrid::Generator)
+  void initEvolgrid(const int nx, const double xmin, const double a_factor)
   {
     // Reset cache
     QC = 0;
     double* xg = new double[nx+1];
     std::cout << " Initialising  "<< nx << " points starting from x = " << xmin <<std::endl;
 
+    // Initialise x-grid generator
+    const XGrid::Generator xgen(a_factor);
 
     // Special requirements for FTDY in APFEL
     if (FTDY_mode)
     {
       // Requires two x-grid points below x-min
-      xg[0] = 0.9*xmin;
+      xg[0] = 0.90*xmin;
       xg[1] = 0.95*xmin;
 
-      const double ymin = XGrid::appl_fy(xmin);
-      const double ymax = XGrid::appl_fy(1.0);
+      const double ymin = xgen.appl_fy(xmin);
+      const double ymax = xgen.appl_fy(1.0);
 
       // Populate grid
       for (int i=2; i<=nx; i++)
-        xg[i] = XGrid::appl_fx(ymin + ((ymax-ymin)/((double) nx))*(i-2));
+        xg[i] = xgen.appl_fx(ymin + ((ymax-ymin)/((double) nx))*(i-2));
 
     }
     else
     { // Normal mode
-      const double ymin = XGrid::appl_fy(0.99*xmin);
-      const double ymax = XGrid::appl_fy(1.0);
+      const double ymin = xgen.appl_fy(0.99*xmin);
+      const double ymax = xgen.appl_fy(1.0);
 
       // Populate grid
       for (int i=0; i<=nx; i++)
-        xg[i] = XGrid::appl_fx(ymin + ((ymax-ymin)/((double) nx))*i);
+        xg[i] = xgen.appl_fx(ymin + ((ymax-ymin)/((double) nx))*i);
     }
 
     // Just in case of numerical trouble
@@ -238,7 +248,10 @@ namespace QCD
     APFEL::EnableWelcomeMessage(false);
 
     // Start APFEL
-    APFEL::InitializeAPFEL_DIS();
+    if (DIS_mode)
+        APFEL::InitializeAPFEL_DIS();
+    else
+        APFEL::InitializeAPFEL();
 
     // Needed to join the grids
     APFEL::EvolveAPFEL(Q0,Q0);

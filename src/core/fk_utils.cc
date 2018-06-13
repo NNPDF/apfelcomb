@@ -121,6 +121,7 @@ std::string setupDir(int const& theoryID)
   mkdir(resultsPath().c_str(),0777);
   mkdir(theoryDir.str().c_str(),0777);
   mkdir((theoryDir.str() + "subgrids/").c_str(),0777);
+  mkdir((theoryDir.str() + "evolution/").c_str(),0777);
   mkdir((theoryDir.str() + "fastkernel/").c_str(),0777);
   return theoryDir.str();
 }
