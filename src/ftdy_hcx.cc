@@ -17,16 +17,17 @@ using namespace std;
 
 
 int main(int argc, char* argv[]) {
-  
-  for (int i=13; i<FTDY::nsets; i++)
-  {
-      cout << "Computing: "<<FTDY::setnames[i]<< "  ("<<i<<"/"<<FTDY::nsets<<")"<<endl;
 
-      const std::string commonfile = dataPath() + "commondata/DATA_" + FTDY::setnames[i] + ".dat";
-      const std::string hcxfile = "./data/FTDY/"+FTDY::setnames[i]+".hcx";
-
-      APFEL::ComputeHardCrossSectionsDY(commonfile,hcxfile);
-  }
+    //  Currently out of action
+//  for (int i=13; i<FTDY::nsets; i++)
+//  {
+//      cout << "Computing: "<<FTDY::setnames[i]<< "  ("<<i<<"/"<<FTDY::nsets<<")"<<endl;
+//
+//      const std::string commonfile = dataPath() + "commondata/DATA_" + FTDY::setnames[i] + ".dat";
+//      const std::string hcxfile = "./data/FTDY/"+FTDY::setnames[i]+".hcx";
+//
+//      APFEL::ComputeHardCrossSectionsDY(commonfile,hcxfile);
+//  }
 
   exit(0);
 }

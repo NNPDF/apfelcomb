@@ -25,7 +25,7 @@ double trgPrec(int const& i, NNPDF::CommonData const& cd)
   if (abs(cd.GetUncE(i)/cd.GetData(i)) > 1E-5)
     targetPrec = std::min(targetPrec, abs(cd.GetUncE(i)/cd.GetData(i))/5.0);
   if (targetPrec == std::numeric_limits<double>::infinity())
-    targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);  
+    targetPrec = std::min(targetPrec, abs(cd.GetCorE(i)/cd.GetData(i))/10.0);
   if (targetPrec == std::numeric_limits<double>::infinity())
   {
     targetPrec = 0.001;
@@ -36,7 +36,7 @@ double trgPrec(int const& i, NNPDF::CommonData const& cd)
 
 
 int main(int argc, char* argv[]) {
-  
+
   if (argc!=3)
   {
     cout << "Usage: "<<argv[0]<<" <grid id> <theory id>"<<endl;
@@ -51,13 +51,14 @@ int main(int argc, char* argv[]) {
   // Parse parameters
   Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
 
-  NNPDF::SetVerbosity(0); appl::setVerbose(false);
+  NNPDF::SetVerbosity(0);
   NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
   const string source = "app";
   NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", source+"_subgrids");
 
   // Read grid information
-  FKTarget table(grid_db, iDB); table.ReadSubGrids(subgrid_db);
+  FKTarget table(grid_db, iDB, par.global_nx);
+  table.ReadSubGrids(subgrid_db);
 
   // // Initialise QCD
   QCD::initQCD(par, table.GetPositivity(), table.GetQ2max());
@@ -108,7 +109,7 @@ int main(int argc, char* argv[]) {
   //           << setw(15) << left << rel_err
   //           << endl;
   //   }
-  
+
   cout << "                      OptGrid Complete "<<endl;
   DisplayHR();
 
