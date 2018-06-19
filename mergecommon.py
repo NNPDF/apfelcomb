@@ -3,6 +3,7 @@ from __future__ import print_function
 import sqlite3 as lite
 import sys,os
 from subprocess import call
+import NNPDF as nnpath
 
 source_dict = { 'APP': 'app_subgrids',
                 'DIS': 'dis_subgrids',
@@ -37,9 +38,18 @@ def get_subgrids(source, target, cur):
 def get_missing(subgrids, thID, target):
     missing_subgrids = []
     subgridPath = get_subgrid_path(thID)
+    dataPath = nnpath.get_data_path()
+    theoryPath = dataPath+"theory_"+str(thID)
+    if os.path.isfile(datapath) != True:
+        print("datapath of NNPDF doesn't exist")
+        exit(1)
+    if os.path.isfile(theoryPath) != True:
+        os.system("vp-get theoryID "+str(thID))
+
     for subgrid in subgrids:
         constituent = subgridPath+"FK_"+target+"_"+str(subgrid[0])+".subgrid.dat"
-        if os.path.isfile(constituent) != True:
+        constituent2 = theoryPath+"/fastkernel/FK_"+target+"_"+str(subgrid[0])+".dat"
+        if os.path.isfile(constituent) != True or os.path.isfile(constituent2) != True:
             missing_subgrids.append(subgrid[0])
     return missing_subgrids
 
