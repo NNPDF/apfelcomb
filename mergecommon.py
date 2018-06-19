@@ -40,10 +40,10 @@ def get_missing(subgrids, thID, target):
     subgridPath = get_subgrid_path(thID)
     dataPath = nnpath.get_data_path()
     theoryPath = dataPath+"theory_"+str(thID)
-    if os.path.isfile(datapath) != True:
+    if not os.path.exists(dataPath):
         print("datapath of NNPDF doesn't exist")
         exit(1)
-    if os.path.isfile(theoryPath) != True:
+    if not os.path.exists(theoryPath):
         os.system("vp-get theoryID "+str(thID))
 
     for subgrid in subgrids:
