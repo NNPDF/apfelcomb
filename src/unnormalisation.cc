@@ -46,6 +46,8 @@ int main(int argc, char* argv[]) {
   const std::string cDataPath = dataPath() + "/commondata/DATA_"+setName+".dat";
   const std::string sysTypePath = dataPath() + "/commondata/systypes/SYSTYPE_"+setName+"_DEFAULT.dat";
 
+  const std::string F2DPath = dataPath() + "/F2D_unnormalization/F2D_"+setName+".dat";
+
   cout<<"dataPath() = "<<dataPath()<<endl;
   // Read CommonData
   NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(cDataPath, sysTypePath);
@@ -79,6 +81,8 @@ int main(int argc, char* argv[]) {
 
   double x,Q,Q2,y;
 
+  /*
+  //Check kinematics
   cout<<"double x[]={";
   for (int i=0; i<cd.GetNData(); i++)
   {    x=cd.GetKinematics(i,0);
@@ -93,8 +97,10 @@ int main(int argc, char* argv[]) {
     Q=sqrt(Q2);
     cout<<Q<<", ";
   }
-  cout<<"};"<<endl;
+  cout<<"};"<<endl;*/
 
+  std::ofstream outstream(F2DPath.c_str());
+  int Nrep=100;
   for (int i=0; i<cd.GetNData(); i++)
   {
     x=cd.GetKinematics(i,0);
@@ -102,66 +108,18 @@ int main(int argc, char* argv[]) {
     Q=sqrt(Q2);
     y=cd.GetKinematics(i,2);
 
+    QCD::initPDF("NNPDF31_nnlo_as_0118.LHgrid",0);
     F2_D = QCD::disobs("DIS_F2D",x,Q,y);//Deuterium structure function
+    outstream<<1./F2_D<<"  ";
 
-    cout<<"==================================="<<endl;
-    cout<<"F2_D(x="<<x<<",Q="<<Q<<") = "<<F2_D<<endl;
-    cout<<"==================================="<<endl;
+    for(int j=1; j<=Nrep; j++)
+    {
+      QCD::initPDF("NNPDF31_nnlo_as_0118.LHgrid",j);
+      F2_D = QCD::disobs("DIS_F2D",x,Q,y);//Deuterium structure function
+      outstream<<1./F2_D<<" ";
+    }
+    outstream<<endl;
   }
-  /*=======================================
-  *=======================================
-  *--------Unnormalization code-----------
-  *=======================================
-  *=======================================
-  */
-  /*
-  string s = "NNPDF30_nnlo_as_0118";
-  const vector<LHAPDF::PDF*> dist = LHAPDF::mkPDFs(s);
-
-  // Retrieve evolution parameters
-  const int    pto   = dist[0]->orderQCD();
-  //const int    Nrep  = 100;//dist.size();
-  const double Qref  = 91.1876;
-  const double asref = dist[0]->alphasQ(Qref);
-  const double mc    = dist[0]->quarkThreshold(4);
-  const double mb    = dist[0]->quarkThreshold(5);
-  const double mt    = dist[0]->quarkThreshold(6);
-
-  // NNPDF-specific settings (Uncertanties are standard deviations and
-  //central values averages).
-  APFEL::SetPDFEvolution("truncated");
-  APFEL::SetAlphaEvolution("expanded");
-
-  // Settings
-  //APFEL::SetMassScheme("FONLL-B");
-  APFEL::SetProcessDIS("NC");
-  APFEL::SetPerturbativeOrder(pto);
-  APFEL::SetPDFSet(s + ".LHgrid");
-  APFEL::SetAlphaQCDRef(asref,Qref);
-  APFEL::SetPoleMasses(mc,mb,mt);
-  APFEL::SetMaxFlavourPDFs(5);
-  APFEL::SetMaxFlavourAlpha(5);
-
-  APFEL::SetTargetDIS("isoscalar"); // Deuteron case
-  APFEL::SetProjectileDIS("electron");
-  APFEL::SetTargetDIS("proton");
-
-  // Initializes integrals on the grids
-  APFEL::SetQLimits(0.5,1000);
-  APFEL::InitializeAPFEL_DIS();
-
-  double Q=100,x=0.1;
-  APFEL::SetReplica(0);
-  APFEL::ComputeStructureFunctionsAPFEL(Q,Q);
-
-  cout<<"==================================="<<endl;
-  cout<<"F2_D(x="<<x<<",Q="<<Q<<") = "<<APFEL::F2total(x)<<endl;
-  cout<<"==================================="<<endl;
-  */
-  /*=======================================
-  *---------------------------------------
-  *=======================================
-  */
-
+  outstream.close();
   exit(0);
 }
