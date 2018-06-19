@@ -46,8 +46,6 @@ int main(int argc, char* argv[]) {
   const std::string cDataPath = dataPath() + "/commondata/DATA_"+setName+".dat";
   const std::string sysTypePath = dataPath() + "/commondata/systypes/SYSTYPE_"+setName+"_DEFAULT.dat";
 
-  const std::string F2DPath = dataPath() + "/F2D_unnormalization/F2D_"+setName+".dat";
-
   cout<<"dataPath() = "<<dataPath()<<endl;
   // Read CommonData
   NNPDF::CommonData cd = NNPDF::CommonData::ReadFile(cDataPath, sysTypePath);
@@ -99,27 +97,38 @@ int main(int argc, char* argv[]) {
   }
   cout<<"};"<<endl;*/
 
-  std::ofstream outstream(F2DPath.c_str());
-  int Nrep=100;
-  for (int i=0; i<cd.GetNData(); i++)
+
+  int Nrep=100;//100
+  const string pdfset="NNPDF31_nnlo_as_0118";
+  for(int nrep=0; nrep<=Nrep; nrep++)
   {
-    x=cd.GetKinematics(i,0);
-    Q2=cd.GetKinematics(i,1);
-    Q=sqrt(Q2);
-    y=cd.GetKinematics(i,2);
-
-    QCD::initPDF("NNPDF31_nnlo_as_0118.LHgrid",0);
-    F2_D = QCD::disobs("DIS_F2D",x,Q,y);//Deuterium structure function
-    outstream<<1./F2_D<<"  ";
-
-    for(int j=1; j<=Nrep; j++)
+    const std::string F2DPath = dataPath() + "/theory_" + to_string(tTh) + "/F2D_unnormalization/F2D_"+setName+"_"+to_string(nrep)+".dat";
+    std::ofstream outstream(F2DPath.c_str());
+    outstream<<"*******************************************************************************************"<<endl;
+    outstream<<"SetName: "<<setName<<endl;
+    outstream<<"Author: Rabah Abdul Khalek rabah.khalek@gmail.com"<<endl;
+    outstream<<"Date: 2018"<<endl;
+    outstream<<"CodesUsed: None"<<endl;
+    outstream<<"TheoryInput: theoryID "<<iTh<<endl;
+    outstream<<"PDFset: "<<pdfset<<endl;
+    outstream<<"Warnings: None"<<endl;
+    outstream<<"Replica (LHAPDF): "<<nrep<<endl;
+    outstream<<"Description: Unnormalization corrections for F2_A/F2_D nuclear ratios"<<endl;
+    outstream<<"*******************************************************************************************"<<endl;
+    for (int ndat=0; ndat<cd.GetNData(); ndat++)
     {
-      QCD::initPDF("NNPDF31_nnlo_as_0118.LHgrid",j);
+      x=cd.GetKinematics(ndat,0);
+      Q2=cd.GetKinematics(ndat,1);
+      Q=sqrt(Q2);
+      y=cd.GetKinematics(ndat,2);
+
+      QCD::initPDF(pdfset+".LHgrid",nrep);
       F2_D = QCD::disobs("DIS_F2D",x,Q,y);//Deuterium structure function
-      outstream<<1./F2_D<<" ";
+      outstream<<1./F2_D<<"\t"<<0<<endl;
     }
     outstream<<endl;
+    outstream.close();
   }
-  outstream.close();
+
   exit(0);
 }
