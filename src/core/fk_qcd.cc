@@ -154,6 +154,10 @@ namespace QCD
 
     APFEL::SetParam(par.thMap);
 
+    // Init Scale Variation mode
+    const bool DGLAP_SCALEVAR = atoi(par.thMap["EScaleVar"].c_str());
+    APFEL::SetScaleVariationProcedure((int)!DGLAP_SCALEVAR);
+
     // Init Q0
     QCD::Q0 = par.Q0;
     QCD::QM = std::max(par.xiF, par.xiR)*std::sqrt(Q2max);
