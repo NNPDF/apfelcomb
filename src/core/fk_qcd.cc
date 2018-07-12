@@ -109,6 +109,9 @@ namespace QCD
 
     // Set number of global x-grid points
     param.global_nx = NNPDF::dbquery<int>(theoryDB, param.thID,"global_nx");
+    // Set DGLAP scale variation flag
+    param.EScaleVar = NNPDF::dbquery<bool>(theoryDB, param.thID,"EScaleVar");
+    std::cout << " EScaleVar: " << param.EScaleVar << std::endl;
 
     return;
   }
@@ -155,8 +158,7 @@ namespace QCD
     APFEL::SetParam(par.thMap);
 
     // Init Scale Variation mode
-    const bool DGLAP_SCALEVAR = atoi(par.thMap["EScaleVar"].c_str());
-    APFEL::SetScaleVariationProcedure((int)!DGLAP_SCALEVAR);
+    APFEL::SetScaleVariationProcedure((int)!par.EScaleVar);
 
     // Init Q0
     QCD::Q0 = par.Q0;

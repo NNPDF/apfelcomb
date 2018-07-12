@@ -92,6 +92,7 @@ namespace QCD
     double xiF;       //!< mu_F/Q_F
     double xiR;       //!< mu_R/Q_R
     int    global_nx; //!< Number of x-grid points to use in all grids (default 0)
+    bool   EScaleVar; //!< Flag to enable scale variation in evolution
   };
 
   // Parse theory input
