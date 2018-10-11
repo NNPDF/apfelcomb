@@ -1,0 +1,21 @@
+#!/bin/bash
+./unnormalisation dis 48 203 nNMCCAD nCTEQ15_1_1
+./unnormalisation dis 49 203 nNMCCD nCTEQ15_1_1
+./unnormalisation dis 50 203 nNMCHED nCTEQ15_1_1
+./unnormalisation dis 51 203 nNMCLID nCTEQ15_1_1
+./unnormalisation dis 52 203 nE139AGD nCTEQ15_1_1
+./unnormalisation dis 53 203 nE139ALD nCTEQ15_1_1
+./unnormalisation dis 54 203 nE139AUD nCTEQ15_1_1
+./unnormalisation dis 55 203 nE139BED nCTEQ15_1_1
+./unnormalisation dis 56 203 nE139CAD nCTEQ15_1_1
+./unnormalisation dis 57 203 nE139CD nCTEQ15_1_1
+./unnormalisation dis 58 203 nE139FED nCTEQ15_1_1
+./unnormalisation dis 59 203 nE139HED nCTEQ15_1_1
+./unnormalisation dis 60 203 nEMCC nCTEQ15_1_1
+./unnormalisation dis 61 203 nEMCCA nCTEQ15_1_1
+./unnormalisation dis 62 203 nEMCCAD nCTEQ15_1_1
+./unnormalisation dis 63 203 nEMCCD nCTEQ15_1_1
+./unnormalisation dis 64 203 nEMCCUD nCTEQ15_1_1
+./unnormalisation dis 65 203 nEMCFED nCTEQ15_1_1
+./unnormalisation dis 66 203 nEMCSND nCTEQ15_1_1
+./unnormalisation dis 67 203 nEMCFE nCTEQ15_1_1
