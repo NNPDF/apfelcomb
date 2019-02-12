@@ -30,6 +30,22 @@
 
 using namespace std;
 
+extern "C" {
+    extern struct {
+      double ad, au, as, ac;
+    } eft_;
+}
+
+void SetupAPFELeftCoeff(int theoryid)
+{
+  if (theoryid == 182)
+  {
+    eft_.ad = 1;
+    eft_.au = 1;
+    eft_.as = 1;
+    eft_.ac = 0;
+  }
+}
 
 int main(int argc, char* argv[]) {
 
