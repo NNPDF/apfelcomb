@@ -61,6 +61,9 @@ int main(int argc, char* argv[]) {
   const int iTh = atoi(argv[3]);
   setupDir(iTh);
 
+  // Assign eft coeff
+  SetupAPFELeftCoeff(iTh);
+
   // Parse parameters
   Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
 
