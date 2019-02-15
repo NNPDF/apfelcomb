@@ -38,13 +38,426 @@ extern "C" {
 
 void SetupAPFELeftCoeff(int theoryid)
 {
-  if (theoryid == 182)
-  {
-    eft_.ad = 1;
-    eft_.au = 1;
-    eft_.as = 1;
-    eft_.ac = 0;
-  }
+  double Lambda2=pow(1000.0,2.0);
+    // ad = as; au = ac
+    if (theoryid == 181) // BP1
+      {
+	eft_.ad = -0.26/Lambda2;
+	eft_.au = +0.22/Lambda2;
+	eft_.as = eft_.ad;
+	eft_.ac = eft_.au;
+      } 
+    else if (theoryid == 182) // BP2
+      {
+	eft_.ad = +0.06/Lambda2;
+	eft_.au = -0.08/Lambda2;
+	eft_.as = eft_.ad;
+	eft_.ac = eft_.au;
+      }
+    else if (theoryid == 183) // BP3
+      {
+	eft_.ad = 0.0;
+	eft_.au = +0.16/Lambda2;
+	eft_.as = eft_.ad;
+	eft_.ac = eft_.au;
+      }
+    else if (theoryid == 184) // BP4
+      {
+	eft_.ad = -0.19/Lambda2;
+	eft_.au = -0.04/Lambda2;
+	eft_.as = eft_.ad;
+	eft_.ac = eft_.au;
+      }
+    else if (theoryid == 191) // BP1b
+      {
+	eft_.ad = +0.10/Lambda2;
+	eft_.au = -0.28/Lambda2;
+	eft_.as = eft_.ad;
+	eft_.ac = eft_.au;
+      }
+    else if (theoryid == 192) // BP2b
+      {
+	eft_.ad = -0.01/Lambda2;
+	eft_.au = +0.10/Lambda2;
+	eft_.as = eft_.ad;
+	eft_.ac = eft_.au;
+      }
+    else if (theoryid == 193) // BP3b
+      {
+	eft_.ad = +0.18/Lambda2;
+	eft_.au = -0.04/Lambda2;
+	eft_.as = eft_.ad;
+	eft_.ac = eft_.au;
+      }
+  // ad = -as; au = -ac
+    else if (theoryid == 185) // BP5
+      {
+	eft_.ad = -0.48/Lambda2;
+	eft_.au = +0.57/Lambda2;
+	eft_.as = - eft_.ad;
+	eft_.ac = - eft_.au;
+      }
+    else if (theoryid == 186) // BP6
+      {
+	eft_.ad = +0.43/Lambda2;
+	eft_.au = -0.61/Lambda2;
+	eft_.as = - eft_.ad;
+	eft_.ac = - eft_.au;
+      }
+    else if (theoryid == 187) // BP7
+      {
+	eft_.ad = +0.09/Lambda2;
+	eft_.au = +0.15/Lambda2;
+	eft_.as = - eft_.ad;
+	eft_.ac = - eft_.au;
+      }
+    else if (theoryid == 188) // BP8
+      {
+	eft_.ad = +0.11/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = - eft_.ad;
+	eft_.ac = - eft_.au;
+      }
+    else if (theoryid == 194) // BP11
+      {
+	eft_.ad = -0.75/Lambda2;
+	eft_.au = +0.95/Lambda2;
+	eft_.as = - eft_.ad;
+	eft_.ac = - eft_.au;
+      }
+    else if (theoryid == 195) // BP12
+      {
+	eft_.ad = +0.7/Lambda2;
+	eft_.au = -1.0/Lambda2;
+	eft_.as = - eft_.ad;
+	eft_.ac = - eft_.au;
+      }
+  // au = as = -ad = -ac
+    else if (theoryid == 196) // BP9b
+      {
+	eft_.ad = +0.51/Lambda2;
+	eft_.au = - eft_.ad;
+	eft_.as = - eft_.ad;
+	eft_.ac = eft_.ad;
+      }
+    else if (theoryid == 189) // BP9
+      {
+	eft_.ad = +0.33/Lambda2;
+	eft_.au = - eft_.ad;
+	eft_.as = - eft_.ad;
+	eft_.ac = eft_.ad;
+      }
+    else if (theoryid == 197) // BP10b
+      {
+	eft_.ad = -0.75/Lambda2;
+	eft_.au = - eft_.ad;
+	eft_.as = - eft_.ad;
+	eft_.ac = eft_.ad;
+      }
+    else if (theoryid == 190) // BP10
+      {
+	eft_.ad = -0.495/Lambda2;
+	eft_.au = - eft_.ad;
+	eft_.as = - eft_.ad;
+	eft_.ac = eft_.ad;
+      }
+  // ad = 0, au = 0
+    else if (theoryid == 198) // BP13
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 1.45/Lambda2;
+	eft_.ac = 2.8/Lambda2;
+      }
+    else if (theoryid == 199) // BP14
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = -3.2/Lambda2;
+	eft_.ac = 0.5/Lambda2;
+      }
+    else if (theoryid == 201) // BP16
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 1.2/Lambda2;
+	eft_.ac = 1.0/Lambda2;
+      }
+  // au = -0.0672 - 1.32 ad
+    else if (theoryid == 202) // BP17
+      {
+	eft_.ad = -1.7/Lambda2;
+	eft_.au = - 0.0672 - 1.32*eft_.ad;
+	eft_.as = +1.7/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 203) // BP18
+      {
+	eft_.ad = -0.3/Lambda2;
+	eft_.au = -0.0672 - 1.32*eft_.ad;
+	eft_.as = -3.2/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 204) // BP19
+      {
+	eft_.ad = +0.5/Lambda2;
+	eft_.au = - 0.0672 - 1.32*eft_.ad;
+	eft_.as = 0.0;
+	eft_.ac = +3.0/Lambda2;
+      }
+    else if (theoryid == 205) // BP20
+      {
+	eft_.ad = -1.8/Lambda2;
+	eft_.au = - 0.0672 - 1.32*eft_.ad;
+	eft_.as = 0.0;
+	eft_.ac = -1.2/Lambda2;
+      }
+  // ad = as = ac = 0
+    else if (theoryid == 206) // BP21
+      {
+	eft_.ad = 0.0;
+	eft_.au = -0.18/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 207) // BP22
+      {
+	eft_.ad = 0.0;
+	eft_.au = +0.17/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 214)  // BP29
+      {
+	eft_.ad = 0.0;
+	eft_.au = -1.0/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 215) // BP30
+      {
+	eft_.ad = 0.0;
+	eft_.au = +1.0/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 216) // BP31
+      {
+	eft_.ad = 0.0;
+	eft_.au = -0.5/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 217) // BP32
+      {
+	eft_.ad = 0.0;
+	eft_.au = +0.5/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 218) // BP33
+      {
+	eft_.ad = 0.0;
+	eft_.au = -0.3/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 219) // BP34
+      {
+	eft_.ad = 0.0;
+	eft_.au = +0.3/Lambda2;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+  //  au = as = ac = 0
+    else if (theoryid == 208) // BP23
+      {
+	eft_.ad = -0.22/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 209) // BP24
+      {
+	eft_.ad = +0.10/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 220) // BP35
+      {
+	eft_.ad = -1.0/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 221) // BP36
+      {
+	eft_.ad = +1.0/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 222) // BP37
+      {
+	eft_.ad = -0.5/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 223) // BP38
+      {
+	eft_.ad = +0.5/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 224) // BP39
+      {
+	eft_.ad = -0.3/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 225) // BP40
+      {
+	eft_.ad = +0.3/Lambda2;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = 0.0;
+      }
+  //  au = ad = ac = 0
+    else if (theoryid == 210) // BP25
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = -2.6/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 211) // BP26
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = +0.4/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 226) // BP41
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = -0.4/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 227) // BP42
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = +2.6/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 228) // BP43
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = -1.0/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 229) // BP44
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = +1.0/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 230) // BP45
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = -0.7/Lambda2;
+	eft_.ac = 0.0;
+      }
+    else if (theoryid == 231) // BP46
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.7/Lambda2;
+	eft_.ac = 0.0;
+      }
+  // au = ad = as = 0
+    else if (theoryid == 212) // BP27
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = -0.2/Lambda2;
+      }
+    else if (theoryid == 213) // BP28
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = +0.8/Lambda2;
+      }
+    else if (theoryid == 232) // BP47
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = -1.0/Lambda2;
+      }
+    else if (theoryid == 233) // BP48
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = +1.0/Lambda2;
+      }
+    else if (theoryid == 234) // BP49
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = -2.0/Lambda2;
+      }
+    else if (theoryid == 235) // BP50
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = +2.0/Lambda2;
+      }
+    else if (theoryid == 200) // BP15
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = -0.5/Lambda2;
+      }
+    else if (theoryid == 236) // BP51
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = +0.5/Lambda2;
+      }
+    else if (theoryid == 237) // BP52
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = -0.8/Lambda2;
+      }
+    else if (theoryid == 238) // BP53
+      {
+	eft_.ad = 0.0;
+	eft_.au = 0.0;
+	eft_.as = 0.0;
+	eft_.ac = +0.2/Lambda2;
+      }
+    else 
+      {
+	cerr << "Wrong theory ID!" << endl;
+      }
 }
 
 int main(int argc, char* argv[]) {
