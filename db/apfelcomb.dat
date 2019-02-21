@@ -297,6 +297,9 @@ INSERT INTO dis_subgrids VALUES(64,'LHeC160NCEM','DIS_NCE',NULL);
 INSERT INTO dis_subgrids VALUES(65,'LHeC160CCEM','DIS_CCE',NULL);
 INSERT INTO dis_subgrids VALUES(66,'LHeC760NCEM','DIS_NCE',NULL);
 INSERT INTO dis_subgrids VALUES(67,'LHeC760CCEM','DIS_CCE',NULL);
+INSERT INTO dis_subgrids VALUES(68,'HERACOMB_SIGMARED_C','DIS_NCP_CH',NULL);
+INSERT INTO dis_subgrids VALUES(69,'HERACOMB_SIGMARED_B','DIS_NCE_BT',NULL);
+
 CREATE TABLE IF NOT EXISTS "dyp_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`fktarget`	TEXT NOT NULL,
@@ -514,8 +517,10 @@ INSERT INTO grids VALUES(177,'LHeC160NCEM','LHeC160NCEM','LHeC NC pseudo-data lo
 INSERT INTO grids VALUES(178,'LHeC160CCEM','LHeC160CCEM','LHeC CC pseudo-data low energy',50,0,'DIS');
 INSERT INTO grids VALUES(179,'LHeC760NCEM','LHeC760NCEM','LHeC NC pseudo-data electron',50,0,'DIS');
 INSERT INTO grids VALUES(180,'LHeC760CCEM','LHeC760CCEM','LHeC CC pseudo-data electron',50,0,'DIS');
+INSERT INTO grids VALUES(181,'HERACOMB_SIGMARED_C','HERACOMB_SIGMARED_C','Combined HERA charm reduced cross section',50,0,'DIS');
+INSERT INTO grids VALUES(182,'HERACOMB_SIGMARED_B','HERACOMB_SIGMARED_B','Combined HERA bottom reduced cross section',50,0,'DIS');
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('dis_subgrids',47);
+INSERT INTO sqlite_sequence VALUES('dis_subgrids',69);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',172);
+INSERT INTO sqlite_sequence VALUES('grids',181);
 COMMIT;
