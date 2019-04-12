@@ -59,7 +59,6 @@ INSERT INTO app_subgrids VALUES(430,'CMSDY2D11','CMSDY2D11-BIN3_rapidity.root',-
 INSERT INTO app_subgrids VALUES(440,'CMSDY2D11','CMSDY2D11-BIN4_rapidity.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(450,'CMSDY2D11','CMSDY2D11-BIN5_rapidity.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(460,'CMSDY2D11','CMSDY2D11-BIN6_rapidity.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
-INSERT INTO app_subgrids VALUES(470,'HIGGSPOS','H_y_mh2_5gev2_forward_amcatnlo.root',-1,0,0,0,'1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(480,'TTBARTOT','ttbar-xsectot-7tev.root',-1,0,0,0,'1','*:4,N:14.0');
 INSERT INTO app_subgrids VALUES(490,'TTBARTOT','ttbar-xsectot-8tev.root',-1,0,0,0,'1','*:2,N:14.0');
 INSERT INTO app_subgrids VALUES(500,'CDFZRAP','CDF_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
@@ -364,7 +363,7 @@ INSERT INTO grids VALUES(13,'CMSWMASY47FB','CMSWMASY47FB_WM','CMS 47FB W_m asymm
 INSERT INTO grids VALUES(14,'LHCBW36PB','LHCBW36PB','LHCb 36PB W rapidity',25,0,'APP');
 INSERT INTO grids VALUES(15,'LHCBZ940PB','LHCBZ940PB','LHCb 940PB Z rapidity',40,0,'APP');
 INSERT INTO grids VALUES(16,'CMSDY2D11','CMSDY2D11','CMS 2011 double-differential Drell-Yan',50,0,'APP');
-INSERT INTO grids VALUES(17,'HIGGSPOS','HIGGSPOS','Higgs Positivity',30,1,'APP');
+INSERT INTO grids VALUES(17,'POSHIGGS','POSHIGGS','Higgs Positivity',30,1,'APP');
 INSERT INTO grids VALUES(18,'TTBARTOT','TTBARTOT',' LHC 7 TeV total ttbar',15,0,'APP');
 INSERT INTO grids VALUES(19,'CDFZRAP','CDFZRAP','CDF Z Rapidity',40,0,'APP');
 INSERT INTO grids VALUES(20,'D0ZRAP','D0ZRAP','D0 Z Rapidity',35,0,'APP');
