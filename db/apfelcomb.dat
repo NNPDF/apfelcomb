@@ -59,7 +59,6 @@ INSERT INTO app_subgrids VALUES(430,'CMSDY2D11','CMSDY2D11-BIN3_rapidity.root',-
 INSERT INTO app_subgrids VALUES(440,'CMSDY2D11','CMSDY2D11-BIN4_rapidity.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(450,'CMSDY2D11','CMSDY2D11-BIN5_rapidity.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(460,'CMSDY2D11','CMSDY2D11-BIN6_rapidity.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
-INSERT INTO app_subgrids VALUES(470,'POSHIGGS','H_y_mh2_5gev2_forward_amcatnlo.root',-1,0,0,0,'1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(480,'TTBARTOT','ttbar-xsectot-7tev.root',-1,0,0,0,'1','*:4,N:14.0');
 INSERT INTO app_subgrids VALUES(490,'TTBARTOT','ttbar-xsectot-8tev.root',-1,0,0,0,'1','*:2,N:14.0');
 INSERT INTO app_subgrids VALUES(500,'CDFZRAP','CDF_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
