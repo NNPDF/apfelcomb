@@ -704,7 +704,7 @@ INSERT INTO grids VALUES(212,'ATLAS_SINGLETOP_TCH_DIFF_8TEV_T_RAP_NORM','ATLAS_S
 INSERT INTO grids VALUES(213,'ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM','ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM_NUM','ATLAS single antitop y norm differential cross section 8 TeV',20,0,'APP');
 INSERT INTO grids VALUES(214,'ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM','ATLAS_SINGLETOP_TCH_DIFF_8TEV_TBAR_RAP_NORM_DEN','ATLAS single antitop y norm differential cross section 8 TeV',20,0,'APP');
 INSERT INTO grids VALUES(215,'CMS_TTB_DIFF_13TEV_2016_LJ_TPT','CMS_TTB_DIFF_13TEV_2016_LJ_TPT','CMS ttbar pT top differential distribution 13 TeV, lepton+jet',20,0,'APP');
-INSERT INTO grids VALUES(215,'CMS_TTB_DIFF_13TEV_2016_LJ_TRAP','CMS_TTB_DIFF_13TEV_2016_LJ_TRAP','CMS ttbar y top differential distribution 13 TeV, lepton+jet',20,0,'APP');
+INSERT INTO grids VALUES(216,'CMS_TTB_DIFF_13TEV_2016_LJ_TRAP','CMS_TTB_DIFF_13TEV_2016_LJ_TRAP','CMS ttbar y top differential distribution 13 TeV, lepton+jet',20,0,'APP');
 INSERT INTO grids VALUES(217,'CMS_TTB_DIFF_13TEV_2016_LJ_TTM','CMS_TTB_DIFF_13TEV_2016_LJ_TTM','CMS ttbar mtt differential distribution 13 TeV, lepton+jet',20,0,'APP');
 INSERT INTO grids VALUES(218,'CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM','CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM_NUM','CMS normalised ttbar pT top differential distribution 13 TeV, lepton+jet',20,0,'APP');
 INSERT INTO grids VALUES(219,'CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM','CMS_TTB_DIFF_13TEV_2016_LJ_TPTNORM_DEN','CMS normalised ttbar pT top differential distribution 13 TeV, lepton+jet',20,0,'APP');
