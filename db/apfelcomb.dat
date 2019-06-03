@@ -2,7 +2,7 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS "app_subgrids" (
 	`id`	INTEGER,
-	`fktarget`      	TEXT,
+	`fktarget`      TEXT,
 	`applgrid`	TEXT,
 	`fnlobin`	NUMERIC,
 	`ptmin`	NUMERIC,
