@@ -322,6 +322,16 @@ INSERT INTO dis_subgrids VALUES(77,'nFNALXED','DIS_F2P',NULL);
 INSERT INTO dis_subgrids VALUES(78,'nFNALPBD','DIS_F2P',NULL);
 INSERT INTO dis_subgrids VALUES(79,'eRHIC_20x100AUD','DIS_F2P',NULL);
 INSERT INTO dis_subgrids VALUES(80,'eRHIC_20x100CD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(81,'eRHIC_20x75AUD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(82,'eRHIC_20x75CD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(83,'eRHIC_20x50AUD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(84,'eRHIC_20x50CD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(85,'eRHIC_5x100AUD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(86,'eRHIC_5x100CD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(87,'eRHIC_5x75AUD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(88,'eRHIC_5x75CD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(89,'eRHIC_5x50AUD','DIS_F2P',NULL);
+INSERT INTO dis_subgrids VALUES(90,'eRHIC_5x50CD','DIS_F2P',NULL);
 CREATE TABLE IF NOT EXISTS "dyp_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`fktarget`	TEXT NOT NULL,
@@ -564,8 +574,18 @@ INSERT INTO grids VALUES(202,'nFNALXED','nFNALXED','Fermilab DIS off Xenon norma
 INSERT INTO grids VALUES(203,'nFNALPBD','nFNALPBD','Fermilab DIS off Lead normalised by Deuterium',50,0,'DIS');
 INSERT INTO grids VALUES(204,'eRHIC_20x100AUD','eRHIC_20x100AUD','EIC DIS off Gold normalised by Deuterium',50,0,'DIS');
 INSERT INTO grids VALUES(205,'eRHIC_20x100CD','eRHIC_20x100CD','EIC DIS off Carbon normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(206,'eRHIC_20x75AUD','eRHIC_20x75AUD','EIC DIS off Gold normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(207,'eRHIC_20x75CD','eRHIC_20x75CD','EIC DIS off Carbon normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(208,'eRHIC_20x50AUD','eRHIC_20x50AUD','EIC DIS off Gold normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(209,'eRHIC_20x50CD','eRHIC_20x50CD','EIC DIS off Carbon normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(210,'eRHIC_5x100AUD','eRHIC_5x100AUD','EIC DIS off Gold normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(211,'eRHIC_5x100CD','eRHIC_5x100CD','EIC DIS off Carbon normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(212,'eRHIC_5x75AUD','eRHIC_5x75AUD','EIC DIS off Gold normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(213,'eRHIC_5x75CD','eRHIC_5x75CD','EIC DIS off Carbon normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(214,'eRHIC_5x50AUD','eRHIC_5x50AUD','EIC DIS off Gold normalised by Deuterium',50,0,'DIS');
+INSERT INTO grids VALUES(215,'eRHIC_5x50CD','eRHIC_5x50CD','EIC DIS off Carbon normalised by Deuterium',50,0,'DIS');
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('dis_subgrids',80);
+INSERT INTO sqlite_sequence VALUES('dis_subgrids',90);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',205);
+INSERT INTO sqlite_sequence VALUES('grids',215);
 COMMIT;

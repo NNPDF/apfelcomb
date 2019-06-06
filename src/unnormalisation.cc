@@ -72,13 +72,13 @@ int main(int argc, char* argv[]) {
 
   double x,Q,Q2,y;
 
-  string command1 = "mkdir "+dataPath() + "/theory_" + to_string(iTh) + "/F2D_unnormalization/"+setName;
+  string command1 = "mkdir /Users/jacobethier/Documents/apfelcomb/results/theory_" + to_string(iTh) + "/F2D_unnormalization/"+setName;
   system(command1.c_str());
 
   int Nrep=100;//100
   for(int nrep=0; nrep<1; nrep++)
   {
-    std::string F2DPath = dataPath() + "/theory_" + to_string(iTh) + "/F2D_unnormalization/"+setName+"/F2D_"+setName+"_"+to_string(nrep)+".dat";
+    std::string F2DPath = "/Users/jacobethier/Documents/apfelcomb/results/theory_" + to_string(iTh) + "/F2D_unnormalization/"+setName+"/F2D_"+setName+"_"+to_string(nrep)+".dat";
     std::ofstream outstream(F2DPath.c_str());
     outstream<<"*******************************************************************************************"<<endl;
     outstream<<"SetName: "<<setName<<endl;
@@ -97,8 +97,6 @@ int main(int argc, char* argv[]) {
     if(FOR_APFELGRID)
     outstream<<endl;
 
-
-
     for (int ndat=0; ndat<cd.GetNData(); ndat++)
     {
 
@@ -111,20 +109,15 @@ int main(int argc, char* argv[]) {
       }
       else
       {
+
         x=cd.GetKinematics(ndat,0);
         Q2=cd.GetKinematics(ndat,1);
         Q=sqrt(Q2);
         y=cd.GetKinematics(ndat,2);
 
-        QCD::initPDF(pdfset+".LHgrid",nrep);
+        QCD::initPDF(pdfset,nrep);
         string obs;
-        //if(setName== nE139AGD nE139ALD nE139AUD nE139BED nE139CAD nE139CD  nE139FED nE139HED
-        //if(setName.find("nE139"))
-        if(setName == "nE139AGD" || setName ==  "nE139ALD" || setName == "nE139AUD" ||
-           setName == "nE139BED" || setName ==  "nE139CAD" || setName == "nE139CD"  ||
-           setName == "nE139FED" || setName == "nE139HED")
-        F2_D = QCD::disobs("DIS_NCE_D",x,Q,y);//Deuterium Cross section
-        else
+
         F2_D = QCD::disobs("DIS_F2D",x,Q,y);//Deuterium structure function
 
         if(F2_D == 0)
