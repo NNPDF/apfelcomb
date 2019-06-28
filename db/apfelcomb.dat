@@ -404,6 +404,8 @@ INSERT INTO app_subgrids VALUES(1978,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','a
 INSERT INTO app_subgrids VALUES(1979,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','aMCfast_obs_14.root',-1,0,1,0,'1',NULL);
 INSERT INTO app_subgrids VALUES(1980,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_DEN','sigmatot.root',-1,0,1,0,'1','*:7');
 INSERT INTO app_subgrids VALUES(1981,'CMS_1JET_8TEV','applgrid-cms-incjets-arxiv-1609.05331-xsec000.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1982,'STAR_WRATIO_2017_WP','STAR_WP_leptrap.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1983,'STAR_WRATIO_2017_WM','STAR_WM_leptrap.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1',NULL);
 
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -740,9 +742,11 @@ INSERT INTO grids VALUES(236,'CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORM','CMS_TTB_DIF
 INSERT INTO grids VALUES(237,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(238,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_DEN','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(239,'CMS_1JET_8TEV','CMS_1JET_8TEV','CMS double differential single inclusive jets 8 TeV',50,0,'APP');
+INSERT INTO grids VALUES(240,'STAR_WRATIO_2017','STAR_WRATIO_2017_WP','STAR W+/W- ratio 510 GeV',25,0,'APP');
+INSERT INTO grids VALUES(241,'STAR_WRATIO_"017','STAR_WRATIO_2017_WM','STAR W+/W- ratio 510 GeV',25,0,'APP');
 
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',53);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',239);
+INSERT INTO sqlite_sequence VALUES('grids',241);
 COMMIT;
