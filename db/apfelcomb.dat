@@ -404,6 +404,20 @@ INSERT INTO app_subgrids VALUES(1978,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','a
 INSERT INTO app_subgrids VALUES(1979,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','aMCfast_obs_14.root',-1,0,1,0,'1',NULL);
 INSERT INTO app_subgrids VALUES(1980,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_DEN','sigmatot.root',-1,0,1,0,'1','*:7');
 INSERT INTO app_subgrids VALUES(1981,'CMS_1JET_8TEV','applgrid-cms-incjets-arxiv-1609.05331-xsec000.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1982,'ATLAS_2JET_7TEV_R04','atlas-atlas-dijets-arxiv-1312.3524-xsec000.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1983,'ATLAS_2JET_7TEV_R04','atlas-atlas-dijets-arxiv-1312.3524-xsec001.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1984,'ATLAS_2JET_7TEV_R04','atlas-atlas-dijets-arxiv-1312.3524-xsec002.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1985,'ATLAS_2JET_7TEV_R04','atlas-atlas-dijets-arxiv-1312.3524-xsec003.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1986,'ATLAS_2JET_7TEV_R04','atlas-atlas-dijets-arxiv-1312.3524-xsec004.root',-1,0,0,0,'1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1987,'ATLAS_2JET_7TEV_R04','atlas-atlas-dijets-arxiv-1312.3524-xsec005.root',-1,0,0,0,'1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1988,'ATLAS_2JET_7TEV_R06','atlas-atlas-dijets-arxiv-1312.3524-xsec006.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1989,'ATLAS_2JET_7TEV_R06','atlas-atlas-dijets-arxiv-1312.3524-xsec007.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1990,'ATLAS_2JET_7TEV_R06','atlas-atlas-dijets-arxiv-1312.3524-xsec008.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ',NULL);
+INSERT INTO app_subgrids VALUES(1991,'ATLAS_2JET_7TEV_R06','atlas-atlas-dijets-arxiv-1312.3524-xsec009.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1992,'ATLAS_2JET_7TEV_R06','atlas-atlas-dijets-arxiv-1312.3524-xsec010.root',-1,0,0,0,'1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1993,'ATLAS_2JET_7TEV_R06','atlas-atlas-dijets-arxiv-1312.3524-xsec011.root',-1,0,0,0,'1 1 1 1',NULL);
+
+
 
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -740,9 +754,11 @@ INSERT INTO grids VALUES(236,'CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORM','CMS_TTB_DIF
 INSERT INTO grids VALUES(237,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(238,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_DEN','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(239,'CMS_1JET_8TEV','CMS_1JET_8TEV','CMS double differential single inclusive jets 8 TeV',50,0,'APP');
+INSERT INTO grids VALUES(240,'ATLAS_2JET_7TEV_R04','ATLAS_2JET_7TEV_R04','ATLAS double differential dijet distributions at 7 TeV R=0.4',30,0,'APP');
+INSERT INTO grids VALUES(241,'ATLAS_2JET_7TEV_R06','ATLAS_2JET_7TEV_R06','ATLAS double differential dijet distributions at 7 TeV R=0.6',30,0,'APP');
 
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',53);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',239);
+INSERT INTO sqlite_sequence VALUES('grids',241);
 COMMIT;
