@@ -754,8 +754,8 @@ INSERT INTO grids VALUES(236,'CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORM','CMS_TTB_DIF
 INSERT INTO grids VALUES(237,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(238,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_DEN','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(239,'CMS_1JET_8TEV','CMS_1JET_8TEV','CMS double differential single inclusive jets 8 TeV',50,0,'APP');
-INSERT INTO grids VALUES(240,'ATLAS_2JET_7TEV_R04','ATLAS_2JET_7TEV_R04','ATLAS double differential dijet distributions at 7 TeV R=0.4',30,0,'APP');
-INSERT INTO grids VALUES(241,'ATLAS_2JET_7TEV_R06','ATLAS_2JET_7TEV_R06','ATLAS double differential dijet distributions at 7 TeV R=0.6',30,0,'APP');
+INSERT INTO grids VALUES(240,'ATLAS_2JET_7TEV_R04','ATLAS_2JET_7TEV_R04','ATLAS double differential dijet distributions at 7 TeV R=0.4',20,0,'APP');
+INSERT INTO grids VALUES(241,'ATLAS_2JET_7TEV_R06','ATLAS_2JET_7TEV_R06','ATLAS double differential dijet distributions at 7 TeV R=0.6',20,0,'APP');
 
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',53);
