@@ -418,6 +418,8 @@ INSERT INTO app_subgrids VALUES(1992,'ATLAS_1JET_8TEV_R04','atlas-atlas-incljets
 INSERT INTO app_subgrids VALUES(1993,'ATLAS_1JET_8TEV_R04','atlas-atlas-incljets-8tev-arxiv-1706.03192-xsec004.root',-1,0,0,0,'0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0','N:0.490196078');
 INSERT INTO app_subgrids VALUES(1994,'ATLAS_1JET_8TEV_R04','atlas-atlas-incljets-8tev-arxiv-1706.03192-xsec005.root',-1,0,0,0,'0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0',NULL);
 INSERT INTO app_subgrids VALUES(1995,'ATLAS_1JET_8TEV_R04','atlas-atlas-incljets-8tev-arxiv-1706.03192-xsec005.root',-1,0,0,0,'0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0','N:0.487179487');
+INSERT INTO app_subgrids VALUES(1996,'H1_DIS_JETS_HIGH_Q2','H1-HQ-8.ptji_q2_150_200.tab',0,0,1,0,'1 1 1 1',NULL);
+
 
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -760,9 +762,10 @@ INSERT INTO grids VALUES(240,'CHORUSNBPb','CHORUSNBPb','CHORUS NB Pb',50,0,'DIS'
 INSERT INTO grids VALUES(241,'CHORUSNUPb','CHORUSNUPb','CHORUS NU Pb',50,0,'DIS');
 INSERT INTO grids VALUES(242,'ATLAS_1JET_8TEV_R06','ATLAS_1JET_8TEV_R06','ATLAS double differential single inclusive jets 8 TeV, R=0.6',50,0,'APP');
 INSERT INTO grids VALUES(243,'ATLAS_1JET_8TEV_R04','ATLAS_1JET_8TEV_R04','ATLAS double differential single inclusive jets 8 TeV, R=0.4',50,0,'APP');
+INSERT INTO grids VALUES(244,'H1_DIS_JETS_HIGH_Q2','H1_DIS_JETS_HIGH_Q2','H1 HERA-II DIS+jet production',20,0,'APP');
 
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('dis_subgrids',53);
+INSERT INTO sqlite_sequence VALUES('dis_subgrids',55);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',243);
+INSERT INTO sqlite_sequence VALUES('grids',244);
 COMMIT;
