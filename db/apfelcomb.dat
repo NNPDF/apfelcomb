@@ -751,8 +751,8 @@ INSERT INTO grids VALUES(236,'CMS_TTB_DIFF_13TEV_2016_2L_TTRAPNORM','CMS_TTB_DIF
 INSERT INTO grids VALUES(237,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_NUM','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(238,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM_DEN','CMS normalised ttbar mtt differential distribution 13 TeV, dlepton',40,0,'APP');
 INSERT INTO grids VALUES(239,'CMS_1JET_8TEV','CMS_1JET_8TEV','CMS double differential single inclusive jets 8 TeV',100,0,'APP');
-INSERT INTO grids VALUES(240,'ATLAS_1JET_8TEV_R04','ATLAS_1JET_8TEV_R04','ATLAS double differential single inclusive jets 8 TeV, R=0.6',100,0,'APP');
-INSERT INTO grids VALUES(241,'ATLAS_1JET_8TEV_R06','ATLAS_1JET_8TEV_R06','ATLAS double differential single inclusive jets 8 TeV, R=0.4',100,0,'APP');
+INSERT INTO grids VALUES(240,'ATLAS_1JET_8TEV_R04','ATLAS_1JET_8TEV_R04','ATLAS double differential single inclusive jets 8 TeV, R=0.6',60,0,'APP');
+INSERT INTO grids VALUES(241,'ATLAS_1JET_8TEV_R06','ATLAS_1JET_8TEV_R06','ATLAS double differential single inclusive jets 8 TeV, R=0.4',60,0,'APP');
 INSERT INTO grids VALUES(242,'CHORUSNBPb','CHORUSNBPb','CHORUS NB Pb',50,0,'DIS');
 INSERT INTO grids VALUES(243,'CHORUSNUPb','CHORUSNUPb','CHORUS NU Pb',50,0,'DIS');
 
