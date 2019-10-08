@@ -275,6 +275,13 @@ namespace APP
             // Renormalisation and factorisation scale variation terms
             const bool vary_ren = order_id.lmur2() != 0 && par.xiR != 1.0;
             const bool vary_fac = order_id.lmuf2() != 0 && par.xiF != 1.0;
+
+            if (((order_id.lmur2() != 0) && (par.xiR == 1.0)) ||
+                ((order_id.lmuf2() != 0) && (par.xiF == 1.0)))
+            {
+                break;
+            }
+
             const double renscale =  (as/(2.0*M_PI))*2.0*M_PI*QCD::beta0()*order_id.alphs()*log(par.xiR*par.xiR); // TODO: check the int power...
             const double facscale = -(as/(2.0*M_PI))*log(par.xiF*par.xiF);
 
