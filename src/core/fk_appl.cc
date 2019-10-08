@@ -169,7 +169,7 @@ namespace APP
 
 //    // Progress update ****************************************************
 
-  int countElements(vector<int> const& maskmap, int const& min_pto, int const& max_pto, const appl::grid* g)
+  int countElements(vector<int> const& maskmap, int const& min_pto, int const& max_pto, const appl::grid* g, QCD::qcd_param const& par)
   {
     // Counter
     int nElm = 0;
@@ -179,6 +179,11 @@ namespace APP
       int gidx = 0;
       for (auto const& order_id: g->order_ids())
       {
+        if (((order_id.lmur2() != 0) && (par.xiR == 1.0)) ||
+            ((order_id.lmuf2() != 0) && (par.xiF == 1.0)))
+        {
+            break;
+        }
         const int order = order_id.alphs() + order_id.alpha() - (lo.alphs() + lo.alpha());
         if (order >= min_pto && order <= max_pto)
         {
@@ -240,7 +245,7 @@ namespace APP
 
     // Progress monitoring
     int completedElements = 0;
-    const int nXelements = countElements(maskmap, ptmin, ptmax, g);
+    const int nXelements = countElements(maskmap, ptmin, ptmax, g, par);
     const time_point t1 = std::chrono::system_clock::now();
     const vector<size_t> afl = QCD::active_flavours(par);
 
