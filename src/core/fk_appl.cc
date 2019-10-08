@@ -245,7 +245,6 @@ namespace APP
     const vector<size_t> afl = QCD::active_flavours(par);
 
     const auto& lo =  *std::min_element(g->order_ids().begin(), g->order_ids().end(), [](auto const& a, auto const& b){ return (a.alphs()+a.alpha()) < (b.alphs()+b.alpha()); });
-    assert(lo.alphs() == 2);
     for (size_t d=0; d<maskmap.size(); d++)
     {
       int gidx = 0;
@@ -253,7 +252,6 @@ namespace APP
       for (auto const& order_id: g->order_ids())
       {
         const int order = order_id.alphs() + order_id.alpha() - (lo.alphs() + lo.alpha());
-        assert(order == 0);
         if (order >= static_cast<int>(ptmin) && order <= ptmax)
         {
           // Determine grid index, allocate subprocess arrays
@@ -279,9 +277,6 @@ namespace APP
             const bool vary_fac = order_id.lmuf2() != 0 && par.xiF != 1.0;
             const double renscale =  (as/(2.0*M_PI))*2.0*M_PI*QCD::beta0()*order_id.alphs()*log(par.xiR*par.xiR); // TODO: check the int power...
             const double facscale = -(as/(2.0*M_PI))*log(par.xiF*par.xiF);
-
-            assert(vary_ren == false);
-            assert(vary_fac == false);
 
             // define evolution factor arrays
             const int nxin = fk->GetNx();
