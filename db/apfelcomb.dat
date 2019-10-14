@@ -436,6 +436,11 @@ INSERT INTO app_subgrids VALUES(2010,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV.tab',2
 INSERT INTO app_subgrids VALUES(2011,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV.tab',3,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(2012,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV.tab',4,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(2013,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV.tab',5,0,0,0,'1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2014,'ATLAS_WP_JET_8TEV_PT','atlas-atlas-wjets-arxiv-1711.03296-xsec002.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2015,'ATLAS_WM_JET_8TEV_PT','atlas-atlas-wjets-arxiv-1711.03296-xsec003.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2016,'ATLAS_WP_JET_8TEV_PTJ','atlas-atlas-wjets-arxiv-1711.03296-xsec004.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2017,'ATLAS_WM_JET_8TEV_PTJ','atlas-atlas-wjets-arxiv-1711.03296-xsec005.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+
 
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -780,11 +785,15 @@ INSERT INTO grids VALUES(242,'CMS_2JET_7TEV','CMS_2JET_7TEV','CMS dijets at 7 Te
 INSERT INTO grids VALUES(243,'ATLAS_2JET_7TEV_R04','ATLAS_2JET_7TEV_R04','ATLAS dijets at 7 TeV, R=0.4',50,0,'APP');
 INSERT INTO grids VALUES(244,'ATLAS_2JET_7TEV_R06','ATLAS_2JET_7TEV_R06','ATLAS dijets at 7 TeV, R=0.6',50,0,'APP');
 INSERT INTO grids VALUES(245,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV','CMS dijet triple differential distributions',60,0,'APP');
-INSERT INTO grids VALUES(246,'CHORUSNBPb','CHORUSNBPb','CHORUS NB Pb',50,0,'DIS');
-INSERT INTO grids VALUES(247,'CHORUSNUPb','CHORUSNUPb','CHORUS NU Pb',50,0,'DIS');
+INSERT INTO grids VALUES(246,'ATLAS_WP_JET_8TEV_PT','ATLAS_WP_JET_8TEV_PT','ATLAS W+ + jet distribution differential in pT',40,0,'APP');
+INSERT INTO grids VALUES(247,'ATLAS_WM_JET_8TEV_PT','ATLAS_WM_JET_8TEV_PT','ATLAS W- + jet distribution differential in pT',40,0,'APP');
+INSERT INTO grids VALUES(248,'ATLAS_WP_JET_8TEV_PTJ','ATLAS_WP_JET_8TEV_PTJ','ATLAS W+ + jet distribution differential in pTjet',40,0,'APP');
+INSERT INTO grids VALUES(249,'ATLAS_WM_JET_8TEV_PTJ','ATLAS_WM_JET_8TEV_PTJ','ATLAS W- + jet distribution differential in pTjet',40,0,'APP');
+INSERT INTO grids VALUES(250,'CHORUSNBPb','CHORUSNBPb','CHORUS NB Pb',50,0,'DIS');
+INSERT INTO grids VALUES(251,'CHORUSNUPb','CHORUSNUPb','CHORUS NU Pb',50,0,'DIS');
 
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',53);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',247);
+INSERT INTO sqlite_sequence VALUES('grids',251);
 COMMIT;
