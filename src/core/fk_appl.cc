@@ -274,7 +274,7 @@ namespace APP
           for (int t=0; t<igrid->Ntau(); t++)
           {
             // Scales and strong coupling
-            const double Q2  = igrid->fQ2( igrid->gettau(t));
+            const double Q2  = appl::igrid::fQ2( igrid->gettau(t));
             const double QF  = sqrt(Q2)*par.xiF;
             const double QR  = sqrt(Q2)*par.xiR;
             const double as  = QCD::alphas(QR);
@@ -331,7 +331,7 @@ namespace APP
 
                 // Calculate normalisation factors
                 const double x2 = igrid->fx(igrid->gety2(b));
-                const double pdfnrm = pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
+                const double pdfnrm = pdfwgt ? appl::igrid::weightfun(x1)*appl::igrid::weightfun(x2) : 1.0;
                 const double norm = pdfnrm*compute_wgt_norm(g, bin, order_id, as, x1, x2)*nrmdat;
 
                 for (int i=0; i<nxin; i++)    // Loop over input pdf x1
