@@ -19,7 +19,6 @@
 #include "appl_grid/appl_grid.h"
 #include "appl_grid/appl_igrid.h"
 #include "appl_grid/appl_pdf.h"
-#include "appl_grid/fastnlo.h"
 
 #include "fk_utils.h"
 #include "fk_qcd.h"
@@ -35,11 +34,9 @@ namespace APP
 	{
 	public:
 		grid(std::string const& filename, int const& fnlobin):
-		fg(fnlobin >= 0 ? new fastnlo(filename):0),
-		g(fg ? fg->grids()[fnlobin]:new appl::grid(filename)){};
-		~grid() {fg ? delete fg : delete g;};
+		g(new appl::grid(filename)){};
+		~grid() {delete g;};
 
-		fastnlo* 	fg;
 		appl::grid* g;
 	};
 
