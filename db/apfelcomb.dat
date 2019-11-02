@@ -799,11 +799,11 @@ INSERT INTO grids VALUES(243,'ATLAS_2JET_7TEV_R04','ATLAS_2JET_7TEV_R04','ATLAS 
 INSERT INTO grids VALUES(244,'ATLAS_2JET_7TEV_R06','ATLAS_2JET_7TEV_R06','ATLAS dijets at 7 TeV, R=0.6',50,0,'APP');
 INSERT INTO grids VALUES(245,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV','CMS dijet triple differential distributions',60,0,'APP');
 INSERT INTO grids VALUES(246,'ATLAS_TOPDIFF_DILEPT_8TEV_TTM','ATLAS_TOPDIFF_DILEPT_8TEV_TTM', 'ATLAS top pair mtt differential distribution dilepton channel 8 TeV',40,0,'APP');
-INSERT INTO grids VALUES(247,'ATLAS_TOPDIFF_DILEPT_8TEV_TTM_NORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTM_NUM','ATLAS top pair mtt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
-INSERT INTO grids VALUES(248,'ATLAS_TOPDIFF_DILEPT_8TEV_TTM_NORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTM_DEN','ATLAS top pair mtt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
+INSERT INTO grids VALUES(247,'ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTM_NUM','ATLAS top pair mtt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
+INSERT INTO grids VALUES(248,'ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTM_DEN','ATLAS top pair mtt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
 INSERT INTO grids VALUES(249,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP', 'ATLAS top pair ytt differential distribution dilepton channel 8 TeV',40,0,'APP');
-INSERT INTO grids VALUES(250,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP_NORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP_NUM','ATLAS top pair ytt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
-INSERT INTO grids VALUES(251,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP_NORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP_DEN','ATLAS top pair ytt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
+INSERT INTO grids VALUES(250,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP_NUM','ATLAS top pair ytt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
+INSERT INTO grids VALUES(251,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP_DEN','ATLAS top pair ytt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
 INSERT INTO grids VALUES(252,'CHORUSNBPb','CHORUSNBPb','CHORUS NB Pb',50,0,'DIS');
 INSERT INTO grids VALUES(253,'CHORUSNUPb','CHORUSNUPb','CHORUS NU Pb',50,0,'DIS');
 
