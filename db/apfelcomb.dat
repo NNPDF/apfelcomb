@@ -29,7 +29,7 @@ INSERT INTO app_subgrids VALUES(130,'ATLASR04JETS36PB','atlas-incljets-eta4.root
 INSERT INTO app_subgrids VALUES(140,'ATLASR04JETS36PB','atlas-incljets-eta5.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(150,'ATLASR04JETS36PB','atlas-incljets-eta6.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(160,'ATLASR04JETS36PB','atlas-incljets-eta7.root',-1,0,0,0,'1 1 1 1 1 1',NULL);
-INSERT INTO app_subgrids VALUES(170,'ATLASZHIGHMASS49FB','ATLAS-HiMass-DY-mee.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(170,'ATLASZHIGHMASS49FB','ATLAS-HiMass-DY-mee.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1','N:1000');
 INSERT INTO app_subgrids VALUES(180,'ATLASWPT31PB_WP','ATLASWPT11-Wplus_pt34.root',-1,1,0,0,'1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(190,'ATLASWPT31PB_WM','ATLASWPT11-Wminus_pt34.root',-1,1,0,0,'1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(200,'ATLASWPT31PB_WP_TOT','ATLASWPT11-Wplus_tot.root',-1,0,0,0,'1','*:11');
