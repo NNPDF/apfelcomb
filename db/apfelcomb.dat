@@ -241,6 +241,7 @@ INSERT INTO app_subgrids VALUES(1814,'nCMS_pPb_Wm_5TEV','nCMS_pPb_Wm_5TEV_etalep
 INSERT INTO app_subgrids VALUES(1815,'nCMS_pPb_Wp_5TEV','nCMS_pPb_Wp_5TEV_etalept.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(1816,'nCMS_pPb_Wm_8TEV','nCMS_pPb_Wm_8TEV_etalept.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(1817,'nCMS_pPb_Wp_8TEV','nCMS_pPb_Wp_8TEV_etalept.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1818,'nCMS_pPb_Z_5TEV','nCMS_pPb_Z_5TEV_yZ.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`fktarget`	TEXT NOT NULL,
@@ -578,8 +579,9 @@ INSERT INTO grids VALUES(209,'nNMCCLI','nNMCCLI','nNMCCLI',50,0,'DIS');
 INSERT INTO grids VALUES(210,'nNMCFEC','nNMCFEC','nNMCFEC',50,0,'DIS');
 INSERT INTO grids VALUES(211,'nNMCPBC','nNMCPBC','nNMCPBC',50,0,'DIS');
 INSERT INTO grids VALUES(212,'nNMCSNC','nNMCSNC','nNMCSNC',50,0,'DIS');
+INSERT INTO grids VALUES(213,'nCMS_pPb_Z_5TEV_yZ','nCMS_pPb_Z_5TEV_yZ','nCMS_pPb_Z_5TEV_yZ',50,0,'APP');
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',82);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',212);
+INSERT INTO sqlite_sequence VALUES('grids',213);
 COMMIT;
