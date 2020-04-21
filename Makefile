@@ -4,8 +4,8 @@ CXXFLAGS = 	$(PRJCXXFLAGS)
 LDLIBS   =  ./src/libac_core.a $(PRJLDFLAGS)
 
 VPATH=./src
-MAIN = apfel_comb src/cfac_scale 
-DEV = appl_optgrid ftdy_hcx
+MAIN = apfel_comb src/cfac_scale src/ftdy_hcx
+DEV = appl_optgrid 
 
 .PHONY: all dev core clean
 	

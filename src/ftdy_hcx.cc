@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <string>
 #include <cstdio>
+#include <vector>
+#include <string>
 
 #include "apfelcomb/fk_utils.h"
 #include "apfelcomb/fk_ftdy.h"
@@ -18,16 +20,20 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
+  std::vector<std::string> setnames;
+  setnames.push_back("POSDYU");
+  int nsets = setnames.size();
+
     //  Currently out of action
-//  for (int i=13; i<FTDY::nsets; i++)
-//  {
-//      cout << "Computing: "<<FTDY::setnames[i]<< "  ("<<i<<"/"<<FTDY::nsets<<")"<<endl;
-//
-//      const std::string commonfile = dataPath() + "commondata/DATA_" + FTDY::setnames[i] + ".dat";
-//      const std::string hcxfile = "./data/FTDY/"+FTDY::setnames[i]+".hcx";
-//
-//      APFEL::ComputeHardCrossSectionsDY(commonfile,hcxfile);
-//  }
+  for (int i=0; i<nsets; i++)
+  {
+      cout << "Computing: "<<setnames[i]<< "  ("<<i<<"/"<<nsets<<")"<<endl;
+
+      const std::string commonfile = dataPath() + "commondata/DATA_" + setnames[i] + ".dat";
+      const std::string hcxfile = "./data/FTDY/"+setnames[i]+".hcx";
+
+      APFEL::ComputeHardCrossSectionsDY(commonfile,hcxfile);
+  }
 
   exit(0);
 }
