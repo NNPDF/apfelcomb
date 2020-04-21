@@ -20,8 +20,8 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-  std::vector<std::string> setnames;
-  setnames.push_back("POSDYU");
+  std::vector<std::string> setnames = {"POSDYC", "POSDYCBSB", "POSDYCSB", "POSDYUBD", "POSDYUD", "POSDYCBD", "POSDYCD", "POSDYD", "POSDYUBDB", "POSDYUDB", "POSDYCBDB", "POSDYCDB", "POSDYS", "POSDYUBS", "POSDYUS", "POSDYCBS", "POSDYCS", "POSDYU", "POSDYUBSB", "POSDYUSB"};
+  
   int nsets = setnames.size();
 
     //  Currently out of action
