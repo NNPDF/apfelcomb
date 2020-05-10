@@ -869,14 +869,14 @@ INSERT INTO grids VALUES(277,'CMS_Z_13TEV_DIFF_ZRAP_2M','CMS_Z_13TEV_DIFF_ZRAP_2
 INSERT INTO grids VALUES(278,'CHORUSNBPb','CHORUSNBPb','CHORUS NB Pb',50,0,'DIS');
 INSERT INTO grids VALUES(279,'CHORUSNUPb','CHORUSNUPb','CHORUS NU Pb',50,0,'DIS');
 INSERT INTO grids VALUES(280,'POSF2C','POSF2C','F2c Positivity',40,1,'DIS');
-INSERT INTO grids VALUES(281,'POSXUQ','POSXUQ','xu positivity',50,1,'DIS');
-INSERT INTO grids VALUES(282,'POSXUQ','POSXUB','xbar positivity',50,1,'DIS');
-INSERT INTO grids VALUES(283,'POSXUQ','POSXDQ','xd positivity',50,1,'DIS');
-INSERT INTO grids VALUES(284,'POSXUQ','POSXDB','xdbar positivity',50,1,'DIS');
-INSERT INTO grids VALUES(285,'POSXUQ','POSXSQ','xs positivity',60,1,'DIS');
-INSERT INTO grids VALUES(286,'POSXUQ','POSXSB','xsbar positivity',60,1,'DIS');
-INSERT INTO grids VALUES(287,'POSXUQ','POSXCQ','xc positivity',60,1,'DIS');
-INSERT INTO grids VALUES(288,'POSXUQ','POSXGL','xg positivity',60,1,'DIS');
+INSERT INTO grids VALUES(281,'POSXUQ','POSXUQ','xu positivity',60,1,'DIS');
+INSERT INTO grids VALUES(282,'POSXUQ','POSXUB','xubar positivity',80,1,'DIS');
+INSERT INTO grids VALUES(283,'POSXUQ','POSXDQ','xd positivity',60,1,'DIS');
+INSERT INTO grids VALUES(284,'POSXUQ','POSXDB','xdbar positivity',80,1,'DIS');
+INSERT INTO grids VALUES(285,'POSXUQ','POSXSQ','xs positivity',80,1,'DIS');
+INSERT INTO grids VALUES(286,'POSXUQ','POSXSB','xsbar positivity',80,1,'DIS');
+INSERT INTO grids VALUES(287,'POSXUQ','POSXCQ','xc positivity',80,1,'DIS');
+INSERT INTO grids VALUES(288,'POSXUQ','POSXGL','xg positivity',80,1,'DIS');
 
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',64);
