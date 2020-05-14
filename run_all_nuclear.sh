@@ -3,7 +3,7 @@ source ~/.zshrc
 theoryID=64
 
 #HADRONIC
-for id in `seq 1813 1817`; do
+for id in `seq 1813 1821`; do
     ./apfel_comb app $id $theoryID
 done
 
