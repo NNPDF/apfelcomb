@@ -243,7 +243,7 @@ INSERT INTO app_subgrids VALUES(1816,'nCMS_pPb_Wm_8TEV','nCMS_pPb_Wm_8TEV_etalep
 INSERT INTO app_subgrids VALUES(1817,'nCMS_pPb_Wp_8TEV','nCMS_pPb_Wp_8TEV_etalept.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(1818,'nCMS_pPb_Z_5TEV','nCMS_pPb_Z_5TEV_yZ.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(1819,'nATLAS_pPb_PHT_8TEV_Et_1bin','nATLAS_pPb_PHT_8TEV_Et_1bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
-INSERT INTO app_subgrids VALUES(1820,'nATLAS_pPb_PHT_8TEV_Et_2bin',replace('nATLAS_pPb_PHT_8TEV_Et_2\nbin.root','\n',char(10)),-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1820,'nATLAS_pPb_PHT_8TEV_Et_2bin','nATLAS_pPb_PHT_8TEV_Et_2bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(1821,'nATLAS_pPb_PHT_8TEV_Et_3bin','nATLAS_pPb_PHT_8TEV_Et_3bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
