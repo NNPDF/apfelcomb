@@ -242,6 +242,9 @@ INSERT INTO app_subgrids VALUES(1815,'nCMS_pPb_Wp_5TEV','nCMS_pPb_Wp_5TEV_etalep
 INSERT INTO app_subgrids VALUES(1816,'nCMS_pPb_Wm_8TEV','nCMS_pPb_Wm_8TEV_etalept.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(1817,'nCMS_pPb_Wp_8TEV','nCMS_pPb_Wp_8TEV_etalept.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(1818,'nCMS_pPb_Z_5TEV','nCMS_pPb_Z_5TEV_yZ.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1819,'nATLAS_pPb_PHT_8TEV_Et_1bin','nATLAS_pPb_PHT_8TEV_Et_1bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1820,'nATLAS_pPb_PHT_8TEV_Et_2bin',replace('nATLAS_pPb_PHT_8TEV_Et_2\nbin.root','\n',char(10)),-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1821,'nATLAS_pPb_PHT_8TEV_Et_3bin','nATLAS_pPb_PHT_8TEV_Et_3bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`fktarget`	TEXT NOT NULL,
@@ -580,10 +583,13 @@ INSERT INTO grids VALUES(209,'nNMCCLI','nNMCCLI','nNMCCLI',50,0,'DIS');
 INSERT INTO grids VALUES(210,'nNMCFEC','nNMCFEC','nNMCFEC',50,0,'DIS');
 INSERT INTO grids VALUES(211,'nNMCPBC','nNMCPBC','nNMCPBC',50,0,'DIS');
 INSERT INTO grids VALUES(212,'nNMCSNC','nNMCSNC','nNMCSNC',50,0,'DIS');
-INSERT INTO grids VALUES(213,'nCMS_pPb_Z_5TEV_yZ','nCMS_pPb_Z_5TEV_yZ','nCMS_pPb_Z_5TEV_yZ',50,0,'APP');
-INSERT INTO grids VALUES(214,'POSF2C','POSF2C','F2c Positivity',60,1,'DIS');
+INSERT INTO grids VALUES(213,'POSF2C','POSF2C','F2c Positivity',60,1,'DIS');
+INSERT INTO grids VALUES(215,'nCMS_pPb_Z_5TEV_yZ','nCMS_pPb_Z_5TEV_yZ','nCMS_pPb_Z_5TEV_yZ',50,0,'APP');
+INSERT INTO grids VALUES(216,'nATLAS_pPb_PHT_8TEV_1bin','nATLAS_pPb_PHT_8TEV_1bin','nATLAS_pPb_PHT_8TEV_1bin',50,0,'APP');
+INSERT INTO grids VALUES(217,'nATLAS_pPb_PHT_8TEV_2bin','nATLAS_pPb_PHT_8TEV_2bin','nATLAS_pPb_PHT_8TEV_2bin',50,0,'APP');
+INSERT INTO grids VALUES(218,'nATLAS_pPb_PHT_8TEV_3bin','nATLAS_pPb_PHT_8TEV_3bin','nATLAS_pPb_PHT_8TEV_3bin',50,0,'APP');
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',83);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',214);
+INSERT INTO sqlite_sequence VALUES('grids',218);
 COMMIT;
