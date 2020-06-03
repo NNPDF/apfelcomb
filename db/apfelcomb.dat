@@ -554,6 +554,12 @@ INSERT INTO dis_subgrids VALUES(63,'POSXSQ','DIS_XSQ',NULL);
 INSERT INTO dis_subgrids VALUES(64,'POSXSB','DIS_XSB',NULL);
 INSERT INTO dis_subgrids VALUES(65,'POSXCQ','DIS_XCQ',NULL);
 INSERT INTO dis_subgrids VALUES(66,'POSXGL','DIS_XGL',NULL);
+INSERT INTO dis_subgrids VALUES(67,'INTEGXT3','DIS_XT3',NULL);
+INSERT INTO dis_subgrids VALUES(68,'INTEGXT8','DIS_XT8',NULL);
+INSERT INTO dis_subgrids VALUES(69,'INTEGXT15','DIS_XT15',NULL);
+INSERT INTO dis_subgrids VALUES(70,'INTEGXV3','DIS_XV3',NULL);
+INSERT INTO dis_subgrids VALUES(71,'INTEGXV8','DIS_XV8',NULL);
+INSERT INTO dis_subgrids VALUES(72,'INTEGXV','DIS_XV',NULL);
 
 CREATE TABLE IF NOT EXISTS "dyp_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -881,9 +887,15 @@ INSERT INTO grids VALUES(287,'POSXUQ','POSXSQ','xs positivity',100,1,'DIS');
 INSERT INTO grids VALUES(288,'POSXUQ','POSXSB','xsbar positivity',100,1,'DIS');
 INSERT INTO grids VALUES(289,'POSXUQ','POSXCQ','xc positivity',100,1,'DIS');
 INSERT INTO grids VALUES(290,'POSXUQ','POSXGL','xg positivity',100,1,'DIS');
+INSERT INTO grids VALUES(291,'INTEGXT3','INTEGXT3','xT3 integrability',30,1,'DIS');
+INSERT INTO grids VALUES(292,'INTEGXT8','INTEGXT8','xT8 integrability',30,1,'DIS');
+INSERT INTO grids VALUES(293,'INTEGXT15','INTEGXT15','xT15 integrability',30,1,'DIS');
+INSERT INTO grids VALUES(294,'INTEGXV3','INTEGXV3','xV3 integrability',30,1,'DIS');
+INSERT INTO grids VALUES(295,'INTEGXV8','INTEGXV8','xV8 integrability',30,1,'DIS');
+INSERT INTO grids VALUES(296,'INTEGXV','INTEGXV','xV integrability',30,1,'DIS');
 
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('dis_subgrids',64);
+INSERT INTO sqlite_sequence VALUES('dis_subgrids',70);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',288);
+INSERT INTO sqlite_sequence VALUES('grids',296);
 COMMIT;
