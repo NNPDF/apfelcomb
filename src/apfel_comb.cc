@@ -136,6 +136,5 @@ int main(int argc, char* argv[]) {
 
   cout << "                      APPLComb Complete "<<endl;
   DisplayHR();
-  exit(0);
 }
 
