@@ -395,57 +395,23 @@ namespace PINE
   void SubGrid::Splash(ostream& o) const
   {
     FKSubGrid::Splash(o);
-    o << "- APPLgrid: " << pineapplfile << endl;
+    o << "- PineAPPL: " << pineapplfile << endl;
   }
 
     // Get the maximum scale of an applgrid
   double SubGrid::GetQ2max() const
   {
-    /*
-    // Find maximum required scale
-    double Q2max = 0;
-    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
-    for(int i=0; i<nloops; i++)  // pto
-      for (int j=0; j<applgrid.g->Nobs(); j++) // bin
-      {
-        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
-        Q2max = max(Q2max, igrid->getQ2max());
-      }
-    return Q2max;
-    */
+    vector<double> q2values(pineappl_grid_subgrid_q2_count(grid));
+    pineappl_grid_subgrid_q2(grid, q2values.data());
+    return *std::max_element(q2values.begin(), q2values.end());
   }
-
 
   // Return the minimum x used in the subgrid
   double SubGrid::GetXmin() const
   {
-    /*
-    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
-    double xmin = 1.0;
-    for(int i=0; i<nloops; i++)
-      for (int j=0; j<applgrid.g->Nobs(); j++)
-      {
-        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
-        const size_t nsubproc = applgrid.g->subProcesses(i);
-
-          for (int t=0; t<igrid->Ntau(); t++) // Loop over Q^2 integral
-          {
-            const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);
-            if (l1.first <= l1.second)
-            {
-              xmin = min(xmin, igrid->fx(igrid->gety1(l1.first)));
-              xmin = min(xmin, igrid->fx(igrid->gety1(l1.second)));
-            }
-            const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);
-            if (l2.first <= l2.second)
-            {
-              xmin = min(xmin, igrid->fx(igrid->gety2(l2.first)));
-              xmin = min(xmin, igrid->fx(igrid->gety2(l2.second)));
-            }
-          }
-        }
-    return xmin;
-    */
+    vector<double> xvalues(pineappl_grid_subgrid_x_count(grid));
+    pineappl_grid_subgrid_x(grid, xvalues.data());
+    return *std::min_element(xvalues.begin(), xvalues.end());
   };
 
   double SubGrid::GetComputeXmin() const
