@@ -22,6 +22,10 @@ typedef std::chrono::system_clock::duration time_span;
 #define RESULTS_PATH run/
 #endif
 
+#ifndef PINEAPPL_PATH
+#define PINEAPPL_PATH ./
+#endif
+
 #ifndef APPL_PATH
 #define APPL_PATH ./
 #endif
@@ -60,6 +64,7 @@ namespace Colour {
 void DisplayHR();
 void Splash();
 
+std::string pineapplPath();
 std::string applPath();
 std::string dataPath();
 std::string resultsPath();

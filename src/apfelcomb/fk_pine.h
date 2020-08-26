@@ -10,11 +10,8 @@
 #include "NNPDF/fastkernel.h"
 #include "NNPDF/nnpdfdb.h"
 
-// APPLGrid main includes
-#include "appl_grid/appl_grid.h"
-#include "appl_grid/appl_igrid.h"
-#include "appl_grid/appl_pdf.h"
-#include "appl_grid/fastnlo.h"
+// PineAPPL includes
+#include "pineappl_capi.h"
 
 #include "fk_utils.h"
 #include "fk_qcd.h"
@@ -24,19 +21,6 @@ using QCD::qcd_param;
 
 namespace PINE
 {
-
-	// // Wrapper for appl::grids (handles fastNLO based grids)
-	class grid
-	{
-	public:
-		grid(std::string const& filename, int const& fnlobin);
-		~grid();
-
-		fastnlo* 	fg;
-		appl::grid* g;
-	};
-
-
 	class SubGrid: public FKSubGrid
 	{
 	public:
@@ -54,18 +38,13 @@ namespace PINE
 
 		// ***********************************************************
 
-		const string 		applfile;	//!< Path for the applgrid file
-		const string 		readme;		//!< APPLgrid README
+		const string 		pineapplfile; //!< Path for the pineapplg file
+		const string 		readme;		  //!< APPLgrid README
 
 		const vector<int> 	maskmap;	//!< Map of masked applgrid points to datapoints
 		const size_t 		ndata;     	//!< Number of selected datapoints
-		const size_t 		ptmin;     	//!< Minimum perturbative order to contribute
 
-		const int    		fnlobin;   	//!< Which bin in the fastNLO grid? (yes, this needs to be signed)
-		const bool 			pdfwgt;     //!< Using a PDF weight? Typically used for fastNLO grids
-		const bool 			ppbar;		//!< Does the grid need a pp -> ppbar transform?
-
-		const grid 			applgrid;	//!< APPLgrid class
+		const pineappl_grid* grid;	//!< PineAPPL class
 
 		static vector<int>  parse_maskmap(string const&);
 	};

@@ -39,6 +39,12 @@ std::string exec(const char* cmd) {
     return result;
 }
 
+std::string pineapplPath()
+{
+  std::string pineapplDir(STR(PINEAPPL_PATH));
+  return pineapplDir;
+};
+
 std::string applPath()
 {
   std::string applDir(STR(APPL_PATH));

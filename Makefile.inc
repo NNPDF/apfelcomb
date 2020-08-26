@@ -10,9 +10,10 @@ SHELL=/bin/bash
 
 # APPLCOMB paths
 RESULTSDIR=   -D  RESULTS_PATH="./results/"
+PINEAPPLGRID= -D  PINEAPPL_PATH="../pineapplgrids/"
 APPLGRIDDIR=  -D  APPL_PATH="../applgrids/"
 DATABASEDIR=  -D  DB_PATH="./db/"
-ALLDIR= $(RESULTSDIR) $(APPLGRIDDIR) $(DATABASEDIR)
+ALLDIR= $(RESULTSDIR) $(APPLGRIDDIR) $(DATABASEDIR) $(PINEAPPLGRID)
 
 # root
 ROOTINCS = $(shell root-config --cflags)

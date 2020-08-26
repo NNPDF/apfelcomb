@@ -80,7 +80,7 @@ namespace PINE
   }
 
   // ********************************* Kinematics Helpers *************************************
-
+/*
   // Returns the minimum and maximum x-grid points for a specified subgrid slice.
   // igrid is the requested subgrid, nsubproc the number of subprocesses held within igrid.
   // tau specified the bin in scale to be investigated, and alpha specifies the bin in x1.
@@ -204,36 +204,22 @@ namespace PINE
       }
     return nElm;
   }
-
- // *********************************** Grid object **************************************
-
-  grid::grid(std::string const& filename, int const& fnlobin):
-    fg(fnlobin >= 0 ? new fastnlo(filename):0),
-    g(fg ? fg->grids()[fnlobin]:new appl::grid(filename))
-    {}
-
-  grid::~grid() {
-    fg ? delete fg : delete g;
-  }
-
+*/
 
  // *********************************** APPLGrid convolutions **************************************
 
   SubGrid::SubGrid(FKTarget const& parent, NNPDF::IndexDB const& db, int const& iDB):
     FKSubGrid(parent, iDB, NNPDF::dbquery<string>(db, iDB, "operators")),
-    applfile(NNPDF::dbquery<string>(db,iDB,"applgrid")),
+    pineapplfile(NNPDF::dbquery<string>(db,iDB,"pineapplgrid")),
     readme(),
     maskmap(parse_maskmap(NNPDF::dbquery<string>(db,iDB,"mask"))),
-    ndata(	maskmap.size() ),
-    ptmin(	NNPDF::dbquery<size_t>(db,iDB,"ptmin")),
-    fnlobin(NNPDF::dbquery<int>(db,iDB,"fnlobin")),
-    pdfwgt(	NNPDF::dbquery<bool>(db,iDB,"pdfwgt")),
-    ppbar(	NNPDF::dbquery<bool>(db,iDB,"ppbar")),
-    applgrid(applPath() + parent.GetSetName() + "/" + applfile , fnlobin)
+    ndata(maskmap.size()),
+    grid(pineappl_grid_read((pineapplPath() + parent.GetSetName() + "/" + pineapplfile).c_str()))
   {
-    if (ndata>static_cast<size_t>(applgrid.g->Nobs()))
+    const size_t bin_count = pineappl_grid_bin_count(grid);
+    if (ndata > bin_count)
     {
-      cerr <<"Error: number of datapoints in settings: "<<ndata<<" > appl grid Nobs: "<<applgrid.g->Nobs()<<endl;
+      cerr <<"Error: number of datapoints in settings: "<<ndata<<" > appl grid Nobs: "<<bin_count<<endl;
       cerr <<"Please check the provided mask" <<endl;
       exit(-1);
     }
@@ -241,6 +227,7 @@ namespace PINE
 
   void SubGrid::Compute(qcd_param const& par, vector<double>& results) const
   {
+    /*
     if (ppbar == true && par.xiF != 1)
       std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
     if (par.evol_pto == 2)
@@ -260,6 +247,7 @@ namespace PINE
     for (size_t i=0; i<maskmap.size(); i++)
       for (int const& j : datamap[i])
         results[j] += xsec[maskmap[i]];
+        */
   }
 
 
@@ -267,6 +255,7 @@ namespace PINE
 
   void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* fk) const
   {
+    /*
     if (par.evol_pto == 2)
       std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
 
@@ -397,6 +386,7 @@ namespace PINE
       } // /pto
     } // /data
     return;
+    */
   }
 
   //  *************************************** Metadata methods ********************************************
@@ -405,17 +395,13 @@ namespace PINE
   void SubGrid::Splash(ostream& o) const
   {
     FKSubGrid::Splash(o);
-    o << "- APPLgrid: " << applfile << endl
-      << "- PTMin: "    << ptmin    << endl
-      << "- fnlobin: "  << fnlobin  << endl
-      << "- PDFWeight: "<< pdfwgt   << endl
-      << "- ppbar: "    << ppbar    << endl
-      << endl;
+    o << "- APPLgrid: " << pineapplfile << endl;
   }
 
     // Get the maximum scale of an applgrid
   double SubGrid::GetQ2max() const
   {
+    /*
     // Find maximum required scale
     double Q2max = 0;
     const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
@@ -426,12 +412,14 @@ namespace PINE
         Q2max = max(Q2max, igrid->getQ2max());
       }
     return Q2max;
+    */
   }
 
 
   // Return the minimum x used in the subgrid
   double SubGrid::GetXmin() const
   {
+    /*
     const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
     double xmin = 1.0;
     for(int i=0; i<nloops; i++)
@@ -457,10 +445,12 @@ namespace PINE
           }
         }
     return xmin;
+    */
   };
 
   double SubGrid::GetComputeXmin() const
   {
+    /*
     const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
     double xmin = 1.0;
     for(int i=0; i<nloops; i++)
@@ -474,6 +464,7 @@ namespace PINE
       }
 
     return xmin;
+    */
   };
 
 
