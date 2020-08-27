@@ -285,6 +285,16 @@ namespace QCD
       pdf[i+7]= APFEL::xPDF(i,fx);
   }
 
+  // APFEL PDF in the evolution basis
+  double flvpdf(int32_t pdgid, double x, double q2)
+  {
+    updateEvol(sqrt(q2));
+    const double fx = fabs(x-APFEL::xGrid(0))/x < 1E-6 ? APFEL::xGrid(0):x;  // Fuzzy x
+    if (pdgid == 22)
+      return APFEL::xgamma(fx);
+    return APFEL::xPDF(pdgid, fx);
+  }
+
   // APFEL strong coupling
   double alphas(const double& Q)
   {

@@ -109,6 +109,7 @@ namespace QCD
 
   // APFEL PDF access functions
   void evolpdf(const double& x, const double& Q, double* pdf);
+  double flvpdf(int32_t pdgid, double x, double q2);
   double alphas(const double& Q);
   double beta0();
 

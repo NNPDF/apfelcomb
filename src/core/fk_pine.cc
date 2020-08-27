@@ -19,22 +19,17 @@ using NNPDF::FKHeader;
 
 namespace PINE
 {
-  #ifdef __APPL_PHOTON
-  const int applgrid_nfl = 14;
-  #else
-  const int applgrid_nfl = 13;
-  #endif
-
 
 // // ********************* Evolution factors ******************************
+
 
   class EvolutionFactors
   {
   public:
     EvolutionFactors(const int nxin, const int nxout):
-    b1(applgrid_nfl),
-    b2(applgrid_nfl*14),
-    b3(applgrid_nfl*14*nxin),
+    b1(14),
+    b2(14*14),
+    b3(14*14*nxin),
     data(new double[nxout*b3])
     {
       for (int i=0; i<nxout*b3; i++)
@@ -54,29 +49,16 @@ namespace PINE
 // ********************************* Basis rotation helpers *************************************
 
   // Rotates APFEL flavour basis into APPLgrid flavour basis (photon moves from 0 to 13)
-  void evolpdf_applgrid(const double& x, const double& Q, double* pdf)
+  double evolpdf_pineapplgrid(int32_t pdgid, double x, double q2, void*)
   {
-    for (int i=0; i<applgrid_nfl; i++) pdf[i]=0;
-    if (x<APFEL::xGrid(0))  // A nice trick of APPLgrid is to request PDF x-values smaller than are actually used
-      return;
-
-    double *APFEL_basis = new double[14]();
-    QCD::evolpdf(x, Q, APFEL_basis);
-
-    for (int i=0; i<13; i++)
-      pdf[i]=APFEL_basis[i+1];
-    if (applgrid_nfl == 14)
-      pdf[13] = APFEL_basis[0];
-
-    delete[] APFEL_basis;
+    if (x < APFEL::xGrid(0))  // A nice trick of APPLgrid is to request PDF x-values smaller than are actually used
+      return 0;
+    return QCD::flvpdf(pdgid, x, q2);
   }
 
-  // antiproton version of evolpdf_applgrid, swaps q<->qbar
-  void evolpdf_applgrid_pbar(const double& x, const double& Q, double* pdf)
+  double alphas(double q2, void*)
   {
-    evolpdf_applgrid(x,Q,pdf);
-    for (int i=1; i<7; i++)
-      std::swap(pdf[6+i], pdf[6-i]);
+    return QCD::alphas(sqrt(q2));
   }
 
   // ********************************* Kinematics Helpers *************************************
@@ -227,19 +209,15 @@ namespace PINE
 
   void SubGrid::Compute(qcd_param const& par, vector<double>& results) const
   {
-    /*
-    if (ppbar == true && par.xiF != 1)
-      std::cout << "WARNING: ppbar ROTATION NOT TESTED - APPLgrid does not support fac. scale variation with ppbar so I cannot cross-check" <<std::endl;
     if (par.evol_pto == 2)
       std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
 
-    // Compute with applgrid interface
-    const int pto = (ptmin == 1) ? -1: min(par.evol_pto,(size_t)1);
-    vector<double> xsec;
-    if ( ppbar == true && par.xiF == 1)
-      xsec = applgrid.g->vconvolute( evolpdf_applgrid, evolpdf_applgrid_pbar, QCD::alphas, pto, par.xiR, par.xiF );
-    else
-      xsec = applgrid.g->vconvolute( evolpdf_applgrid, QCD::alphas, pto, par.xiR, par.xiF);
+    // TODO: fix pto
+    vector<double> xsec(pineappl_grid_bin_count(grid));
+    pineappl_grid_convolute(grid, evolpdf_pineapplgrid, evolpdf_pineapplgrid, alphas,
+                            nullptr, nullptr, nullptr, par.xiR, par.xiF, xsec.data());
+
+    // apply database normalization rule
     for (double& obs : xsec)
       obs *= nrmdat;
 
@@ -247,7 +225,6 @@ namespace PINE
     for (size_t i=0; i<maskmap.size(); i++)
       for (int const& j : datamap[i])
         results[j] += xsec[maskmap[i]];
-        */
   }
 
 
@@ -255,138 +232,140 @@ namespace PINE
 
   void SubGrid::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* fk) const
   {
-    /*
     if (par.evol_pto == 2)
       std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
 
-    if (applgrid_nfl == 14)
-      std::cout << "WARNING: Combining with photon channel in APPLgrid" <<std::endl;
-
-    // APPLgrid pointer
-    const appl::grid* g = applgrid.g;
-    const int ptmax = min(par.evol_pto,(size_t)1); // Maximum perturbative order limited to NLO
+    // TODO: fit pto
 
     // Progress monitoring
     int completedElements = 0;
-    const int nXelements = countElements(maskmap, ptmin, ptmax, g);
-    const time_point t1 = std::chrono::system_clock::now();
+    //const int nXelements = countElements(maskmap, ptmin, ptmax, g);
+    //const time_point t1 = std::chrono::system_clock::now();
     const vector<size_t> afl = QCD::active_flavours(par);
+
+    vector<uint32_t> orders(pineappl_grid_order_count(grid));
+    pineappl_grid_order_params(grid, orders.data());
+
+    auto *grid_lumi = pineappl_grid_lumi(grid);
+    const size_t lumi_count = pineappl_lumi_count(grid_lumi);
+
+    vector<double> q2values(pineappl_subgrid_q2_grid_count(grid));
+    pineappl_subgrid_q2_grid(grid, q2values.data());
+
+    vector<double> xvalues(pineappl_subgrid_x_grid_count(grid));
+    pineappl_subgrid_x_grid(grid, xvalues.data());
+    const size_t nxpi = xvalues.size();
+
+    vector<double> bin_sizes(pineappl_grid_bin_count(grid));
+    pineappl_grid_bin_sizes(grid, bin_sizes.data());
+
+    vector<double> weight_matrix(nxpi * nxpi);
 
     for (size_t d=0; d<maskmap.size(); d++)
     {
       // Fetch associated applgrid info
       const size_t bin = maskmap[d];
-      for (size_t pto=0; pto<=(ptmax-ptmin); pto++) // Loop over perturbative order
+
+      for (size_t pto = 0; pto < orders.size()/4; pto++) // Loop over perturbative order
       {
-        // Determine grid index, allocate subprocess arrays
-        const int gidx = get_grid_idx(g, pto+ptmin);
-        appl::appl_pdf *genpdf = get_appl_pdf( g, gidx );
-        const size_t nsubproc = g->subProcesses(gidx);
-        double *W = new double[nsubproc];   // Weight array
-        double *H = new double[nsubproc];   // Evolution factor array
-        double *H1 = new double[nsubproc];  // Split evolution factor array 1
-        double *H2 = new double[nsubproc];  // Split evolution factor array 2
+        // TODO: unSkip renormalization and factorization scale variation.
+        if (orders.at(4 * pto + 2) > 0 || orders.at(4 * pto + 3) > 0)
+          continue;
 
-        // Fetch grid pointer and loop over Q
-        appl::igrid const *igrid = g->weightgrid(gidx, bin);
-        for (int t=0; t<igrid->Ntau(); t++)
+        for (size_t lumi = 0; lumi < lumi_count; lumi++)
         {
-          // Scales and strong coupling
-          const double Q2  = igrid->fQ2( igrid->gettau(t));
-          const double QF  = sqrt(Q2)*par.xiF;
-          const double QR  = sqrt(Q2)*par.xiR;
-          const double as  = QCD::alphas(QR);
-
-          // Renormalisation and factorisation scale variation terms
-          const bool vary_ren = pto == 0 && par.evol_pto == 1 && par.xiR != 1.0;
-          const bool vary_fac = pto == 0 && par.evol_pto == 1 && par.xiF != 1.0;
-          const double renscale =  (as/(2.0*M_PI))*2.0*M_PI*QCD::beta0()*g->leadingOrder()*log(par.xiR*par.xiR);
-          const double facscale = -(as/(2.0*M_PI))*log(par.xiF*par.xiF);
-
-          // define evolution factor arrays
-          const int nxin = fk->GetNx();
-          EvolutionFactors fA1(nxin, igrid->Ny1());   // PDF 1 Evolution factors
-          EvolutionFactors fA2(nxin, igrid->Ny2());   // PDF 2 Evolution factors
-          EvolutionFactors fdA1(nxin, igrid->Ny1());  // PDF 1 Splitting function x Evolution factors
-          EvolutionFactors fdA2(nxin, igrid->Ny2());  // PDF 2 Splitting function x Evolution factors
-
-          // Compute nonzero evolution factors
-          const std::pair<int,int> l1 = get_igrid_limits_x1(igrid, nsubproc, t);
-          const std::pair<int,int> l2 = get_igrid_limits_x2(igrid, nsubproc, t);
-
-          for (int ix = 0; ix < nxin; ix++)
-          for (size_t fl : afl)
+          // Fetch grid pointer and loop over Q
+          size_t slice_indices[2];
+          pineappl_subgrid_filled_q2_slices(grid, pto, bin, lumi, slice_indices);
+          for (size_t t = slice_indices[0]; t < slice_indices[1]; t++)
           {
-            for (int ox=l1.first; ox<=l1.second; ox++) // Loop over applgrid x1
-            {
-              QCD::EvolutionOperator(false,applgrid_nfl==14,ix,igrid->fx(igrid->gety1(ox)),fl,QF,fA1(ox,ix,fl));
-              if (vary_fac) QCD::DerivativeOperator(false,applgrid_nfl==14,ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
-            }
-            for (int ox=l2.first; ox<=l2.second; ox++) // Loop over applgrid x2
-            {
-              QCD::EvolutionOperator(ppbar,applgrid_nfl==14,ix,igrid->fx(igrid->gety2(ox)),fl,QF,fA2(ox,ix,fl));
-              if (vary_fac) QCD::DerivativeOperator(ppbar,applgrid_nfl==14,ix,igrid->fx(igrid->gety2(ox)),fl,QF,fdA2(ox,ix,fl));
-            }
-          }
+            // Scales and strong coupling
+            const double Q2  = q2values.at(t);
+            const double QF  = sqrt(Q2)*par.xiF;
+            const double QR  = sqrt(Q2)*par.xiR;
+            const double as  = QCD::alphas(QR);
 
-          for (int a=l1.first; a<=l1.second; a++ )
-          {
-            const double x1 = igrid->fx(igrid->gety1(a));
-            const std::pair<int,int> limits = get_slice_limits(igrid, nsubproc, t, a);
-            for (int b=limits.first; b<=limits.second; b++) // Loop over applgrid x2
-            {
-              // fetch weight values
-              for (size_t ip=0; ip<nsubproc; ip++)
-                W[ip] = (*(const SparseMatrix3d*) const_cast<appl::igrid*>(igrid)->weightgrid(ip))(t,a,b);
+            // Renormalisation and factorisation scale variation terms
+            //const bool vary_ren = pto == 0 && par.evol_pto == 1 && par.xiR != 1.0;
+            //const bool vary_fac = pto == 0 && par.evol_pto == 1 && par.xiF != 1.0;
+            //const double renscale =  (as/(2.0*M_PI))*2.0*M_PI*QCD::beta0()*g->leadingOrder()*log(par.xiR*par.xiR);
+            //const double facscale = -(as/(2.0*M_PI))*log(par.xiF*par.xiF);
 
-              // Calculate normalisation factors
-              const double x2 = igrid->fx(igrid->gety2(b));
-              const double pdfnrm = pdfwgt ? igrid->weightfun(x1)*igrid->weightfun(x2) : 1.0;
-              const double norm = pdfnrm*compute_wgt_norm(g, bin, pto+ptmin, as, x1, x2)*nrmdat;
+            // define evolution factor arrays
+            const int nxin = fk->GetNx();
+            EvolutionFactors fA(nxin, nxpi);   // PDF 1 and 2 Evolution factors
+            //EvolutionFactors fdA1(nxin, igrid->Ny1());  // PDF 1 Splitting function x Evolution factors
+            //EvolutionFactors fdA2(nxin, igrid->Ny2());  // PDF 2 Splitting function x Evolution factors
 
-              for (int i=0; i<nxin; i++)    // Loop over input pdf x1
-                for (int j=0; j<nxin; j++)  // Loop over input pdf x2
-                  for (size_t k : afl)         // loop over flavour 1
-                    for (size_t l : afl)       // loop over flavour 2
+            // Compute nonzero evolution factors
+            for (int ix = 0; ix < nxin; ix++)
+              for (size_t fl : afl)
+              {
+                for (size_t ox = 0; ox < nxpi; ox++) // Loop over applgrid x1
+                {
+                  QCD::EvolutionOperator(false, true, ix, xvalues.at(ox), fl, QF, fA(ox, ix, fl));
+                  //if (vary_fac) QCD::DerivativeOperator(false,applgrid_nfl==14,ix,igrid->fx(igrid->gety1(ox)),fl,QF,fdA1(ox,ix,fl));
+                }
+              }
+
+            // take the grid from pineappl
+            pineappl_subgrid_q2_slice(grid, pto, bin, lumi, t, weight_matrix.data());
+
+            for (size_t a = 0; a < nxpi; a++)
+              for (size_t b = 0; b < nxpi; b++) // Loop over applgrid x2
+              {
+                // fetch weight values
+                const double W = weight_matrix[a * nxpi + b];
+
+                // Calculate normalisation factors
+                const double norm = pow(as, orders.at(4 * pto + 0))/(xvalues.at(a)*xvalues.at(b)*bin_sizes.at(bin))*nrmdat;
+
+                for (int i = 0; i < nxin; i++)    // Loop over input pdf x1
+                  for (int j = 0; j < nxin; j++)  // Loop over input pdf x2
+                  {
+                    // Rotate to subprocess basis
+                    const size_t combinations = pineappl_lumi_combinations(grid_lumi, lumi);
+                    vector<int32_t> pdgids(2 * combinations);
+                    vector<double> factors(combinations);
+                    pineappl_lumi_entry(grid_lumi, lumi, pdgids.data(), factors.data());
+
+                    if (W != 0)
                     {
-                      // Rotate to subprocess basis
-                      genpdf->evaluate(fA1(a,i,k),fA2(b,j,l),H);
-
-                      if (vary_fac)
+                      for (size_t m = 0; m < combinations; m++)
                       {
-                        genpdf->evaluate(fdA1(a,i,k),fA2(b,j,l),H1);
-                        genpdf->evaluate(fA1(a,i,k),fdA2(b,j,l),H2);
-                      }
+                        const int32_t k = pdgids.at(2 * m + 0);
+                        const int32_t l = pdgids.at(2 * m + 1);
 
-                      for (size_t ip=0; ip<nsubproc; ip++)
-                        if (W[ip] != 0)
-                        {
-                          double fill = H[ip];                              // Basic fill
-                          if (vary_ren) fill += renscale*H[ip];             // Ren. scale variation
-                          if (vary_fac) fill += facscale*(H1[ip] + H2[ip]); // Fac. scale variation
-                          if ( fill != 0.0 )
-                            for (int const& td : datamap[d])
-                              fk->Fill( td, i, j, k, l, norm*fill*W[ip]);
+                        const double H = factors.at(m) * (*fA(a, i, k)) * (*fA(b, j, l));
+
+                        // if (vary_fac)
+                        // {
+                        //   genpdf->evaluate(fdA1(a,i,k),fA2(b,j,l),H1);
+                        //   genpdf->evaluate(fA1(a,i,k),fdA2(b,j,l),H2);
+                        // }
+
+                        double fill = H;                              // Basic fill
+                        //if (vary_ren) fill += renscale*H[ip];             // Ren. scale variation
+                        //if (vary_fac) fill += facscale*(H1[ip] + H2[ip]); // Fac. scale variation
+                        if ( fill != 0.0 )
+                          for (int const& td : datamap[d])
+                            fk->Fill(td, i, j, k, l, norm*fill*W);
                         }
                     }
+                  }
 
-              // Update progress
-              completedElements++;
-              StatusUpdate(t1, (double)completedElements/(double)nXelements, cout);
-            }
+                // Update progress
+                completedElements++;
+                //StatusUpdate(t1, (double)completedElements/(double)nXelements, cout);
+              }
           }
         }
-
-        // Free subprocess arrays
-        delete[] W;
-        delete[] H;
-        delete[] H1;
-        delete[] H2;
-
       } // /pto
     } // /data
+
+    pineappl_lumi_delete(grid_lumi);
+
     return;
-    */
   }
 
   //  *************************************** Metadata methods ********************************************
@@ -401,38 +380,24 @@ namespace PINE
     // Get the maximum scale of an applgrid
   double SubGrid::GetQ2max() const
   {
-    vector<double> q2values(pineappl_grid_subgrid_q2_count(grid));
-    pineappl_grid_subgrid_q2(grid, q2values.data());
-    return *std::max_element(q2values.begin(), q2values.end());
+    vector<double> q2values(pineappl_subgrid_q2_grid_count(grid));
+    pineappl_subgrid_q2_grid(grid, q2values.data());
+    return std::max(q2values.front(), q2values.back());
   }
 
   // Return the minimum x used in the subgrid
   double SubGrid::GetXmin() const
   {
-    vector<double> xvalues(pineappl_grid_subgrid_x_count(grid));
-    pineappl_grid_subgrid_x(grid, xvalues.data());
-    return *std::min_element(xvalues.begin(), xvalues.end());
+    // TODO: check this implementation.
+    return GetComputeXmin();
   };
 
   double SubGrid::GetComputeXmin() const
   {
-    /*
-    const double nloops = applgrid.g->calculation() == appl::grid::AMCATNLO ? 4 : 2;
-    double xmin = 1.0;
-    for(int i=0; i<nloops; i++)
-      for (int j=0; j<applgrid.g->Nobs(); j++)
-      {
-        appl::igrid const *igrid = applgrid.g->weightgrid(i, j);
-        xmin = min(xmin, igrid->fx(igrid->gety1(0)));
-        xmin = min(xmin, igrid->fx(igrid->gety1(igrid->Ny1()-1)));
-        xmin = min(xmin, igrid->fx(igrid->gety2(0)));
-        xmin = min(xmin, igrid->fx(igrid->gety2(igrid->Ny2()-1)));
-      }
-
-    return xmin;
-    */
+    vector<double> xvalues(pineappl_subgrid_x_grid_count(grid));
+    pineappl_subgrid_x_grid(grid, xvalues.data());
+    return std::min(xvalues.front(), xvalues.back());
   };
-
 
   vector<int> SubGrid::parse_maskmap(string const& mask)
   {
