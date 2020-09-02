@@ -13,6 +13,7 @@
 #include <chrono>
 #include <ctime>
 #include <limits>
+#include <stdexcept>
 
 using namespace std;
 using NNPDF::FKHeader;
@@ -30,20 +31,16 @@ namespace PINE
     b1(14),
     b2(14*14),
     b3(14*14*nxin),
-    data(new double[nxout*b3])
-    {
-      for (int i=0; i<nxout*b3; i++)
-        data[i] = 0;
-    };
-    ~EvolutionFactors() {delete[] data;};
+    data(nxout*b3)
+    {}
 
-    double* operator()(int const& ox, int const& ix, int const& fi ) {return data+b3*ox+b2*ix+b1*fi;};
-    const double* operator()(int const& ox, int const& ix, int const& fi ) const {return data+b3*ox+b2*ix+b1*fi;};
+    double* operator()(size_t ox, size_t ix, size_t fi ) {return &data.at(b3*ox+b2*ix+b1*fi);}
+    const double* operator()(size_t ox, size_t ix, size_t fi) const {return &data.at(b3*ox+b2*ix+b1*fi);}
   private:
-    const int b1;
-    const int b2;
-    const int b3;
-    double* data;
+    const size_t b1;
+    const size_t b2;
+    const size_t b3;
+    std::vector<double> data;
   };
 
 // ********************************* Basis rotation helpers *************************************
@@ -59,6 +56,36 @@ namespace PINE
   double alphas(double q2, void*)
   {
     return QCD::alphas(sqrt(q2));
+  }
+
+  // convert pineappl pdg to applgrid
+  int32_t pdgid_to_apfel_array_id(int32_t pdgid)
+  {
+    switch (pdgid)
+    {
+    case 22:
+      return 14;
+
+    case 21:
+      return 0;
+
+    case -6:
+    case -5:
+    case -4:
+    case -3:
+    case -2:
+    case -1:
+    case 6:
+    case 5:
+    case 4:
+    case 3:
+    case 2:
+    case 1:
+      return pdgid + 7;
+
+    default:
+      throw std::runtime_error("pdgid not available.");
+    }
   }
 
   // ********************************* Kinematics Helpers *************************************
@@ -318,7 +345,7 @@ namespace PINE
                 const double W = weight_matrix[a * nxpi + b];
 
                 // Calculate normalisation factors
-                const double norm = pow(as, orders.at(4 * pto + 0))/(xvalues.at(a)*xvalues.at(b)*bin_sizes.at(bin))*nrmdat;
+                const double norm = pow(as, orders.at(4 * pto + 0))/bin_sizes.at(bin)*nrmdat;
 
                 for (int i = 0; i < nxin; i++)    // Loop over input pdf x1
                   for (int j = 0; j < nxin; j++)  // Loop over input pdf x2
@@ -329,12 +356,11 @@ namespace PINE
                     vector<double> factors(combinations);
                     pineappl_lumi_entry(grid_lumi, lumi, pdgids.data(), factors.data());
 
-                    if (W != 0)
-                    {
-                      for (size_t m = 0; m < combinations; m++)
+                    for (size_t k : afl)         // loop over flavour 1
+                      for (size_t l : afl)       // loop over flavour 2
                       {
-                        const int32_t k = pdgids.at(2 * m + 0);
-                        const int32_t l = pdgids.at(2 * m + 1);
+                        //const int32_t k = pdgid_to_apfel_array_id(pdgids.at(2 * m + 0));
+                        //const int32_t l = pdgid_to_apfel_array_id(pdgids.at(2 * m + 1));
 
                         const double H = factors.at(m) * (*fA(a, i, k)) * (*fA(b, j, l));
 
