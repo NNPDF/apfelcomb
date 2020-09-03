@@ -64,10 +64,10 @@ namespace PINE
     switch (pdgid)
     {
     case 22:
-      return 14;
+      return 13;
 
     case 21:
-      return 0;
+      return 6;
 
     case -6:
     case -5:
@@ -81,7 +81,7 @@ namespace PINE
     case 3:
     case 2:
     case 1:
-      return pdgid + 7;
+      return pdgid + 6;
 
     default:
       throw std::runtime_error("pdgid not available.");
@@ -263,11 +263,7 @@ namespace PINE
       std::cout << "WARNING: APPLgrid does not currently support NNLO convolutions, fixing convolution to NLO" <<std::endl;
 
     // TODO: fit pto
-
     // Progress monitoring
-    int completedElements = 0;
-    //const int nXelements = countElements(maskmap, ptmin, ptmax, g);
-    //const time_point t1 = std::chrono::system_clock::now();
     const vector<size_t> afl = QCD::active_flavours(par);
 
     vector<uint32_t> orders(pineappl_grid_order_count(grid));
@@ -288,6 +284,28 @@ namespace PINE
 
     vector<double> weight_matrix(nxpi * nxpi);
 
+    int completedElements = 0;
+    int nXelements = 0;
+    for (size_t d=0; d<maskmap.size(); d++)
+    {
+      const size_t bin = maskmap[d];
+      for (size_t pto = 0; pto < orders.size()/4; pto++) // Loop over perturbative order
+      {
+        // TODO: unSkip renormalization and factorization scale variation.
+        if (orders.at(4 * pto + 2) > 0 || orders.at(4 * pto + 3) > 0)
+          continue;
+
+        for (size_t lumi = 0; lumi < lumi_count; lumi++)
+        {
+          size_t slice_indices[2];
+          pineappl_subgrid_filled_q2_slices(grid, pto, bin, lumi, slice_indices);
+          nXelements += (slice_indices[1] - slice_indices[0]) * nxpi * nxpi;
+        }
+      }
+    }
+
+    const time_point t1 = std::chrono::system_clock::now();
+
     for (size_t d=0; d<maskmap.size(); d++)
     {
       // Fetch associated applgrid info
@@ -301,6 +319,12 @@ namespace PINE
 
         for (size_t lumi = 0; lumi < lumi_count; lumi++)
         {
+          // prepare luminosity combinations
+          const size_t combinations = pineappl_lumi_combinations(grid_lumi, lumi);
+          vector<int32_t> pdgids(2 * combinations);
+          vector<double> factors(combinations);
+          pineappl_lumi_entry(grid_lumi, lumi, pdgids.data(), factors.data());
+
           // Fetch grid pointer and loop over Q
           size_t slice_indices[2];
           pineappl_subgrid_filled_q2_slices(grid, pto, bin, lumi, slice_indices);
@@ -349,13 +373,6 @@ namespace PINE
 
                 for (int i = 0; i < nxin; i++)    // Loop over input pdf x1
                   for (int j = 0; j < nxin; j++)  // Loop over input pdf x2
-                  {
-                    // Rotate to subprocess basis
-                    const size_t combinations = pineappl_lumi_combinations(grid_lumi, lumi);
-                    vector<int32_t> pdgids(2 * combinations);
-                    vector<double> factors(combinations);
-                    pineappl_lumi_entry(grid_lumi, lumi, pdgids.data(), factors.data());
-
                     for (size_t k : afl)         // loop over flavour 1
                       for (size_t l : afl)       // loop over flavour 2
                       {
@@ -380,11 +397,10 @@ namespace PINE
                           for (int const& td : datamap[d])
                             fk->Fill(td, i, j, k, l, norm*fill*W);
                     }
-                  }
 
                 // Update progress
                 completedElements++;
-                //StatusUpdate(t1, (double)completedElements/(double)nXelements, cout);
+                StatusUpdate(t1, (double)completedElements/(double)nXelements, cout);
               }
           }
         }
