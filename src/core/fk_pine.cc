@@ -359,10 +359,13 @@ namespace PINE
                     for (size_t k : afl)         // loop over flavour 1
                       for (size_t l : afl)       // loop over flavour 2
                       {
-                        //const int32_t k = pdgid_to_apfel_array_id(pdgids.at(2 * m + 0));
-                        //const int32_t l = pdgid_to_apfel_array_id(pdgids.at(2 * m + 1));
-
-                        const double H = factors.at(m) * (*fA(a, i, k)) * (*fA(b, j, l));
+                        double H = 0.0;
+                        for (std::size_t c = 0; c != combinations; ++c)
+                        {
+                            auto const ai = pdgid_to_apfel_array_id(pdgids.at(2 * c + 0));
+                            auto const bi = pdgid_to_apfel_array_id(pdgids.at(2 * c + 1));
+                            H += factors.at(c) * (fA(a, i, k)[ai]) * (fA(b, j, l)[bi]);
+                        }
 
                         // if (vary_fac)
                         // {
@@ -376,7 +379,6 @@ namespace PINE
                         if ( fill != 0.0 )
                           for (int const& td : datamap[d])
                             fk->Fill(td, i, j, k, l, norm*fill*W);
-                        }
                     }
                   }
 
