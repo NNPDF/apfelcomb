@@ -15,6 +15,7 @@
 #include <ctime>
 #include <limits>
 #include <stdexcept>
+#include <string>
 
 using namespace std;
 using NNPDF::FKHeader;
@@ -85,7 +86,7 @@ namespace PINE
       return pdgid + 6;
 
     default:
-      throw std::runtime_error("pdgid not available.");
+      throw std::runtime_error("pdgid `" + std::to_string(pdgid) + "` not available.");
     }
   }
 
