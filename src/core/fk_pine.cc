@@ -10,6 +10,7 @@
 #include "NNPDF/nnpdfdb.h"
 #include "NNPDF/commondata.h"
 
+#include <array>
 #include <chrono>
 #include <ctime>
 #include <limits>
@@ -251,7 +252,7 @@ namespace PINE
     // Relate back to results
     for (size_t i=0; i<maskmap.size(); i++)
       for (int const& j : datamap[i])
-        results[j] += xsec[maskmap[i]];
+        results.at(j) += xsec.at(maskmap[i]);
   }
 
 
@@ -297,9 +298,9 @@ namespace PINE
 
         for (size_t lumi = 0; lumi < lumi_count; lumi++)
         {
-          size_t slice_indices[2];
-          pineappl_subgrid_filled_q2_slices(grid, pto, bin, lumi, slice_indices);
-          nXelements += (slice_indices[1] - slice_indices[0]) * nxpi * nxpi;
+          std::array<size_t, 2> slice_indices;
+          pineappl_subgrid_filled_q2_slices(grid, pto, bin, lumi, slice_indices.data());
+          nXelements += (slice_indices.at(1) - slice_indices.at(0)) * nxpi * nxpi;
         }
       }
     }
@@ -326,9 +327,9 @@ namespace PINE
           pineappl_lumi_entry(grid_lumi, lumi, pdgids.data(), factors.data());
 
           // Fetch grid pointer and loop over Q
-          size_t slice_indices[2];
-          pineappl_subgrid_filled_q2_slices(grid, pto, bin, lumi, slice_indices);
-          for (size_t t = slice_indices[0]; t < slice_indices[1]; t++)
+          std::array<size_t, 2> slice_indices;
+          pineappl_subgrid_filled_q2_slices(grid, pto, bin, lumi, slice_indices.data());
+          for (size_t t = slice_indices.at(0); t < slice_indices.at(1); t++)
           {
             // Scales and strong coupling
             const double Q2  = q2values.at(t);
@@ -366,7 +367,7 @@ namespace PINE
               for (size_t b = 0; b < nxpi; b++) // Loop over applgrid x2
               {
                 // fetch weight values
-                const double W = weight_matrix[a * nxpi + b];
+                const double W = weight_matrix.at(a * nxpi + b);
 
                 // Calculate normalisation factors
                 const double norm = pow(as, orders.at(4 * pto + 0))/bin_sizes.at(bin)*nrmdat;
