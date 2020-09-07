@@ -77,6 +77,7 @@ namespace PINE
     case -3:
     case -2:
     case -1:
+    case 0:
     case 6:
     case 5:
     case 4:
