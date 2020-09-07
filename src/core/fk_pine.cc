@@ -267,7 +267,7 @@ namespace PINE
     // Progress monitoring
     const vector<size_t> afl = QCD::active_flavours(par);
 
-    vector<uint32_t> orders(pineappl_grid_order_count(grid));
+    vector<uint32_t> orders(4 * pineappl_grid_order_count(grid));
     pineappl_grid_order_params(grid, orders.data());
 
     auto *grid_lumi = pineappl_grid_lumi(grid);
