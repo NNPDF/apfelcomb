@@ -285,6 +285,9 @@ namespace PINE
 
     vector<double> weight_matrix(nxpi * nxpi);
 
+    vector<int32_t> pdgids;
+    vector<double> factors;
+
     int completedElements = 0;
     int nXelements = 0;
     for (size_t d=0; d<maskmap.size(); d++)
@@ -322,8 +325,8 @@ namespace PINE
         {
           // prepare luminosity combinations
           const size_t combinations = pineappl_lumi_combinations(grid_lumi, lumi);
-          vector<int32_t> pdgids(2 * combinations);
-          vector<double> factors(combinations);
+          pdgids.resize(2 * combinations);
+          factors.resize(combinations);
           pineappl_lumi_entry(grid_lumi, lumi, pdgids.data(), factors.data());
 
           // Fetch grid pointer and loop over Q
