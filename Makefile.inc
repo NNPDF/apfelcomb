@@ -10,17 +10,18 @@ SHELL=/bin/bash
 
 # APPLCOMB paths
 RESULTSDIR=   -D  RESULTS_PATH="./results/"
+PINEAPPLGRID= -D  PINEAPPL_PATH="../pineapplgrids/"
 APPLGRIDDIR=  -D  APPL_PATH="../applgrids/"
 DATABASEDIR=  -D  DB_PATH="./db/"
-ALLDIR= $(RESULTSDIR) $(APPLGRIDDIR) $(DATABASEDIR)
+ALLDIR= $(RESULTSDIR) $(APPLGRIDDIR) $(DATABASEDIR) $(PINEAPPLGRID)
 
 # root
-ROOTINCS = $(shell root-config --cflags) 
-ROOTLIBS = $(shell root-config --libs) 
+ROOTINCS = $(shell root-config --cflags)
+ROOTLIBS = $(shell root-config --libs)
 
 # APFEL
-APFELINCS = $(shell apfel-config --cppflags) 
-APFELLIBS = $(shell apfel-config --ldflags) 
+APFELINCS = $(shell apfel-config --cppflags)
+APFELLIBS = $(shell apfel-config --ldflags)
 
 #LHAPDF
 LHAPDFINCS = -I$(shell lhapdf-config --prefix)/include
@@ -29,7 +30,7 @@ LHAPDFLIBS = -L$(LHAPDFDIR) -lLHAPDF
 
 # applgrid
 APPLINCS = -I$(shell applgrid-config --prefix)/include
-APPLCLIBS = -L$(shell applgrid-config --prefix)/lib -lAPPLgrid 
+APPLCLIBS = -L$(shell applgrid-config --prefix)/lib -lAPPLgrid
 
 # libnnpdf
 NNPDFINCLUDE=$(shell pkg-config nnpdf --cflags)
@@ -39,8 +40,12 @@ NNPDFLIBS=$(shell pkg-config nnpdf --libs)
 GSLINCLUDE=$(shell gsl-config --cflags)
 GSLLIBS=$(shell gsl-config --libs)
 
-# additional libraries to be included 
-PRJLDFLAGS = $(LHAPDFLIBS) $(APPLCLIBS) $(ROOTLIBS) $(APFELLIBS) $(NNPDFLIBS) $(GSLLIBS) -lsqlite3
+# pineappl
+PINEAPPLINCLUDE=$(shell pkg-config pineappl_capi --cflags)
+PINEAPPLLIBS=$(shell pkg-config pineappl_capi --libs)
+
+# additional libraries to be included
+PRJLDFLAGS = $(LHAPDFLIBS) $(APPLCLIBS) $(ROOTLIBS) $(APFELLIBS) $(NNPDFLIBS) $(GSLLIBS) $(PINEAPPLLIBS) -lsqlite3
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)
-PRJCXXFLAGS = -Wall -O3 $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE) $(GSLINCLUDE)
+PRJCXXFLAGS = -Wall -O3 $(ALLDIR) $(LHAPDFINCS) $(APPLINCS) $(ROOTINCS) $(APFELINCS) $(NNPDFINCLUDE) $(GSLINCLUDE) $(PINEAPPLINCLUDE)

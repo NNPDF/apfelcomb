@@ -10,6 +10,7 @@
 #include "NNPDF/nnpdfdb.h"
 #include "NNPDF/commondata.h"
 
+#include "apfelcomb/fk_pine.h"
 #include "apfelcomb/fk_appl.h"
 #include "apfelcomb/fk_dis.h"
 #include "apfelcomb/fk_ftdy.h"
@@ -61,9 +62,10 @@ void FKTarget::Combine(QCD::qcd_param const& par, NNPDF::FKGenerator* FK) const
 
 FKTarget::source FKTarget::parse_source(string const& ss)
 {
-  if (ss.compare("APP") == 0) return FKTarget::APP;
-  if (ss.compare("DIS") == 0) return FKTarget::DIS;
-  if (ss.compare("DYP") == 0) return FKTarget::DYP;
+  if (ss.compare("PINE") == 0) return FKTarget::PINE;
+  if (ss.compare("APP") == 0)  return FKTarget::APP;
+  if (ss.compare("DIS") == 0)  return FKTarget::DIS;
+  if (ss.compare("DYP") == 0)  return FKTarget::DYP;
   return FKTarget::NSR;
 }
 
@@ -73,6 +75,9 @@ void FKTarget::ReadSubGrids(NNPDF::IndexDB const& db)
 	for (int i : subgridIDs)
 		switch(subgrid_source)
 		{
+			case PINE:
+				components.insert(pair<int, FKSubGrid*>(i, new PINE::SubGrid(*this, db, i)));
+				break;
 			case APP:
 				components.insert(pair<int, FKSubGrid*>(i, new APP::SubGrid(*this, db, i)));
 				break;

@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 
   if (argc!=4)
   {
-    cout << "Usage: "<<argv[0]<<" <source=app/dis/dyp> <database id> <theory id>"<<endl;
+    cout << "Usage: "<<argv[0]<<" <source=pineappl/app/dis/dyp> <database id> <theory id>"<<endl;
     exit(1);
   }
 
@@ -49,7 +49,8 @@ int main(int argc, char* argv[]) {
   Splash(); QCD::qcd_param par; QCD::parse_input(iTh, par);
 
   NNPDF::SetVerbosity(0);
-  NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", "grids");
+  std::string gridname = (source == "pineappl") ? "fixmegrids" : "grids";
+  NNPDF::IndexDB grid_db(databasePath()+"apfelcomb.db", gridname);
   NNPDF::IndexDB subgrid_db(databasePath()+"apfelcomb.db", source+"_subgrids");
 
   // Read grid information
@@ -135,6 +136,5 @@ int main(int argc, char* argv[]) {
 
   cout << "                      APPLComb Complete "<<endl;
   DisplayHR();
-  exit(0);
 }
 

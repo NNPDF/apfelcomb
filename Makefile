@@ -1,6 +1,6 @@
 include Makefile.inc
 
-CXXFLAGS = 	$(PRJCXXFLAGS) 
+CXXFLAGS = 	$(PRJCXXFLAGS)
 LDLIBS   =  ./src/libac_core.a $(PRJLDFLAGS)
 
 VPATH=./src

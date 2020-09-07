@@ -27,7 +27,7 @@ class FKTarget
 public:
 	FKTarget(NNPDF::IndexDB const& db, int const& targetID, int const& global_nx);
 	~FKTarget(){};
-	enum source { APP, DIS, DYP, NSR };
+	enum source { PINE, APP, DIS, DYP, NSR };
 
 	virtual void Splash( ostream& ) const; 				//!< Write table information to stream
 	void ReadSubGrids(NNPDF::IndexDB const& db);		//!< Read information on subgrids from database
