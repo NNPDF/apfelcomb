@@ -581,6 +581,9 @@ INSERT INTO dis_subgrids VALUES(89,'EIC_NC_EPP_28_PES','DIS_NCP',NULL);
 INSERT INTO dis_subgrids VALUES(90,'EIC_NC_EMD_88_OPT','DIS_NCE_D',NULL);
 INSERT INTO dis_subgrids VALUES(91,'EIC_NC_EMD_66_OPT','DIS_NCE_D',NULL);
 INSERT INTO dis_subgrids VALUES(92,'EIC_NC_EMD_28_OPT','DIS_NCE_D',NULL);
+INSERT INTO dis_subgrids VALUES(93,'EIC_NC_EPD_88_OPT','DIS_NCP_D',NULL);
+INSERT INTO dis_subgrids VALUES(94,'EIC_NC_EPD_66_OPT','DIS_NCP_D',NULL);
+INSERT INTO dis_subgrids VALUES(95,'EIC_NC_EPD_28_OPT','DIS_NCP_D',NULL);
 
 CREATE TABLE IF NOT EXISTS "dyp_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -935,10 +938,13 @@ INSERT INTO grids VALUES(314,'EIC_NC_EPP_28_PES','EIC_NC_EPP_28_PES','EIC pseudo
 INSERT INTO grids VALUES(315,'EIC_NC_EMD_88_OPT','EIC_NC_EMD_88_OPT','EIC pseudodata NC 88 GeV e-d optimistic',50,0,'DIS');
 INSERT INTO grids VALUES(316,'EIC_NC_EMD_66_OPT','EIC_NC_EMD_66_OPT','EIC pseudodata NC 66 GeV e-d optimistic',50,0,'DIS');
 INSERT INTO grids VALUES(317,'EIC_NC_EMD_28_OPT','EIC_NC_EMD_28_OPT','EIC pseudodata NC 28 GeV e-d optimistic',50,0,'DIS');
+INSERT INTO grids VALUES(318,'EIC_NC_EPD_88_OPT','EIC_NC_EPD_88_OPT','EIC pseudodata NC 88 GeV e+d optimistic',50,0,'DIS');
+INSERT INTO grids VALUES(319,'EIC_NC_EPD_66_OPT','EIC_NC_EPD_66_OPT','EIC pseudodata NC 66 GeV e+d optimistic',50,0,'DIS');
+INSERT INTO grids VALUES(320,'EIC_NC_EPD_28_OPT','EIC_NC_EPD_28_OPT','EIC pseudodata NC 28 GeV e+d optimistic',50,0,'DIS');
 
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('dis_subgrids',92);
+INSERT INTO sqlite_sequence VALUES('dis_subgrids',95);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',317);
+INSERT INTO sqlite_sequence VALUES('grids',320);
 
 COMMIT;
