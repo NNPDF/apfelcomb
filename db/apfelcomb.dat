@@ -496,6 +496,7 @@ INSERT INTO app_subgrids VALUES(2070,'nCMS_pPb_2JET_5TEV_bin2','nCMS_pPb_2JET_5T
 INSERT INTO app_subgrids VALUES(2071,'nCMS_pPb_2JET_5TEV_bin3','nCMS_pPb_2JET_5TEV.tab',2,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(2072,'nCMS_pPb_2JET_5TEV_bin4','nCMS_pPb_2JET_5TEV.tab',3,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(2073,'nCMS_pPb_2JET_5TEV_bin5','nCMS_pPb_2JET_5TEV.tab',4,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2074,'nCMS_pPb_2JET_5TEV_ratio_bin4','nCMS_pPb_2JET_5TEV.tab',3,0,0,0,'0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`fktarget`	TEXT NOT NULL,
@@ -1109,10 +1110,11 @@ INSERT INTO grids VALUES(402,'nCMS_pPb_2JET_5TEV_bin2','nCMS_pPb_2JET_5TEV_bin2'
 INSERT INTO grids VALUES(403,'nCMS_pPb_2JET_5TEV_bin3','nCMS_pPb_2JET_5TEV_bin3','nCMS_pPb_2JET_5TEV_bin3',50,0,'APP');
 INSERT INTO grids VALUES(404,'nCMS_pPb_2JET_5TEV_bin4','nCMS_pPb_2JET_5TEV_bin4','nCMS_pPb_2JET_5TEV_bin4',50,0,'APP');
 INSERT INTO grids VALUES(405,'nCMS_pPb_2JET_5TEV_bin5','nCMS_pPb_2JET_5TEV_bin5','nCMS_pPb_2JET_5TEV_bin5',50,0,'APP');
+INSERT INTO grids VALUES(406,'nCMS_pPb_2JET_5TEV_ratio_bin4','nCMS_pPb_2JET_5TEV_ratio_bin4','nCMS_pPb_2JET_5TEV_ratio_bin4',50,0,'APP');
 
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',166);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',405);
+INSERT INTO sqlite_sequence VALUES('grids',406);
 
 COMMIT;
