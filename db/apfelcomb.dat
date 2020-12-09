@@ -871,7 +871,7 @@ INSERT INTO grids VALUES(238,'CMS_TTB_DIFF_13TEV_2016_2L_TTMNORM','CMS_TTB_DIFF_
 INSERT INTO grids VALUES(239,'CMS_1JET_8TEV','CMS_1JET_8TEV','CMS double differential single inclusive jets 8 TeV',60,0,'APP');
 INSERT INTO grids VALUES(240,'ATLAS_1JET_8TEV_R04','ATLAS_1JET_8TEV_R04','ATLAS double differential single inclusive jets 8 TeV, R=0.6',60,0,'APP');
 INSERT INTO grids VALUES(241,'ATLAS_1JET_8TEV_R06','ATLAS_1JET_8TEV_R06','ATLAS double differential single inclusive jets 8 TeV, R=0.4',60,0,'APP');
-INSERT INTO grids VALUES(242,'CMS_2JET_7TEV','CMS_2JET_7TEV','CMS dijets at 7 TeV',10,0,'APP');
+INSERT INTO grids VALUES(242,'CMS_2JET_7TEV','CMS_2JET_7TEV','CMS dijets at 7 TeV',50,0,'APP');
 INSERT INTO grids VALUES(243,'ATLAS_2JET_7TEV_R04','ATLAS_2JET_7TEV_R04','ATLAS dijets at 7 TeV, R=0.4',50,0,'APP');
 INSERT INTO grids VALUES(244,'ATLAS_2JET_7TEV_R06','ATLAS_2JET_7TEV_R06','ATLAS dijets at 7 TeV, R=0.6',50,0,'APP');
 INSERT INTO grids VALUES(245,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV','CMS dijet triple differential distributions',60,0,'APP');
@@ -950,8 +950,8 @@ INSERT INTO grids VALUES(317,'EIC_NC_EMD_28_OPT','EIC_NC_EMD_28_OPT','EIC pseudo
 INSERT INTO grids VALUES(318,'EIC_NC_EPD_88_OPT','EIC_NC_EPD_88_OPT','EIC pseudodata NC 88 GeV e+d optimistic',50,0,'DIS');
 INSERT INTO grids VALUES(319,'EIC_NC_EPD_66_OPT','EIC_NC_EPD_66_OPT','EIC pseudodata NC 66 GeV e+d optimistic',50,0,'DIS');
 INSERT INTO grids VALUES(320,'EIC_NC_EPD_28_OPT','EIC_NC_EPD_28_OPT','EIC pseudodata NC 28 GeV e+d optimistic',50,0,'DIS');
-INSERT INTO grids VALUES(321,'CMS_2JET_5TEV','CMS_2JET_5TEV','CMS dijet distribution 5 TeV',10,0,'APP');
-INSERT INTO grids VALUES(322,'CMS_2JET_5TEV','CMS_2JET_5TEV_tot','CMS total cross section',10,0,'APP');
+INSERT INTO grids VALUES(321,'CMS_2JET_5TEV','CMS_2JET_5TEV','CMS dijet distribution 5 TeV',50,0,'APP');
+INSERT INTO grids VALUES(322,'CMS_2JET_5TEV','CMS_2JET_5TEV_tot','CMS total cross section',20,0,'APP');
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',95);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
