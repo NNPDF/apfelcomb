@@ -4,7 +4,7 @@ import sqlite3 as lite
 import sys,os
 from subprocess import call
 
-dataPath="../nnpdfcpp/data/"
+dataPath="../nnpdf/nnpdfcpp/data/"
 theoryDB = dataPath+"theory.db"
 pto_dict = {1:"N",2:"NN"}
 
