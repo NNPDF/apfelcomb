@@ -61,8 +61,8 @@ INSERT INTO app_subgrids VALUES(450,'CMSDY2D11','CMSDY2D11-BIN5_rapidity.root',-
 INSERT INTO app_subgrids VALUES(460,'CMSDY2D11','CMSDY2D11-BIN6_rapidity.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(480,'TTBARTOT','ttbar-xsectot-7tev.root',-1,0,0,0,'1','*:4,N:14.0');
 INSERT INTO app_subgrids VALUES(490,'TTBARTOT','ttbar-xsectot-8tev.root',-1,0,0,0,'1','*:2,N:14.0');
-INSERT INTO app_subgrids VALUES(500,'CDFZRAP','CDF_ZRAP_MCgrid_500M_last_two_bins_combined.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
-INSERT INTO app_subgrids VALUES(501,'CDFZRAP_NEW','CDF_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0',NULL);
+INSERT INTO app_subgrids VALUES(500,'CDFZRAP','CDF_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(501,'CDFZRAP_NEW','CDF_ZRAP_MCgrid_500M_last_two_bins_combined.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0',NULL);
 INSERT INTO app_subgrids VALUES(510,'D0ZRAP','D0_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(520,'D0ZRAP_TOT','D0_ZNORM_MCgrid_500M.root',-1,0,0,0,'1','*:28');
 INSERT INTO app_subgrids VALUES(530,'LHCBZEE2FB','LHCBZERAP11_y34.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
