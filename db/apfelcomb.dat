@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS "app_subgrids" (
 	`operators`	TEXT,
 	PRIMARY KEY(id)
 );
-INSERT INTO app_subgrids VALUES(1,'CDFZRAP_NEW','CDF_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(1,'CDFZRAP_NEW','CDF_ZRAP_MCgrid_500M_last_two_bins_combined.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0',NULL);
 INSERT INTO app_subgrids VALUES(2,'D0ZRAP','D0_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(3,'D0ZRAP_TOT','D0_ZNORM_MCgrid_500M.root',-1,0,0,0,'1','*:28');
 INSERT INTO app_subgrids VALUES(4,'D0WMASY_WP','grid-40-6-15-3-Wplus_wly_pt25.root',-1,0,1,1,'1 1 1 1 1 1 1 1 1 1',NULL);
