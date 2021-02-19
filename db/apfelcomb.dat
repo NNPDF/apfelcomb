@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS "app_subgrids" (
 	`operators`	TEXT,
 	PRIMARY KEY(id)
 );
+
 INSERT INTO app_subgrids VALUES(1,'CDFZRAP_NEW','CDF_ZRAP_MCgrid_500M_last_two_bins_combined.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0',NULL);
 INSERT INTO app_subgrids VALUES(2,'D0ZRAP','D0_ZRAP_MCgrid_500M.root',-1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(3,'D0ZRAP_TOT','D0_ZNORM_MCgrid_500M.root',-1,0,0,0,'1','*:28');
@@ -386,7 +387,6 @@ INSERT INTO app_subgrids VALUES(471,'ATLASWZRAP11','ATLASWZRAP11-WP_ylept.root',
 INSERT INTO app_subgrids VALUES(472,'ATLASWZRAP11','ATLASWZRAP11-WM_ylept.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(473,'ATLASWZRAP11','ATLASWZRAP11-Z_yZ.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 
-
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`fktarget`	TEXT NOT NULL,
@@ -473,6 +473,7 @@ CREATE TABLE IF NOT EXISTS "grids" (
 	`positivity`	INTEGER NOT NULL,
 	`source`	TEXT NOT NULL
 );
+
 INSERT INTO grids VALUES(1,'CDFZRAP_NEW','CDFZRAP_NEW','CDF Z Rapidity',90,0,'APP');
 INSERT INTO grids VALUES(2,'D0ZRAP','D0ZRAP','D0 Z Rapidity',90,0,'APP');
 INSERT INTO grids VALUES(3,'D0ZRAP','D0ZRAP_TOT','D0 Z total cross-section',90,0,'APP');
