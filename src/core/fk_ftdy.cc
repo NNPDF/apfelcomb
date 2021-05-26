@@ -97,6 +97,56 @@ namespace FTDY
       remove((path+"FK_DYE886R_P.dat").c_str());
       remove((path+"FK_DYE886R_D.dat").c_str());
     }
+    else if (cd.GetSetName() == "DYE906R_BIN01")
+    {
+      remove((path+"FK_DYE886R_P_BIN01.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN01.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN02")
+    {
+      remove((path+"FK_DYE886R_P_BIN02.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN02.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN03")
+    {
+      remove((path+"FK_DYE886R_P_BIN03.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN03.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN04")
+    {
+      remove((path+"FK_DYE886R_P_BIN04.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN04.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN05")
+    {
+      remove((path+"FK_DYE886R_P_BIN05.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN05.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN06")
+    {
+      remove((path+"FK_DYE886R_P_BIN06.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN06.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN07")
+    {
+      remove((path+"FK_DYE886R_P_BIN07.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN07.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN08")
+    {
+      remove((path+"FK_DYE886R_P_BIN08.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN08.dat").c_str());
+    }    
+    else if (cd.GetSetName() == "DYE906R_BIN09")
+    {
+      remove((path+"FK_DYE886R_P_BIN09.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN09.dat").c_str());
+    }
+    else if (cd.GetSetName() == "DYE906R_BIN10")
+    {
+      remove((path+"FK_DYE886R_P_BIN10.dat").c_str());
+      remove((path+"FK_DYE886R_D_BIN10.dat").c_str());
+    }
     else
     {
       remove(filename.c_str());
