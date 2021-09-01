@@ -416,7 +416,7 @@ INSERT INTO grids VALUES(137,'CMS_TTBAR_2D_DIFF_MTT_TRAP_NORM','CMS_TTBAR_2D_DIF
 INSERT INTO grids VALUES(138,'CMS_TTB_DIFF_13TEV_2016_LJ_TRAP','CMS_TTB_DIFF_13TEV_2016_LJ_TRAP','CMS ttbar y top differential distribution 13 TeV, lepton+jet',40,0,'APP');
 INSERT INTO grids VALUES(139,'CMS_TTB_DIFF_13TEV_2016_LJ_TTRAP','CMS_TTB_DIFF_13TEV_2016_LJ_TTRAP','CMS ttbar ytt differential distribution 13 TeV, lepton+jet',40,0,'APP');
 INSERT INTO grids VALUES(140,'CMS_TTB_DIFF_13TEV_2016_2L_TRAP','CMS_TTB_DIFF_13TEV_2016_2L_TRAP','CMS ttbar y top differential distribution 13 TeV, dilepton',40,0,'APP');
-INSERT INTO grids VALUES(141,'CMS_TTB_DIFF_13TEV_2016_2L_TTRAP','CMS_TTB_DIFF_13TEV_2016_2L_TTRAP','CMS ttbar ytt differential distribution 13 TeV, dilepton',40,0,'APP');
+INSERT INTO grids VALUES(141,'CMS_TTB_DIFF_13TEV_2016_2L_TRAP','CMS_TTB_DIFF_13TEV_2016_2L_TRAP','CMS ttbar ytt differential distribution 13 TeV, dilepton',40,0,'APP');
 INSERT INTO grids VALUES(142,'CMS_2JET_7TEV','CMS_2JET_7TEV','CMS dijets at 7 TeV',50,0,'APP');
 INSERT INTO grids VALUES(143,'CMS_1JET_8TEV','CMS_1JET_8TEV','CMS double differential single inclusive jets 8 TeV',60,0,'APP');
 INSERT INTO grids VALUES(144,'CMS_SINGLETOP_TCH_TOT_7TEV','CMS_SINGLETOP_TCH_R_7TEV_T','CMS single top total cross section 7 TeV',20,0,'APP');
