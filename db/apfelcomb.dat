@@ -504,14 +504,35 @@ INSERT INTO app_subgrids VALUES(2077,'nCMS_pPb_Z_5TEV','nCMS_pPb_Z_5TEV_yZ.root'
 INSERT INTO app_subgrids VALUES(2078,'nATLAS_pPb_PHT_8TEV_1bin','nATLAS_pPb_PHT_8TEV_1bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(2079,'nATLAS_pPb_PHT_8TEV_2bin','nATLAS_pPb_PHT_8TEV_2bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
 INSERT INTO app_subgrids VALUES(2080,'nATLAS_pPb_PHT_8TEV_3bin','nATLAS_pPb_PHT_8TEV_3bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
-
+INSERT INTO app_subgrids VALUES(2081,'nCMS_pPb_2JET_5TEV_ratio_NUM','CMS_2JET_5TEV.tab',0,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2082,'nCMS_pPb_2JET_5TEV_ratio_NUM','CMS_2JET_5TEV.tab',1,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2083,'nCMS_pPb_2JET_5TEV_ratio_NUM','CMS_2JET_5TEV.tab',2,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2084,'nCMS_pPb_2JET_5TEV_ratio_NUM','CMS_2JET_5TEV.tab',3,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2085,'nCMS_pPb_2JET_5TEV_ratio_NUM','CMS_2JET_5TEV.tab',4,0,0,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2086,'nCMS_pPb_2JET_5TEV_ratio_DEN','CMS_2JET_5TEV_tot.tab',0,0,0,0,'1','N:5.915,*:18');
+INSERT INTO app_subgrids VALUES(2087,'nCMS_pPb_2JET_5TEV_ratio_DEN','CMS_2JET_5TEV_tot.tab',1,0,0,0,'1','N:5.633,*:17');
+INSERT INTO app_subgrids VALUES(2088,'nCMS_pPb_2JET_5TEV_ratio_DEN','CMS_2JET_5TEV_tot.tab',2,0,0,0,'1','N:5.633,*:17');
+INSERT INTO app_subgrids VALUES(2089,'nCMS_pPb_2JET_5TEV_ratio_DEN','CMS_2JET_5TEV_tot.tab',3,0,0,0,'1','N:5.633,*:16');
+INSERT INTO app_subgrids VALUES(2090,'nCMS_pPb_2JET_5TEV_ratio_DEN','CMS_2JET_5TEV_tot.tab',4,0,0,0,'1','N:5.07,*:16');
+INSERT INTO app_subgrids VALUES(2091,'nATLAS_pPb_PHT_8TEV','nATLAS_pPb_PHT_8TEV_1bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2092,'nATLAS_pPb_PHT_8TEV','nATLAS_pPb_PHT_8TEV_2bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2093,'nATLAS_pPb_PHT_8TEV','nATLAS_pPb_PHT_8TEV_3bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2094,'nATLAS_pPb_PHT_8TEV_ratio','nATLAS_pPb_PHT_8TEV_ratio_1bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2095,'nATLAS_pPb_PHT_8TEV_ratio','nATLAS_pPb_PHT_8TEV_ratio_2bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2096,'nATLAS_pPb_PHT_8TEV_ratio','nATLAS_pPb_PHT_8TEV_ratio_3bin.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2097,'nALICE_pPb_Z_5TEV','nALICE_pPb_Z_5TEV_bwd_yZ.root',-1,0,1,0,'1','');
+INSERT INTO app_subgrids VALUES(2098,'nALICE_pPb_Z_5TEV','nALICE_pPb_Z_5TEV_fwd_yZ.root',-1,0,1,0,'1','');
+INSERT INTO app_subgrids VALUES(2099,'nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TEV_bwd_etalept.root',-1,0,1,0,'1','');
+INSERT INTO app_subgrids VALUES(2100,'nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TEV_fwd_etalept.root',-1,0,1,0,'1','');
+INSERT INTO app_subgrids VALUES(2101,'nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TEV_bwd_etalept.root',-1,0,1,0,'1','');
+INSERT INTO app_subgrids VALUES(2102,'nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TEV_fwd_etalept.root',-1,0,1,0,'1',NULL);
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`fktarget`	TEXT NOT NULL,
 	`process`	TEXT NOT NULL,
 	`operators`	TEXT
 );
-INSERT INTO dis_subgrids VALUES(1,'BCDMSD','DIS_F2D',NULL);
+INSERT INTO dis_subgrids VALUES(1,'BCDMSD','DIS_F2P',NULL);
 INSERT INTO dis_subgrids VALUES(2,'BCDMSP','DIS_F2P',NULL);
 INSERT INTO dis_subgrids VALUES(3,'CHORUSNB','DIS_SNB',NULL);
 INSERT INTO dis_subgrids VALUES(4,'CHORUSNU','DIS_SNU',NULL);
@@ -535,7 +556,7 @@ INSERT INTO dis_subgrids VALUES(21,'NTVNBDMN','DIS_DM_NB',NULL);
 INSERT INTO dis_subgrids VALUES(22,'NTVNUDMN','DIS_DM_NU',NULL);
 INSERT INTO dis_subgrids VALUES(23,'NTVNBDMNFe','DIS_DM_NB',NULL);
 INSERT INTO dis_subgrids VALUES(24,'NTVNUDMNFe','DIS_DM_NU',NULL);
-INSERT INTO dis_subgrids VALUES(25,'SLACD','DIS_F2D',NULL);
+INSERT INTO dis_subgrids VALUES(25,'SLACD','DIS_F2P',NULL);
 INSERT INTO dis_subgrids VALUES(26,'SLACP','DIS_F2P',NULL);
 INSERT INTO dis_subgrids VALUES(27,'Z06CC','DIS_CCE',NULL);
 INSERT INTO dis_subgrids VALUES(28,'Z06NC','DIS_NCE',NULL);
@@ -677,7 +698,6 @@ INSERT INTO dis_subgrids VALUES(163,'EIC_BNL_OPT_C_89','DIS_NCE',NULL);
 INSERT INTO dis_subgrids VALUES(164,'EIC_BNL_OPT_C_66','DIS_NCE',NULL);
 INSERT INTO dis_subgrids VALUES(165,'EIC_BNL_OPT_C_28','DIS_NCE',NULL);
 INSERT INTO dis_subgrids VALUES(166,'EIC_BNL_OPT_Au_89','DIS_NCE',NULL);
-
 CREATE TABLE IF NOT EXISTS "dyp_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`fktarget`	TEXT NOT NULL,
@@ -835,8 +855,8 @@ INSERT INTO grids VALUES(118,'H1HERAF2B','H1HERAF2B','H1 HERA F2b',50,0,'DIS');
 INSERT INTO grids VALUES(119,'ZEUSHERAF2B','ZEUSHERAF2B','ZEUS HERA F2b',50,0,'DIS');
 INSERT INTO grids VALUES(120,'EMCF2D','EMCF2D',' EMC F2d',50,0,'DIS');
 INSERT INTO grids VALUES(121,'EMCF2P','EMCF2P','EMC F2p',50,0,'DIS');
-INSERT INTO grids VALUES(122,'DYE605','DYE605','E605 Drell-Yan',40,0,'DYP');
-INSERT INTO grids VALUES(123,'DYE886R','DYE886R_P','E886 ratio (proton)',40,0,'DYP');
+INSERT INTO grids VALUES(122,'DYE605','DYE605','E605 Drell-Yan',50,0,'DYP');
+INSERT INTO grids VALUES(123,'DYE886R','DYE886R_P','E886 ratio (proton)',50,0,'DYP');
 INSERT INTO grids VALUES(124,'DYE886R','DYE886R_D','E886 ratio (deuteron)',40,0,'DYP');
 INSERT INTO grids VALUES(125,'DYE886P','DYE886P','E886 proton',40,0,'DYP');
 INSERT INTO grids VALUES(126,'POSDYU','POSDYU','DYU positivity',60,1,'DYP');
@@ -959,10 +979,10 @@ INSERT INTO grids VALUES(242,'CMS_2JET_7TEV','CMS_2JET_7TEV','CMS dijets at 7 Te
 INSERT INTO grids VALUES(243,'ATLAS_2JET_7TEV_R04','ATLAS_2JET_7TEV_R04','ATLAS dijets at 7 TeV, R=0.4',50,0,'APP');
 INSERT INTO grids VALUES(244,'ATLAS_2JET_7TEV_R06','ATLAS_2JET_7TEV_R06','ATLAS dijets at 7 TeV, R=0.6',50,0,'APP');
 INSERT INTO grids VALUES(245,'CMS_2JET_3D_8TEV','CMS_2JET_3D_8TEV','CMS dijet triple differential distributions',60,0,'APP');
-INSERT INTO grids VALUES(246,'ATLAS_TOPDIFF_DILEPT_8TEV_TTM','ATLAS_TOPDIFF_DILEPT_8TEV_TTM', 'ATLAS top pair mtt differential distribution dilepton channel 8 TeV',40,0,'APP');
+INSERT INTO grids VALUES(246,'ATLAS_TOPDIFF_DILEPT_8TEV_TTM','ATLAS_TOPDIFF_DILEPT_8TEV_TTM','ATLAS top pair mtt differential distribution dilepton channel 8 TeV',40,0,'APP');
 INSERT INTO grids VALUES(247,'ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM_NUM','ATLAS top pair mtt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
 INSERT INTO grids VALUES(248,'ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTMNORM_DEN','ATLAS top pair mtt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
-INSERT INTO grids VALUES(249,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP', 'ATLAS top pair ytt differential distribution dilepton channel 8 TeV',40,0,'APP');
+INSERT INTO grids VALUES(249,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAP','ATLAS top pair ytt differential distribution dilepton channel 8 TeV',40,0,'APP');
 INSERT INTO grids VALUES(250,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM_NUM','ATLAS top pair ytt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
 INSERT INTO grids VALUES(251,'ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM','ATLAS_TOPDIFF_DILEPT_8TEV_TTRAPNORM_DEN','ATLAS top pair ytt normalised differential distribution dilepton channel 8 TeV',40,0,'APP');
 INSERT INTO grids VALUES(252,'ATLAS_WP_JET_8TEV_PT','ATLAS_WP_JET_8TEV_PT','ATLAS W+ + jet distribution differential in pT',40,0,'APP');
@@ -1119,11 +1139,15 @@ INSERT INTO grids VALUES(402,'EIC_BNL_OPT_C_28','EIC_BNL_OPT_C_28','EIC_BNL_OPT_
 INSERT INTO grids VALUES(403,'EIC_BNL_OPT_Au_89','EIC_BNL_OPT_Au_89','EIC_BNL_OPT_Au_89',50,0,'DIS');
 INSERT INTO grids VALUES(404,'CMS_2JET_5TEV','CMS_2JET_5TEV_NUM','CMS dijet distribution 5 TeV',50,0,'APP');
 INSERT INTO grids VALUES(405,'CMS_2JET_5TEV','CMS_2JET_5TEV_DEN','CMS total cross section',50,0,'APP');
-
-
+INSERT INTO grids VALUES(406,'nCMS_pPb_2JET_5TEV_ratio','nCMS_pPb_2JET_5TEV_ratio_NUM','CMS dijet distribution 5 TeV pPb/pp',50,0,'APP');
+INSERT INTO grids VALUES(407,'nCMS_pPb_2JET_5TEV_ratio','nCMS_pPb_2JET_5TEV_ratio_DEN','CMS total cross section pPb/pp',50,0,'APP');
+INSERT INTO grids VALUES(408,'nATLAS_pPb_PHT_8TEV','nATLAS_pPb_PHT_8TEV','nATLAS_pPb_PHT_8TEV',50,0,'APP');
+INSERT INTO grids VALUES(409,'nATLAS_pPb_PHT_8TEV_ratio','nATLAS_pPb_PHT_8TEV_ratio','nATLAS_pPb_PHT_8TEV_ratio',50,0,'APP');
+INSERT INTO grids VALUES(410,'nALICE_pPb_Z_5TEV','nALICE_pPb_Z_5TEV','nALICE_pPb_Z_5TEV',50,0,'APP');
+INSERT INTO grids VALUES(411,'nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TeV',50,0,'APP');
+INSERT INTO grids VALUES(412,'nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TeV',50,0,'APP');
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',95);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',323);
-
+INSERT INTO sqlite_sequence VALUES('grids',412);
 COMMIT;
