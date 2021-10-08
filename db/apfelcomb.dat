@@ -526,6 +526,12 @@ INSERT INTO app_subgrids VALUES(2099,'nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TEV_bw
 INSERT INTO app_subgrids VALUES(2100,'nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TEV_fwd_etalept.root',-1,0,1,0,'1','');
 INSERT INTO app_subgrids VALUES(2101,'nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TEV_bwd_etalept.root',-1,0,1,0,'1','');
 INSERT INTO app_subgrids VALUES(2102,'nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TEV_fwd_etalept.root',-1,0,1,0,'1',NULL);
+INSERT INTO app_subgrids VALUES(2103,'nCMS_pPb_Z_8TEV','nCMS_pPb_Z_8TEV_BIN1_yZ.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2104,'nCMS_pPb_Z_8TEV','nCMS_pPb_Z_8TEV_BIN2_yZ.root',-1,0,1,0,'1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1',NULL);
+INSERT INTO app_subgrids VALUES(2105,'nLHCb_pPb_Z_5TEV','nLHCb_pPb_Z_5TEV_fwd_yZ.root',-1,0,1,0,'1','N:2.5');
+INSERT INTO app_subgrids VALUES(2106,'nLHCb_pPb_Z_5TEV','nLHCb_pPb_Z_5TEV_bwd_yZ.root',-1,0,1,0,'1','N:2.5');
+INSERT INTO app_subgrids VALUES(2107,'nALICE_pPb_Z_8TEV','nALICE_pPb_Z_8TEV_fwd_yZ.root',-1,0,1,0,'1',NULL);
+INSERT INTO app_subgrids VALUES(2108,'nALICE_pPb_Z_8TEV','nALICE_pPb_Z_8TEV_bwd_yZ.root',-1,0,1,0,'1',NULL);
 CREATE TABLE IF NOT EXISTS "dis_subgrids" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`fktarget`	TEXT NOT NULL,
@@ -1146,8 +1152,11 @@ INSERT INTO grids VALUES(409,'nATLAS_pPb_PHT_8TEV_ratio','nATLAS_pPb_PHT_8TEV_ra
 INSERT INTO grids VALUES(410,'nALICE_pPb_Z_5TEV','nALICE_pPb_Z_5TEV','nALICE_pPb_Z_5TEV',50,0,'APP');
 INSERT INTO grids VALUES(411,'nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TeV','nALICE_pPb_Wm_5TeV',50,0,'APP');
 INSERT INTO grids VALUES(412,'nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TeV','nALICE_pPb_Wp_5TeV',50,0,'APP');
+INSERT INTO grids VALUES(413,'nLHCb_pPb_Z_5TEV','nLHCb_pPb_Z_5TEV','nLHCb_pPb_Z_5TEV',50,0,'APP');
+INSERT INTO grids VALUES(414,'nALICE_pPb_Z_8TEV','nALICE_pPb_Z_8TEV','nALICE_pPb_Z_8TEV',50,0,'APP');
+INSERT INTO grids VALUES(415,'nCMS_pPb_Z_8TEV','nCMS_pPb_Z_8TEV','nCMS_pPb_Z_8TEV',50,0,'APP');
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('dis_subgrids',95);
 INSERT INTO sqlite_sequence VALUES('dyp_subgrids',23);
-INSERT INTO sqlite_sequence VALUES('grids',412);
+INSERT INTO sqlite_sequence VALUES('grids',415);
 COMMIT;
