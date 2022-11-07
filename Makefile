@@ -4,11 +4,11 @@ CXXFLAGS = 	$(PRJCXXFLAGS)
 LDLIBS   =  ./src/libac_core.a $(PRJLDFLAGS)
 
 VPATH=./src
-MAIN = apfel_comb src/cfac_scale 
+MAIN = apfel_comb src/cfac_scale src/fkmerge2
 DEV = appl_optgrid ftdy_hcx
 
 .PHONY: all dev core clean
-	
+
 all: core $(MAIN) database
 dev: core $(DEV)
 

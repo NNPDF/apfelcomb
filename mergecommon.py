@@ -64,7 +64,7 @@ def mergegrid(target, source, thID, cur):
     if os.path.isfile(mergeTarget) == True:
         print(target + bcolors.OKGREEN + " is already merged" + bcolors.ENDC)
     elif len(missing_subgrids) == 0:
-        os.system("FKmerge2 " +mergeTarget + ' ' + mergeConstituents)
+        os.system("fkmerge2 " +mergeTarget + ' ' + mergeConstituents)
         print(target + bcolors.OKGREEN + " successfully generated!" + bcolors.ENDC)
     else:
         for missing in missing_subgrids:
